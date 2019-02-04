@@ -6,9 +6,6 @@ build_clang/
 .xdchelp
 .config/
 .lauches/
-.settings/
-.project
-.cproject
 *.pyc
 *.aux
 *.log
