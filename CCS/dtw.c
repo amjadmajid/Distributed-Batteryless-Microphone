@@ -1,12 +1,12 @@
 
-#include "include/dtw.h"
+#include "dtw.h"
 
 /*
  * The follwing functions do not work intermittently --> the function has to run in one go
  */
 
 
-uint16_t dtw_full(int16_t x[MAXFRAMES*BANDS], const int16_t y[],
+uint16_t dtw_full(int16_t x[NUM_FRAME*BANDS], const int16_t y[],
                 uint16_t xsize, uint16_t ysize) {
 
     /*
@@ -23,7 +23,7 @@ uint16_t dtw_full(int16_t x[MAXFRAMES*BANDS], const int16_t y[],
 
 
     // xsize and ysize should not be larger than the array size (Dist & globdist))
-    if (xsize > MAXFRAMES || ysize > MAXFRAMES)     return VERY_BIG;
+    if (xsize > NUM_FRAME || ysize > NUM_FRAME)     return VERY_BIG;
 
 
     /*Compute distance matrix*/
@@ -76,7 +76,7 @@ uint16_t dtw_full(int16_t x[MAXFRAMES*BANDS], const int16_t y[],
 }
 
 
-uint16_t dtw_window(int16_t x[MAXFRAMES*BANDS], const int16_t y[],
+uint16_t dtw_window(int16_t x[NUM_FRAME*BANDS], const int16_t y[],
                 uint16_t xsize, uint16_t ysize) {
 
     /*
@@ -94,7 +94,7 @@ uint16_t dtw_window(int16_t x[MAXFRAMES*BANDS], const int16_t y[],
 
 
     // xsize and ysize should not be larger than the array size (Dist & globdist))
-    if (xsize > MAXFRAMES || ysize > MAXFRAMES)     return VERY_BIG;
+    if (xsize > NUM_FRAME || ysize > NUM_FRAME)     return VERY_BIG;
 
 
     /*Compute distance matrix*/
@@ -154,7 +154,7 @@ uint16_t dtw_window(int16_t x[MAXFRAMES*BANDS], const int16_t y[],
 
 
 
-uint16_t linear_compare(int16_t x[MAXFRAMES*BANDS], const int16_t y[],
+uint16_t linear_compare(int16_t x[NUM_FRAME*BANDS], const int16_t y[],
                 uint16_t xsize, uint16_t ysize) {
 
     /*
@@ -169,7 +169,7 @@ uint16_t linear_compare(int16_t x[MAXFRAMES*BANDS], const int16_t y[],
 
 
     // xsize and ysize should not be larger than the array size (Dist) )
-    if (xsize > MAXFRAMES || ysize > MAXFRAMES)     return VERY_BIG;
+    if (xsize > NUM_FRAME || ysize > NUM_FRAME)     return VERY_BIG;
 
 
     /*Compute distance*/

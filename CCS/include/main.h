@@ -17,9 +17,9 @@ void        endpoints_ZCR_init      ();
 int         endpoints_ZCR           (uint16_t *buf, fingerprint *fp);
 void        get_fingerprint         (uint16_t *buf, fingerprint *fp);
 void        compare_init                ();
-uint16_t    dtw_full                (int16_t x[MAXFRAMES*BANDS], const int16_t y[], uint16_t xsize, uint16_t ysize);
-uint16_t    dtw_window              (int16_t x[MAXFRAMES*BANDS], const int16_t y[], uint16_t xsize, uint16_t ysize);
-uint16_t    linear_compare          (int16_t x[MAXFRAMES*BANDS], const int16_t y[], uint16_t xsize, uint16_t ysize);
+uint16_t    dtw_full                (int16_t x[NUM_FRAME*BANDS], const int16_t y[], uint16_t xsize, uint16_t ysize);
+uint16_t    dtw_window              (int16_t x[NUM_FRAME*BANDS], const int16_t y[], uint16_t xsize, uint16_t ysize);
+uint16_t    linear_compare          (int16_t x[NUM_FRAME*BANDS], const int16_t y[], uint16_t xsize, uint16_t ysize);
 
 
 

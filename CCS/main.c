@@ -1,4 +1,4 @@
-#include "include/main.h"
+#include "main.h"
 
 void main_init() {
     WDTCTL = WDTPW | WDTHOLD;   // stop watchdog timer
@@ -59,7 +59,7 @@ int main(void)
 
             // GO TO GET FINGERPRINT
             fp_rec.start = 0;
-            fp_rec.end = MAXFRAMES;
+            fp_rec.end = NUM_FRAME;
             i_nv = fp_rec.start;
 
             #if defined(LOGIC)
@@ -79,7 +79,7 @@ int main(void)
         case COMPARE:
 
             for( ; lib_index<NUM_WORDS ; lib_index++) {
-                temp = linear_compare(fp_rec.data, wordlist[lib_index], MAXFRAMES, MAXFRAMES);
+                temp = linear_compare(fp_rec.data, wordlist[lib_index], NUM_FRAME, NUM_FRAME);
                 if (temp <= word_value) {
                     word_value = temp;
                     word_index = lib_index;

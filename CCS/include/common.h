@@ -5,13 +5,14 @@
 #define LOGIC
 //#define SIMULATION
 
+#define SAMPLERATE  7812
+#define FRAMESIZE   256
 #define NUM_WORDS   10
 #define VERY_BIG    65535
 #define BANDS       12
-#define MAXFRAMES   (SAMPLES/FRAMESIZE)
-#define SAMPLES     (9*256)//(SAMPLERATE*TIMEWINDOW)
-#define SAMPLERATE  7812
-#define FRAMESIZE   256
+#define NUM_FRAME   9
+//#define MAXFRAMES   (SAMPLES/FRAMESIZE)
+#define SAMPLES     (NUM_FRAME*FRAMESIZE)//(SAMPLERATE*TIMEWINDOW)
 //#define TIMEWINDOW  2      // 2 second recording
 
 // For endpoint detection:
@@ -22,7 +23,7 @@
 typedef struct fingerprint {
     uint16_t    start; // first frame of the word
     uint16_t    end;   // the frame after the last frame
-    int16_t     data[MAXFRAMES*BANDS];
+    int16_t     data[NUM_FRAME*BANDS];
 } fingerprint;
 
 
