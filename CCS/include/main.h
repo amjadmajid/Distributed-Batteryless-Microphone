@@ -9,7 +9,9 @@
 
 enum state_t {RECORD, DETECT, ANALYZE, COMPARE};
 
-void        ADC_config              ();
+void        ADC_init                ();
+void        ADC_start               ();
+void        ADC_stop                ();
 uint32_t    squared                 (int16_t x);
 void        endpoints_power_init    ();
 int         endpoints_power         (uint16_t *buf, fingerprint *fp, int step);

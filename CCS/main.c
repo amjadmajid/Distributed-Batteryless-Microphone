@@ -34,13 +34,14 @@ int main(void)
         switch(state) {
 
         case RECORD:
+            ADC_init();
             mic_wait_for_sound();
 
             // save interrupt state and then disable interrupts
             is = __get_interrupt_state();
             __disable_interrupt();
 
-            ADC_config();   // configure ADC
+            ADC_start();
             counter = 0;
 
             #if defined(LOGIC)
@@ -51,8 +52,7 @@ int main(void)
 
             while(counter < SAMPLES);
 
-            P7OUT = 0x00;
-            ADC12CTL0 &= ~ADC12ON;  // turn off the ADC to save energy
+            ADC_stop();
 
             // restore interrupt state
             __set_interrupt_state(is);
@@ -243,7 +243,7 @@ void get_fingerprint(uint16_t *buf, fingerprint *fp) {
 /**
  * Configure ADC for microphone sampling
  */
-void ADC_config()
+void ADC_init()
 {
     // Pin P1.3 set for Ternary Module Function (which includes A3)
     P1SEL0 |= BIT3;
@@ -252,25 +252,20 @@ void ADC_config()
     // Clear ENC bit to allow register settings
     ADC12CTL0 &= ~ADC12ENC;
 
-    // Sample-and-hold source select
-    //
-    // 000 -> ADC12SC bit (default)
-    // ADC12CTL1 &= ~(ADC12SHS0 | ADC12SHS1 | ADC12SHS2);
-
     // Clock source select
     //
     // source: MCLK (DCO, 1 MHz)
     // pre-divider: 4
-    // divider: 4
+    // divider: 1
     ADC12CTL1 |= ADC12SSEL_2 | ADC12PDIV_1 | ADC12DIV_0;
 
-    // sampling period select for MEM0: 64 clock cycles (*)
+    // sampling period select for MEM0: 16 clock cycles (*)
     // multiple sample and conversion: enabled
-    // ADC module ON
-    ADC12CTL0 |= ADC12SHT0_2 | ADC12MSC | ADC12ON;
-    // (*) freq = MCLK / (ADC12PDIV_1 * ADC12DIV_3 * ADC12SHT0_1)
-    //          = 1000000 / (4 * 4 * 8)
-    //          = 7812.5 Hz
+    ADC12CTL0 |= ADC12SHT0_2 | ADC12MSC;
+    // (*) freq = MCLK / (ADC12PDIV_1 * ADC12SHT0_2)
+    //          = 1000000 / (4 * 16)
+    //          = 15625 Hz (should be)
+    //          != 7812.5 Hz (getting this)
 
     // conversion sequence mode: repeat-single-channel
     // pulse-mode select: SAMPCON signal is sourced from the sampling timer
@@ -278,7 +273,7 @@ void ADC_config()
 
     // resolution: 12 bit
     // data format: right-aligned, unsigned
-    ADC12CTL2 |= ADC12RES__12BIT ;//| ADC12DF_0;
+    ADC12CTL2 |= ADC12RES__12BIT ;
     ADC12CTL2 &= ~ADC12DF;
     // conversion start address: MEM0
     ADC12CTL3 |= ADC12CSTARTADD_0;
@@ -291,11 +286,25 @@ void ADC_config()
     // Clear interrupt for MEM0
     ADC12IFGR0 &= ~ADC12IFG0;
 
+}
+
+void ADC_start()
+{
     // Enable interrupt for (only) MEM0
     ADC12IER0 = ADC12IE0;
 
     // Trigger first conversion (Enable conversion and Start conversion)
-    ADC12CTL0 |= ADC12ENC | ADC12SC;
+    // ADC module ON
+    ADC12CTL0 |= ADC12ENC | ADC12SC | ADC12ON;
+}
+
+void ADC_stop()
+{
+    // turn off the ADC to save energy
+    ADC12CTL0 &= ~ADC12ON;
+
+    // Clear interrupt for MEM0
+    ADC12IFGR0 &= ~ADC12IFG0;
 }
 
 #if defined(__TI_COMPILER_VERSION__) || defined(__IAR_SYSTEMS_ICC__)
