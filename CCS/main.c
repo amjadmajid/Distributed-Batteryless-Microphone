@@ -26,7 +26,6 @@ void main_init() {
 int main(void)
 {
     uint16_t temp;
-    uint16_t is;
 
     main_init();
 
@@ -37,25 +36,13 @@ int main(void)
             ADC_init();
             mic_wait_for_sound();
 
-            // save interrupt state and then disable interrupts
-            is = __get_interrupt_state();
-            __disable_interrupt();
-
-            ADC_start();
-            counter = 0;
-
             #if defined(LOGIC)
                 P3OUT |= BIT1;
             #endif
 
-            __enable_interrupt();
-
+            counter = 0;
+            ADC_start();
             while(counter < SAMPLES);
-
-            ADC_stop();
-
-            // restore interrupt state
-            __set_interrupt_state(is);
 
             // GO TO GET FINGERPRINT
             fp_rec.start = 0;
@@ -300,11 +287,12 @@ void ADC_start()
 
 void ADC_stop()
 {
+    // disable ADC conversion and disable interrupt request for MEM0
+    ADC12CTL0 &= ~ADC12ENC;
+    ADC12IER0 &= ~ADC12IE0;
+
     // turn off the ADC to save energy
     ADC12CTL0 &= ~ADC12ON;
-
-    // Clear interrupt for MEM0
-    ADC12IFGR0 &= ~ADC12IFG0;
 }
 
 #if defined(__TI_COMPILER_VERSION__) || defined(__IAR_SYSTEMS_ICC__)
@@ -323,9 +311,7 @@ void ADC12_ISR(void)
             // Read ADC12MEM0 value
             sampled_input[counter++] = ADC12MEM0;
         else {
-            // disable ADC conversion and disable interrupt request for MEM0
-            ADC12CTL0 &= ~ADC12ENC;
-            ADC12IER0 &= ~ADC12IE0;
+            ADC_stop();
         }
         break;
 
@@ -360,13 +346,9 @@ void __attribute__ ((interrupt(PORT5_VECTOR))) port5_isr_handler (void)
             case P5IV__P5IFG2:  break;          // Vector  6:  P5.2 interrupt flag
             case P5IV__P5IFG3:  break;          // Vector  8:  P5.3 interrupt flag
             case P5IV__P5IFG4:  break;          // Vector  10:  P5.4 interrupt flag
-            case P5IV__P5IFG5:                  // Vector  12:  P5.5 interrupt flag
-                __bic_SR_register_on_exit(LPM4_bits); // Exit LPM4
-                break;
+            case P5IV__P5IFG5:  break;          // Vector  12:  P5.5 interrupt flag
             case P5IV__P5IFG6:  break;          // Vector  14:  P5.6 interrupt flag
-            case P5IV__P5IFG7:                  // Vector  16:  P5.7 interrupt flag
-                __bic_SR_register_on_exit(LPM4_bits); // Exit LPM4
-                break;
+            case P5IV__P5IFG7:  break;          // Vector  16:  P5.7 interrupt flag
             default: break;
         }
 }
