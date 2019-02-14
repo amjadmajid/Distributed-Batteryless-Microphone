@@ -37,11 +37,11 @@ The on-time evolution of a event-oblivious distributed intermittent system, as m
 When the power cycles are uniformly distributed, adding a node increases the average on-time as follows, 
 %
 \begin{equation}
-\delta t = \frac{t_{off}}{s_{pc}} * n_{on}
+\delta t = \frac{t_{off}}{t_{sp}} * n_{on}
 		\label{eq:indCov}
 \end{equation}
 %
-where $t_{off}$ is the off-time of the distributed system, $s_{pc}$ is the period of the distributed system's power cycle, $n_{on}$ is a node on-time, and $\delta t$ is the time gain of the distributed intermittent system.
+where $t_{off}$ is the off-time of the distributed system, $t_{sp}$ is the period of the distributed system's power cycle, $n_{on}$ is a node on-time, and $\delta t$ is the time gain of the distributed intermittent system.
 
 As Figure\,\ref{fig:independentCoverage} shows adding nodes to intermittent distributed systems increases its overall on-time, and consequently, its responsiveness. It is also clear that the benefit of an additional node is inversely proportional to the distributed system's on-time. Equation~\ref{eq:indCov}, however, holds only when nodes wake-ups approximate a uniform distribution. \checkit{When the nodes are in close proximity, we cannot model their power cycles as a random variable drawn from a uniform distribution because their energy charging rates are correlated}. 
 

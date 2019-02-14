@@ -22,7 +22,7 @@ go & pause & resume & edit  & quit  \\
 %
 Since our target hardware has extremely limited resources, the first experiment targets the minimum effective recoding length without significant accuracy loss. 
 
-For this experiment a single microcontroller running on continuous power is used. Each word from Table~\ref{tab:words} was recorded on a PC 20 times. The features---normalized FFT-based values---of the first recording are saved in the microcontroller persistent memory as a signature to perform the feature matching, during the testing. the rest of the recording are used for conducting the experiment.   
+For this experiment a single microcontroller running on continuous power is used. Each word from Table~\ref{tab:words} was recorded on a PC 20 times. The features---normalized FFT-based values---of the first recording are saved in the microcontroller's persistent memory as a signature to perform the feature matching, during the testing. the rest of the recording are used for conducting the experiment.   
 
 Figure~\ref{fig:multi} shows words recognition accuracy when the 19 recordings of each word are played back from the PC speaker. We can concluded that recording beyond \textit{nine frames} do not increase the recognition accuracy; therefore, nine frames recording length is chosen for the rest of the experiments. 
 
@@ -44,7 +44,7 @@ Figure~\ref{fig:multi} shows words recognition accuracy when the 19 recordings o
 	Section & Linear (ms) & DTW (ms) \\\hline
 	Recording & 285.9  & 285.9 \\
 	Feature extraction & 501.9 & 501.9 \\
-	Feature matching &  99.4 & \todo{TODO} \\\hline
+	Feature matching &  99.4 & 1251 \\\hline
 	Total & 887.2 & \\\hline
 	\end{tabular}
 	$
