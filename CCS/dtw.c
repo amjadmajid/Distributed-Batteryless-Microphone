@@ -53,7 +53,7 @@ uint16_t dtw_full(int16_t x[NUM_FRAME*BANDS], const int16_t y[],
     for (i=0; i <ysize; i++)
         globdist[0][i] = VERY_BIG;
 
-    globdist[0][0] = 0;
+    globdist[0][0] = Dist[0][0];
 
 
     for (i=1; i<xsize; i++) {
@@ -128,7 +128,7 @@ uint16_t dtw_window(int16_t x[NUM_FRAME*BANDS], const int16_t y[],
         }
     }
 
-    globdist[0][0] = 0;
+    globdist[0][0] = Dist[0][0];
 
 
     for (i=1; i<xsize; i++) {

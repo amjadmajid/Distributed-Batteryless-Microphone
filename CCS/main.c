@@ -8,13 +8,13 @@ void main_init() {
     mic_wake_up_init();
 
 #if defined(SIMULATION)
-    start_power_simulation(t_on);
+    start_power_simulation(36866); // 36866 = 294930 us = 9 frames
 #endif
 
 #if defined(LOGIC)
     // output pins for logic analyzer
     P3DIR = BIT0|BIT1;
-    P3OUT = 0x01;
+    P3OUT = BIT0;
 #endif
 
 #if defined(UART)
@@ -26,7 +26,6 @@ void main_init() {
 int main(void)
 {
     uint16_t temp;
-    uint16_t is;
 
     main_init();
 
@@ -34,30 +33,22 @@ int main(void)
         switch(state) {
 
         case RECORD:
+<<<<<<< HEAD
             ADC_init();
 //            mic_wait_for_sound();
-
-            // save interrupt state and then disable interrupts
-            is = __get_interrupt_state();
-            __disable_interrupt();
-
-            ADC_start();
-            counter = 0;
+=======
+            mic_wait_for_sound();
+>>>>>>> 6fcfce079c318a1912a945b5519bca289b1b8473
 
             #if defined(LOGIC)
                 P3OUT |= BIT1;
             #endif
 
-            __enable_interrupt();
-
+            counter = 0;
+            ADC_init();
+            ADC_start();
             while(counter < SAMPLES);
 
-            ADC_stop();
-
-            // restore interrupt state
-            __set_interrupt_state(is);
-
-            // GO TO GET FINGERPRINT
             fp_rec.start = 0;
             fp_rec.end = NUM_FRAME;
             i_nv = fp_rec.start;
@@ -300,11 +291,12 @@ void ADC_start()
 
 void ADC_stop()
 {
+    // disable ADC conversion and disable interrupt request for MEM0
+    ADC12CTL0 &= ~ADC12ENC;
+    ADC12IER0 &= ~ADC12IE0;
+
     // turn off the ADC to save energy
     ADC12CTL0 &= ~ADC12ON;
-
-    // Clear interrupt for MEM0
-    ADC12IFGR0 &= ~ADC12IFG0;
 }
 
 #if defined(__TI_COMPILER_VERSION__) || defined(__IAR_SYSTEMS_ICC__)
@@ -323,9 +315,7 @@ void ADC12_ISR(void)
             // Read ADC12MEM0 value
             sampled_input[counter++] = ADC12MEM0;
         else {
-            // disable ADC conversion and disable interrupt request for MEM0
-            ADC12CTL0 &= ~ADC12ENC;
-            ADC12IER0 &= ~ADC12IE0;
+            ADC_stop();
         }
         break;
 
@@ -360,13 +350,9 @@ void __attribute__ ((interrupt(PORT5_VECTOR))) port5_isr_handler (void)
             case P5IV__P5IFG2:  break;          // Vector  6:  P5.2 interrupt flag
             case P5IV__P5IFG3:  break;          // Vector  8:  P5.3 interrupt flag
             case P5IV__P5IFG4:  break;          // Vector  10:  P5.4 interrupt flag
-            case P5IV__P5IFG5:                  // Vector  12:  P5.5 interrupt flag
-                __bic_SR_register_on_exit(LPM4_bits); // Exit LPM4
-                break;
+            case P5IV__P5IFG5:  break;          // Vector  12:  P5.5 interrupt flag
             case P5IV__P5IFG6:  break;          // Vector  14:  P5.6 interrupt flag
-            case P5IV__P5IFG7:                  // Vector  16:  P5.7 interrupt flag
-                __bic_SR_register_on_exit(LPM4_bits); // Exit LPM4
-                break;
+            case P5IV__P5IFG7:  break;          // Vector  16:  P5.7 interrupt flag
             default: break;
         }
 }

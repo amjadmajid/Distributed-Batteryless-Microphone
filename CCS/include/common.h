@@ -2,8 +2,9 @@
 #include <stdint.h>
 
 #define UART
-//#define LOGIC
-//#define SIMULATION
+
+#define LOGIC
+#define SIMULATION
 
 #define SAMPLERATE  7812
 #define FRAMESIZE   256

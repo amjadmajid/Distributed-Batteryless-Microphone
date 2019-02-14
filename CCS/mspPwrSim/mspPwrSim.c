@@ -3,8 +3,9 @@
 
 #define __nv  __attribute__((section(".nv_vars")))
 
-#define off_factor 9
-#define sleep_factor 40
+// off-time and sleep-time expressed in on-time
+#define off_factor 18 // 9 times really, but on-time is doubled manually
+#define sleep_factor 38
 
 
 __nv int __noise[] = {
@@ -20,7 +21,7 @@ __nv unsigned int power = 1;
 void start_power_simulation(unsigned int interval)
 {
    power = 1;
-   timecounter=0;
+   timecounter=1; // so t_on = (1+1) * interval; set to 0 if no factor is needed
    rstInterval = interval;
 
    if(__noiseSel >= 200)
@@ -37,12 +38,14 @@ void start_power_simulation(unsigned int interval)
 }
 
 void switch_timer_to_short(){
+    int newcounter;
     //stop timer
     TA0CTL = MC__STOP;
     TA0R = 0;
     //read timecounter and set new timer
-    TA0CCR0 = timecounter * ((rstInterval/sleep_factor) +1); // How short timer depends on time left in long timer
-    timecounter = 0;
+    newcounter = timecounter / sleep_factor;
+    TA0CCR0 = (timecounter % sleep_factor) * ((rstInterval/sleep_factor) ); // How short timer depends on time left in long timer
+    timecounter = newcounter;
     //start timer
     TA0CTL = TASSEL__SMCLK | MC__UP | ID_3;
 }
@@ -51,7 +54,8 @@ void switch_timer_to_long(){
     //stop timer
     TA0CTL = MC__STOP;
     //read timer and set new counter
-    timecounter = (rstInterval-TA0R) / (rstInterval/sleep_factor); // How long timer depends on time left in short timer
+    timecounter *= sleep_factor;
+    timecounter += (rstInterval-TA0R) / (rstInterval/sleep_factor); // How long timer depends on time left in short timer
     TA0R = 0;
     TA0CCR0 = rstInterval;
     //start timer
@@ -75,7 +79,7 @@ void __attribute__ ((interrupt(TIMER0_A0_VECTOR))) Timer0_A0_ISR (void)
             P5IE &= ~BIT1;       // disable mic interrupt
             ADC12IER0 &= ~ADC12IE0;  // disable ADC interrupt
             power=0;  // turn node "off" in next if statement (same run of ISR)
-            timecounter = off_factor;  // off-time = 9 x on-time
+            timecounter = off_factor;
             P3OUT &= ~(BIT0|BIT1); // for logic analyzer
         }
         else {
