@@ -8,13 +8,13 @@ void main_init() {
     mic_wake_up_init();
 
 #if defined(SIMULATION)
-    start_power_simulation(t_on);
+    start_power_simulation(36866); // 36866 = 294930 us = 9 frames
 #endif
 
 #if defined(LOGIC)
     // output pins for logic analyzer
     P3DIR = BIT0|BIT1;
-    P3OUT = 0x01;
+    P3OUT = BIT0;
 #endif
 
 #if defined(UART)
@@ -33,7 +33,6 @@ int main(void)
         switch(state) {
 
         case RECORD:
-            ADC_init();
             mic_wait_for_sound();
 
             #if defined(LOGIC)
@@ -41,10 +40,10 @@ int main(void)
             #endif
 
             counter = 0;
+            ADC_init();
             ADC_start();
             while(counter < SAMPLES);
 
-            // GO TO GET FINGERPRINT
             fp_rec.start = 0;
             fp_rec.end = NUM_FRAME;
             i_nv = fp_rec.start;

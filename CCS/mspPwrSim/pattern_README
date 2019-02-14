@@ -1,0 +1,17 @@
+Power trace
+
+1 MSP430 with PMM microphone
+Powered by: solar panel
+Light in environment: 850 lux
+Recording time: 9 frames
+Wake_on_sound: off
+Endpoint detection: none
+Feature matching: linear
+File: feb11/880_channel_0.csv
+Results:
+    On-time  mean: 0.485042151163 stdev: 0.0177274822514
+    Off-time mean: 4.17032172619 stdev: 0.102289864905
+
+0.0177274822514 seconds * 1000000 / 8 = 2215.935281425
+
+Command for random numbers: python random_gaussian.py 0 2215 200
