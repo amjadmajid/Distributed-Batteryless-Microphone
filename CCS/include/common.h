@@ -2,7 +2,7 @@
 #include <stdint.h>
 
 #define UART
-#define LOGIC
+//#define LOGIC
 //#define SIMULATION
 
 #define SAMPLERATE  7812

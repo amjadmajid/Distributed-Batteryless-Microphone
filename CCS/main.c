@@ -35,7 +35,7 @@ int main(void)
 
         case RECORD:
             ADC_init();
-            mic_wait_for_sound();
+//            mic_wait_for_sound();
 
             // save interrupt state and then disable interrupts
             is = __get_interrupt_state();
