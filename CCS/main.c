@@ -33,12 +33,8 @@ int main(void)
         switch(state) {
 
         case RECORD:
-<<<<<<< HEAD
-            ADC_init();
-//            mic_wait_for_sound();
-=======
+
             mic_wait_for_sound();
->>>>>>> 6fcfce079c318a1912a945b5519bca289b1b8473
 
             #if defined(LOGIC)
                 P3OUT |= BIT1;
