@@ -2,6 +2,7 @@
 #include <stdint.h>
 
 #define UART
+
 #define LOGIC
 #define SIMULATION
 
