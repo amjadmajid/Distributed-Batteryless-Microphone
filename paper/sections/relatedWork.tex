@@ -3,14 +3,14 @@ Many batteryless energy-harvesting platforms have been proposed, for example, Wi
 
 \subsection{Intermittent execution}
 % Sleep not to die 
-Intermittent systems regarded as the successor of energy-aware systems. Dewdrop~\cite{} is an energy-aware runtime for (Computational) RFIDs such as WISP. 
-Dewdrop goes into low power mode until sufficient energy for a given task is accumulated. QuarkOS~\cite{} divides the given task (i.e. sending a message)  into small segments and sleep after finishing a segment for charging energy. However, these systems are not disruption tolerance.  
+Intermittent systems regarded as the successor of energy-aware systems. Dewdrop~\cite{buettner2011dewdrop} is an energy-aware runtime for (Computational) RFIDs such as WISP. 
+Dewdrop goes into low power mode until sufficient energy for a given task is accumulated. QuarkOS~\cite{zhang2013quarkos} divides the given task (i.e. sending a message)  into small segments and sleep after finishing a segment for charging energy. However, these systems are not disruption tolerance.  
 % checkpointing 
 
-The first power failure tolerant systems use the idea of volatile progress state checkpoiting into persistent memory~\cite{mementos}. DINO~\cite{dino}, however, shows that in addition to the volatile memory, the non-volatile memory of the processor must also be protected to ensure correct executions. Hibernus~\cite{} measure the voltage level in the energy buffer to reduce the number of checkpoints. Ratchet~\cite{} uses compiler analysis to eliminate the need of programmer intervention or hardware support. HarvOS~\cite{} uses both compiler and hardware support to optimize checkpoint placement and energy consumption.
+The first power failure tolerant systems use the idea of volatile progress state checkpoiting into persistent memory~\cite{mementos}. DINO~\cite{dino}, however, shows that in addition to the volatile memory, the non-volatile memory of the processor must also be protected to ensure correct executions. Hibernus~\cite{balsamo2015hibernus} measure the voltage level in the energy buffer to reduce the number of checkpoints. Ratchet~\cite{woude2016ratchet} uses compiler analysis to eliminate the need of programmer intervention or hardware support. HarvOS~\cite{bhatti2017harvos} uses both compiler and hardware support to optimize checkpoint placement and energy consumption.
 
 % task-based
-Task-based systems optimize intermittent execution by reducing the amount of data needed to be saved into non-volatile memory to protect applications against power interruptions~\cite{chain}. However,  
+Task-based systems optimize intermittent execution by reducing the amount of data needed to be saved into non-volatile memory to protect applications against power interruptions~\cite{colin2016chain}. However,  
 % I/O and time related
 
 % languages
