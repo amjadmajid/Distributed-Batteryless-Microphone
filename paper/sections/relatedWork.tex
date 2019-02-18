@@ -2,9 +2,22 @@
 Many batteryless energy-harvesting platforms have been proposed, for example, Wireless Identification and Sensing Platform (WISP)~\cite{smith_ubicomp_2006} and its variants such as NFC-WISP~\cite{zhao2015nfc}, WISPcam~\cite{naderiparizi_rfid_2015} and, NeuralWISP~\cite{yeager2009neuralwisp}, batteryless phone~\cite{talla2017battery}, ambient backscatter tag~\cite{liu2013ambient} Moo~\cite{moo}
 
 \subsection{Intermittent execution}
-\todo{intermittent execution approaches:}
+% Sleep not to die 
+Intermittent systems regarded as the successor of energy-aware systems. Dewdrop~\cite{} is an energy-aware runtime for (Computational) RFIDs such as WISP. 
+Dewdrop goes into low power mode until sufficient energy for a given task is accumulated. QuarkOS~\cite{} divides the given task (i.e. sending a message)  into small segments and sleep after finishing a segment for charging energy. However, these systems are not disruption tolerance.  
+% checkpointing 
 
-\subsection{Speech Recognition}
+The first power failure tolerant systems use the idea of volatile progress state checkpoiting into persistent memory~\cite{mementos}. DINO~\cite{dino}, however, shows that in addition to the volatile memory, the non-volatile memory of the processor must also be protected to ensure correct executions. Hibernus~\cite{} measure the voltage level in the energy buffer to reduce the number of checkpoints. Ratchet~\cite{} uses compiler analysis to eliminate the need of programmer intervention or hardware support. HarvOS~\cite{} uses both compiler and hardware support to optimize checkpoint placement and energy consumption.
+
+% task-based
+Task-based systems optimize intermittent execution by reducing the amount of data needed to be saved into non-volatile memory to protect applications against power interruptions~\cite{chain}. However,  
+% I/O and time related
+
+% languages
+
+% debugging 
+
+\subsection{Speech recognition}
 The speech recognition problem has been tackled from many angles and has experienced many great breakthroughs. For example, Dynamic time warping (DTW) algorithm enables matching voice signals with different speed (or time) \cite{}. Approaches based on Hidden Markov Models showed much better performance than DTW-based ones~\cite{jelinek1997statistical}. Hence, they became the standard techniques for general purpose speech recognition until artificial intelligent algorithms~\cite{hinton2012deep}, however, outperform them. 
 
 Many specialized hardware architectures for speech recognition have been proposed to, for instance, reduce energy consumption \cite{price2018low,price20156}. 

@@ -16,7 +16,7 @@ Ambient energy is volatile, and scarce. For example, radio waves harvestable pow
 
 A tiny energy-harvesting device slowly charges its energy buffer (e.g. capacitor) while the device is off. Once the buffer is full, the device begins operating and depleting its energy reservoir---since power consumption is much higher than harvested power---until it powers down. This charging-discharging cycle repeats indefinitely (Figure~\ref{fig:powerCycle}). 
 
-\subsection{Intermittent Computing}
+\subsection{Intermittent computing}
 % What is the problem that requires intermittent execution
 Intermittent execution models~\cite{van2016intermittent,colin2016chain,lucia2015simpler,bhatti2017harvos} enable applications to progress despite frequent power failure. They decompose an application into several small code pieces and save the progress state of the application on the transitions between these code segments. Therefore, intermittent applications do not return to the same execution point (e.g. \texttt{main()}) after each power failure, as the applications that assume continuous power supply, instead they resume from the last saved progress state of execution.   
 % means of intermittent execution 

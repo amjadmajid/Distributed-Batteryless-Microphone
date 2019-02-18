@@ -28,7 +28,7 @@ Two methods have been implemented and tested. The first is Dynamic Time Warping 
 The second is a method that linearly compares two feature vectors. This requires less computations than DTW.
 
 \subsection{Hardware description}
-we used MSP430RF5994~\cite{} an ultra-low-power microcontroller to drive the PMM-3738-VM1010-R microphone that features zero power listening and wake-on-sound technology~\cite{}. A BQ25570EVM-206 solar power harvester connected to a pair of SLMD121H04L solar panels intermittently powers a \sys sensor. For some experiments simulated intermittent power is used. For debugging, we used saleae logic analyzer~\cite{}. 
+we used MSP430RF5994~\cite{ti_msp430_website} an ultra-low-power microcontroller to drive the PMM-3738-VM1010-R microphone that features zero power listening and wake-on-sound technology~\cite{microphone}. A BQ25570EVM-206~\cite{BQ25570EVM-206_website} solar power harvester connected to a pair of SLMD121H04L~\cite{SLMD121H04L_website} solar panels intermittently powers a \sys sensor. For some experiments simulated intermittent power is used. For debugging, we used saleae logic analyzer~\cite{saleae}. 
 
 \subsection{Implementation}
 During recording a sample rate was used of 7812 Hz, which covers the human voice frequency range. The used frame size was 256 samples. This size was beneficial for doing a Fast Fourier Transform and corresponds to approximately 33 milliseconds of speech.
