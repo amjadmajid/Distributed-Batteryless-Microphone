@@ -33,12 +33,8 @@ int main(void)
         switch(state) {
 
         case RECORD:
-<<<<<<< HEAD
-            ADC_init();
-//            mic_wait_for_sound();
-=======
+
             mic_wait_for_sound();
->>>>>>> 6fcfce079c318a1912a945b5519bca289b1b8473
 
             #if defined(LOGIC)
                 P3OUT |= BIT1;
@@ -68,7 +64,6 @@ int main(void)
             break;
 
         case COMPARE:
-
             for( ; lib_index<NUM_WORDS ; lib_index++) {
                 temp = linear_compare(fp_rec.data, wordlist[lib_index], NUM_FRAME, NUM_FRAME);
                 if (temp <= word_value) {
@@ -146,7 +141,6 @@ void get_fingerprint(uint16_t *buf, fingerprint *fp) {
      */
     uint32_t hist[12];
     uint16_t j;
-//    uint16_t freq;
     uint16_t shift;
 
     uint32_t energy;
@@ -170,29 +164,6 @@ void get_fingerprint(uint16_t *buf, fingerprint *fp) {
             msp_fft_auto_q15(&fftParams, vec, &shift);
         #endif
 
-        // To eliminate the IF statements in the following FOR loop,
-        // the FOR loop is split in multiple WHILE loops. See below
-
-//        for ( j=(100/(SAMPLERATE / FRAMESIZE))+1 ; j < (4000/(SAMPLERATE / FRAMESIZE)); j++) {     // range such that freq is from 100-4000 Hz
-////        for ( j=0 ; j < FRAMESIZE; j++) {
-//            freq = j * (SAMPLERATE / FRAMESIZE);
-//            if (freq > 100 && freq < 300) hist[0] += squared(vec[j]); // mag^2 = energy
-//            if (freq > 250 && freq < 450) hist[1] += squared(vec[j]);
-//            if (freq > 400 && freq < 600) hist[2] += squared(vec[j]);
-//            if (freq > 550 && freq < 750) hist[3] += squared(vec[j]);
-//            if (freq > 700 && freq < 900) hist[4] += squared(vec[j]);
-//            else if (freq > 900 && freq < 1200) hist[5] += squared(vec[j]);
-//            else if (freq > 1200 && freq < 1500) hist[6] += squared(vec[j]);
-//            else if (freq > 1500 && freq < 1800) hist[7] += squared(vec[j]);
-//            else if (freq > 1800 && freq < 2300) hist[8] += squared(vec[j]);
-//            else if (freq > 2300 && freq < 2800) hist[9] += squared(vec[j]);
-//            else if (freq > 2800 && freq < 3400) hist[10] += squared(vec[j]);
-//            else if (freq > 3400 && freq < 4000) hist[11] += squared(vec[j]
-//        }
-
-//            ||
-//           \||/
-//            \/
 
         j=(100/(SAMPLERATE / FRAMESIZE))+1;
 
@@ -276,6 +247,9 @@ void ADC_init()
 
     // Clear interrupt for MEM0
     ADC12IFGR0 &= ~ADC12IFG0;
+
+    // Enable general interrupt
+    __enable_interrupt();
 
 }
 
