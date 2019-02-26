@@ -36,13 +36,18 @@ int main(void)
 
             mic_wait_for_sound();
 
+            // TODO: Depending on random number: go back to sleep.
+            // The random number can be based on LSBs from ADC values.
+            // Reading the random number can be done either before or after sleeping.
+            // note: mic has to go into normal mode first, before it can into WoS mode again. Switching to normal mode happens inside the ISR anyway.
+
+
             #if defined(LOGIC)
                 P3OUT |= BIT1;
             #endif
 
             counter = 0;
-            ADC_init();
-            ADC_start();
+            ADC_config();
             while(counter < SAMPLES);
 
             fp_rec.start = 0;
@@ -202,10 +207,11 @@ void get_fingerprint(uint16_t *buf, fingerprint *fp) {
     return;
 }
 
+
 /**
  * Configure ADC for microphone sampling
  */
-void ADC_init()
+void ADC_config()
 {
     // Pin P1.3 set for Ternary Module Function (which includes A3)
     P1SEL0 |= BIT3;
@@ -251,11 +257,7 @@ void ADC_init()
     // Enable general interrupt
     __enable_interrupt();
 
-}
-
-void ADC_start()
-{
-    // Enable interrupt for (only) MEM0
+    // Enable interrupt for MEM0
     ADC12IER0 = ADC12IE0;
 
     // Trigger first conversion (Enable conversion and Start conversion)

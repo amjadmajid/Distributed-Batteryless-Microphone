@@ -15,6 +15,7 @@
 <stringAttribute key="com.ti.ccstudio.debug.debugModel.MRU_PROGRAM./home/patrick/Documents/GitHub/Distributed-Batteryless-Microphone/CCS/targetConfigs/MSP430FR5994.ccxml.TI MSP430 USB1_0/MSP430" value="/home/patrick/Documents/GitHub/Distributed-Batteryless-Microphone/CCS/Debug/BatterylessMic.out"/>
 <mapAttribute key="com.ti.ccstudio.debug.ui.displayFormats">
 <mapEntry key="TI MSP430 USB1/MSP430@##separator##@0" value="16-Bit UnSigned Int"/>
+<mapEntry key="TI MSP430 USB1_0/MSP430@##separator##@0" value="16-Bit Signed Int"/>
 </mapAttribute>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
 <listEntry value="/BatterylessMic"/>
