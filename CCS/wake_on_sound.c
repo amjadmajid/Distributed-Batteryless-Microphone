@@ -31,7 +31,6 @@ void mic_wait_for_sound() {
     P5OUT |= BIT0;
 
 #if defined(SIMULATION)
-    switch_timer_to_long();
     __bis_SR_register(LPM0_bits | GIE);
     __no_operation();                   // For debugger
 #else

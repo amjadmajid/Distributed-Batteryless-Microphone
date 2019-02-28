@@ -20,13 +20,13 @@ void main_init() {
 #if defined(UART)
     uart_init();
 #endif
+
+desync_init();
 }
 
 
 int main(void)
 {
-    uint16_t temp;
-
     main_init();
 
     while (1) {             // loop for: recording->detecting->analyzing->comparing->..
@@ -34,13 +34,16 @@ int main(void)
 
         case RECORD:
 
+            #if defined(SIMULATION)
+                switch_timer_to_long();
+            #endif
+
             mic_wait_for_sound();
+            desync();
 
-            // TODO: Depending on random number: go back to sleep.
-            // The random number can be based on LSBs from ADC values.
-            // Reading the random number can be done either before or after sleeping.
-            // note: mic has to go into normal mode first, before it can into WoS mode again. Switching to normal mode happens inside the ISR anyway.
-
+            #if defined(SIMULATION)
+                switch_timer_to_short();
+            #endif
 
             #if defined(LOGIC)
                 P3OUT |= BIT1;
@@ -70,9 +73,8 @@ int main(void)
 
         case COMPARE:
             for( ; lib_index<NUM_WORDS ; lib_index++) {
-                temp = linear_compare(fp_rec.data, wordlist[lib_index], NUM_FRAME, NUM_FRAME);
-                if (temp <= word_value) {
-                    word_value = temp;
+                word_value[lib_index] = linear_compare(fp_rec.data, wordlist[lib_index], NUM_FRAME, NUM_FRAME);
+                if (word_value[lib_index] <= word_value[word_index]) {
                     word_index = lib_index;
                     }
                 }
@@ -98,11 +100,38 @@ int main(void)
 
 
 
+void desync_init() {
+    TA1CCTL0 = CCIE;                        // TACCR0 interrupt enabled
+    TA1CCR0 = 0; // don't start timer yet
+    TA1EX0 = TAIDEX_1; // pre-divider 2
+    TA1CTL = TACLR | TASSEL__SMCLK | MC__UP | ID_3;   // SMCLK, counting up, divider 8
+//    TA1CTL = TASSEL__ACLK | MC__UP;         // ACLK, up mode
+}
 
+
+void desync() {
+    /*
+     * Delay recording for de-synchronization
+     * To be used in a setup with multiple nodes, to prevent all of them reacting to the same event, and miss the next one because of that.
+     * The random number is based on LSBs from ADC values. P=50% is used
+     *
+     * NOT OPTIMIZED FOR POWER CONUSMPTION YET   (TODO)
+     */
+
+    while ( (sampled_input[__randSel++] & 0x01) == 1) {
+        if(__randSel >= SAMPLES) {
+            __randSel=0;
+        }
+        // sleep for the time of 1 word
+        TA1CCR0 = 43750;  // 700 ms
+        __bis_SR_register(LPM0_bits | GIE);     // Enter LPM0 w/ interrupt  // note: LPM3 could be used for less power consumption. Works only with VLO clock though.
+
+        mic_wait_for_sound();
+    }
+}
 
 void compare_init() {
-    word_value = VERY_BIG;
-    word_index = -1;
+    word_index = NUM_WORDS;
     lib_index = 0;
 }
 
@@ -316,7 +345,7 @@ void __attribute__ ((interrupt(PORT5_VECTOR))) port5_isr_handler (void)
             case P5IV__P5IFG1:                  // Vector  4:  P5.1 interrupt flag
 
                 #if defined(SIMULATION)
-                    switch_timer_to_short();
+//                    switch_timer_to_short();
                     __bic_SR_register_on_exit(LPM0_bits); // Exit LPM0
                 #else
                     __bic_SR_register_on_exit(LPM4_bits); // Exit LPM4
@@ -332,3 +361,20 @@ void __attribute__ ((interrupt(PORT5_VECTOR))) port5_isr_handler (void)
             default: break;
         }
 }
+
+
+// Timer A1 interrupt service routine
+#if defined(__TI_COMPILER_VERSION__) || defined(__IAR_SYSTEMS_ICC__)
+#pragma vector = TIMER1_A0_VECTOR
+__interrupt void Timer1_A0_ISR(void)
+#elif defined(__GNUC__)
+void __attribute__ ((interrupt(TIMER1_A0_VECTOR))) Timer1_A0_ISR (void)
+#else
+#error Compiler not supported!
+#endif
+{
+    TA1CCR0 = 0; //stop timer
+    __bic_SR_register_on_exit(LPM0_bits); // Exit LPM0
+
+}
+

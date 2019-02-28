@@ -41,10 +41,12 @@ int16_t  vec[FRAMESIZE];
 __nv enum state_t state = RECORD;
 __nv fingerprint fp_rec;
 __nv uint16_t lib_index = 0;
-__nv uint16_t word_value;
+__nv uint16_t word_value[NUM_WORDS+1];
+              word_value[NUM_WORDS] = VERY_BIG;
 __nv int16_t  word_index;
 __nv uint16_t i_nv      = 0;
 __nv uint16_t j_nv      = 0;
+__nv int      __randSel = 0;
 
 // Recording
 volatile int16_t counter;

@@ -78,6 +78,8 @@ void __attribute__ ((interrupt(TIMER0_A0_VECTOR))) Timer0_A0_ISR (void)
         if (timecounter==0) {
             P5IE &= ~BIT1;       // disable mic interrupt
             ADC12IER0 &= ~ADC12IE0;  // disable ADC interrupt
+            TA1CCR0 = 0; // stop other timer
+
             power=0;  // turn node "off" in next if statement (same run of ISR)
             timecounter = off_factor;
             P3OUT &= ~(BIT0|BIT1); // for logic analyzer
