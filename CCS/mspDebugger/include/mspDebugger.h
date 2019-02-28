@@ -11,7 +11,7 @@
 
 void uart_sendByte(uint8_t n);
 void uart_sendChar(uint8_t c);
-void uart_sendStr(uint8_t * c);
+void uart_sendStr(uint8_t const * c);
 void uart_sendText(uint8_t * c, const uint16_t len);
 void uart_sendHex_digit(uint8_t n);
 void uart_sendHex8(uint8_t n);

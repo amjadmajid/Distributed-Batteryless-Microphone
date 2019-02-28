@@ -35,7 +35,7 @@ void uart_sendText(uint8_t * c, const uint16_t len)
 
 }
 
-void uart_sendStr(uint8_t * c)
+void uart_sendStr(uint8_t const * c)
 {
     /*
      * uart_sendStr assumes that the string is null terminated

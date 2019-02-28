@@ -11,13 +11,15 @@ enum state_t {RECORD, DETECT, ANALYZE, COMPARE};
 
 void        ADC_config              ();
 void        ADC_stop                ();
+void        desync_init             ();
+void        desync                  ();
 uint32_t    squared                 (int16_t x);
 void        endpoints_power_init    ();
 int         endpoints_power         (uint16_t *buf, fingerprint *fp, int step);
 void        endpoints_ZCR_init      ();
 int         endpoints_ZCR           (uint16_t *buf, fingerprint *fp);
 void        get_fingerprint         (uint16_t *buf, fingerprint *fp);
-void        compare_init                ();
+void        compare_init            ();
 uint16_t    dtw_full                (int16_t x[NUM_FRAME*BANDS], const int16_t y[], uint16_t xsize, uint16_t ysize);
 uint16_t    dtw_window              (int16_t x[NUM_FRAME*BANDS], const int16_t y[], uint16_t xsize, uint16_t ysize);
 uint16_t    linear_compare          (int16_t x[NUM_FRAME*BANDS], const int16_t y[], uint16_t xsize, uint16_t ysize);
@@ -41,8 +43,7 @@ int16_t  vec[FRAMESIZE];
 __nv enum state_t state = RECORD;
 __nv fingerprint fp_rec;
 __nv uint16_t lib_index = 0;
-__nv uint16_t word_value[NUM_WORDS+1];
-              word_value[NUM_WORDS] = VERY_BIG;
+__nv uint16_t word_value[NUM_WORDS+1] = { [NUM_WORDS] = 65535};
 __nv int16_t  word_index;
 __nv uint16_t i_nv      = 0;
 __nv uint16_t j_nv      = 0;
@@ -407,4 +408,4 @@ const int16_t word_stop[30*12] = {
 
 const int16_t *wordlist[NUM_WORDS] = {word_clear, word_edit, word_go, word_load, word_off, word_on, word_pause, word_cancel, word_resume, word_stop};
 const int wordlength[NUM_WORDS] = {30, 30, 30, 30, 30, 30, 30, 30, 30, 30};
-const char words[NUM_WORDS][10] = {" clear", " edit", " go", " load", " off", " on", " pause", "cancel", " resume", " stop"};
+const char words[NUM_WORDS][10] = {" clear", " edit", " go", " load", " off", " on", " pause", " cancel", " resume", " stop"};

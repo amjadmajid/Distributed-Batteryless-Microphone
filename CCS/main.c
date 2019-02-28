@@ -79,14 +79,12 @@ int main(void)
                     }
                 }
 
-            if (word_index != -1) {
-
-                #if defined(UART)
-                    uint8_t * c = words[word_index];
-                    uart_sendStr(c);
-                    uart_sendHex16(word_value);
-                #endif
-            }
+            #if defined(UART)
+                if (word_index != NUM_WORDS) {
+                    uart_sendStr( (uint8_t const *) words[word_index]);
+                    uart_sendHex16(word_value[word_index]);
+                }
+            #endif
             /* no break */
 
         default:
