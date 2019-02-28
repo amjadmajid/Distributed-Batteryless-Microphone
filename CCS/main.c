@@ -191,7 +191,7 @@ void get_fingerprint(uint16_t *buf, fingerprint *fp) {
 
         // use fft to compute energy in each spectral band
         #if defined(UART)
-            if (msp_fft_auto_q15(&fftParams, vec, &shift)) uart_sendText("FFT_ERR", 7);
+            if (msp_fft_auto_q15(&fftParams, vec, &shift)) uart_sendStr( (uint8_t const *) "FFT_ERR");
         #else
             msp_fft_auto_q15(&fftParams, vec, &shift);
         #endif
