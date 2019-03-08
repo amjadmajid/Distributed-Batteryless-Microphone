@@ -16,3 +16,5 @@
 void start_power_simulation(unsigned int interval);
 void switch_timer_to_short();
 void switch_timer_to_long();
+void adapt_energy_buffer();
+void revert_energy_buffer();

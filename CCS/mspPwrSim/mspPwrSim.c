@@ -1,11 +1,13 @@
 #include <msp430.h> 
 #include "mspDebugger.h"
 
+#ifndef __nv
 #define __nv  __attribute__((section(".nv_vars")))
+#endif
 
 // off-time and sleep-time expressed in on-time
-#define off_factor 18 // 9 times really, but on-time is doubled manually
-#define sleep_factor 38
+#define OFF_FACTOR 18 // 9 times really, but on-time is doubled manually
+#define SLEEP_FACTOR 38
 
 
 __nv int __noise[] = {
@@ -13,28 +15,28 @@ __nv int __noise[] = {
 };
 
 __nv unsigned int __noiseSel = 0;
-__nv unsigned int rstInterval = 0;
-__nv unsigned int timecounter = 0;
-__nv unsigned int power = 1;
+unsigned int rstInterval = 0;
+unsigned int timecounter = 0;
+unsigned int power = 1;
+unsigned int low_power_mode = 0;
 
 
 void start_power_simulation(unsigned int interval)
 {
-   power = 1;
-   timecounter=1; // so t_on = (1+1) * interval; set to 0 if no factor is needed
-   rstInterval = interval;
+    power = 1;
+    timecounter=1; // so t_on = (1+1) * interval; set to 0 if no factor is needed
+    rstInterval = interval;
 
-   if(__noiseSel >= 200)
-   {
+    if(__noiseSel >= 200) {
        __noiseSel=0;
-   }
+    }
 
-  TA0CCTL0 = CCIE;                          // TACCR0 interrupt enabled
-  TA0CCR0 =rstInterval+__noise[__noiseSel]; // comment: noise is amplified as well by divider
-  TA0CTL = TASSEL__SMCLK | MC__UP | ID_3;   // SMCLK, counting up, divider 8
+    TA0CCTL0 = CCIE;                          // TACCR0 interrupt enabled
+    TA0CCR0 =rstInterval+__noise[__noiseSel]; // comment: noise is amplified as well by divider
+    TA0CTL = TASSEL__SMCLK | MC__UP | ID_3;   // SMCLK, counting up, divider 8
 
-  __noiseSel++;
-  __bis_SR_register(GIE);       // enable general interrupt
+    __noiseSel++;
+    __bis_SR_register(GIE);       // enable general interrupt
 }
 
 void switch_timer_to_short(){
@@ -43,8 +45,8 @@ void switch_timer_to_short(){
     TA0CTL = MC__STOP;
     TA0R = 0;
     //read timecounter and set new timer
-    newcounter = timecounter / sleep_factor;
-    TA0CCR0 = (timecounter % sleep_factor) * ((rstInterval/sleep_factor) ); // How short timer depends on time left in long timer
+    newcounter = timecounter / SLEEP_FACTOR;
+    TA0CCR0 = (timecounter % SLEEP_FACTOR) * ((rstInterval/SLEEP_FACTOR) ); // How short timer depends on time left in long timer
     timecounter = newcounter;
     //start timer
     TA0CTL = TASSEL__SMCLK | MC__UP | ID_3;
@@ -54,15 +56,44 @@ void switch_timer_to_long(){
     //stop timer
     TA0CTL = MC__STOP;
     //read timer and set new counter
-    timecounter *= sleep_factor;
-    timecounter += (rstInterval-TA0R) / (rstInterval/sleep_factor); // How long timer depends on time left in short timer
+    timecounter *= SLEEP_FACTOR;
+    timecounter += (rstInterval-TA0R) / (rstInterval/SLEEP_FACTOR); // How long timer depends on time left in short timer
     TA0R = 0;
     TA0CCR0 = rstInterval;
     //start timer
     TA0CTL = TASSEL__SMCLK | MC__UP | ID_3;
 }
 
+void adapt_energy_buffer() {
+    if (timecounter >= SLEEP_FACTOR) {
+        timecounter -= SLEEP_FACTOR;
+        low_power_mode = 1;
+    }
+    else {
+        // recharge
+        P5IE &= ~BIT1;       // disable mic interrupt
+        ADC12IER0 &= ~ADC12IE0;  // disable ADC interrupt
+        TA1CCR0 = 0; // stop other timer
 
+        power=0;  // turn node "off"
+        timecounter = (OFF_FACTOR-1) - ((timecounter * OFF_FACTOR/2)/SLEEP_FACTOR);
+        P3OUT &= ~(BIT0|BIT1); // for logic analyzer
+
+        if(__noiseSel >= 200)  __noiseSel=0;
+
+        TA0CCR0 = rstInterval+__noise[__noiseSel];
+        __noiseSel++;
+
+        // sleep LPM0 -> SMCLOCK remains active if SMCLKOFF = 0 (if SMCLK in use)
+        __bis_SR_register(LPM0_bits | GIE);
+        __no_operation();
+    }
+}
+
+void revert_energy_buffer() {
+    timecounter += SLEEP_FACTOR;
+    low_power_mode = 0;
+}
 
 // Timer0_A0 interrupt service routine
 #if defined(__TI_COMPILER_VERSION__) || defined(__IAR_SYSTEMS_ICC__)
@@ -81,8 +112,13 @@ void __attribute__ ((interrupt(TIMER0_A0_VECTOR))) Timer0_A0_ISR (void)
             TA1CCR0 = 0; // stop other timer
 
             power=0;  // turn node "off" in next if statement (same run of ISR)
-            timecounter = off_factor;
             P3OUT &= ~(BIT0|BIT1); // for logic analyzer
+            if (low_power_mode) {
+                timecounter = OFF_FACTOR/2;
+            }
+            else {
+                timecounter = OFF_FACTOR;
+            }
         }
         else {
             timecounter--;

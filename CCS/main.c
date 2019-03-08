@@ -36,12 +36,17 @@ int main(void)
 
             #if defined(SIMULATION)
                 switch_timer_to_long();
+                adapt_energy_buffer();
+//            TA0CTL = MC__STOP;
             #endif
 
-            mic_wait_for_sound();
+                // choose 1
+//            mic_wait_for_sound();
             desync();
 
             #if defined(SIMULATION)
+//            TA0CTL = TASSEL__SMCLK | MC__UP | ID_3;
+                revert_energy_buffer();
                 switch_timer_to_short();
             #endif
 
@@ -115,17 +120,16 @@ void desync() {
      *
      * NOT OPTIMIZED FOR POWER CONUSMPTION YET   (TODO)
      */
-
-    while ( (sampled_input[__randSel++] & 0x01) == 1) {
-        if(__randSel >= SAMPLES) {
-            __randSel=0;
-        }
+    do {
+        if(__randSel >= SAMPLES) __randSel=0;
         // sleep for the time of 1 word
         TA1CCR0 = 43750;  // 700 ms
         __bis_SR_register(LPM0_bits | GIE);     // Enter LPM0 w/ interrupt  // note: LPM3 could be used for less power consumption. Works only with VLO clock though.
-
         mic_wait_for_sound();
-    }
+
+    } while ( (sampled_input[__randSel++] & 0x01) == 1);
+
+    if(__randSel >= SAMPLES) __randSel=0;
 }
 
 void compare_init() {
