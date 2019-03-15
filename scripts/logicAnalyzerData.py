@@ -31,6 +31,7 @@ class LogicAnalyzerData:
             for line in csvReader:
                 self.states.append(list(map(int, line[1:])))
                 self.timestamps.append(float(line[0])) 
+            print(len(self.states))
 
     def __timeRange(self,minTimestamp, maxTimestamp):
         """ __timeRane(...) time range selector [...)
@@ -47,6 +48,8 @@ class LogicAnalyzerData:
 
     def __statesSelector(self, cols, states):
         s = np.array(states)
+        # print(s)
+        # print("cols",cols)
         return s[:,cols]
 
     def getNumOfNodes(self):
@@ -56,8 +59,11 @@ class LogicAnalyzerData:
         return self.timestamps[-1]
 
     def getData(self, minTime, maxTime, cols):
+        # print("minMax",minTime,maxTime)
         indices = self.__timeRange(minTime, maxTime)
+        # print("indices",indices)
         rawStates = [ self.states[i] for i in indices]
+        # print("rawStates", rawStates)
         timestamps = np.array([ self.timestamps[i] for i in indices])
         states = self.__statesSelector(cols,rawStates)
         return timestamps, states

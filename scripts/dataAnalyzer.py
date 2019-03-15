@@ -13,7 +13,6 @@ class Analyzer:
         dataLen=len(self.timestamps)
         onTime_start=False
         onTimeIntervals=[]
-        #print(dataLen)
 
         for idx in range(dataLen):
 #            print(type(self.states[idx]))

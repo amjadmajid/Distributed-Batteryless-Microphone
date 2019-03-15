@@ -15,6 +15,8 @@ class Plotter:
         self.__dataInterpolation()
 
     def __dataInterpolation(self):
+        """This method interpolates the logic analyzer data to enable
+        square-like graph plotting."""
         clustersTimestamps=[]
         timestamps=self.data[0]
         states=self.data[1]
