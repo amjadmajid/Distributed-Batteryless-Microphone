@@ -10,13 +10,14 @@ from dataAnalyzer import Analyzer
 from plotter import Plotter
 
 ## 470uf
+#path='../data/DIS_uptime/random-initial-conditions_7-nodes_5-mins_indoor_night_March-11-2019.csv'
+# path='../data/DIS_uptime/random-initial-conditions_7-nodes_5-mins_no-artificial-light_windows-fully-open_cloudy-day_March-12-2019.csv'
+
+## 680uf
 #path = '../data/DIS_uptime/680uf/random-initial-conditions_8-nodes_5-mins_with-artificial-light_windows-30-percent-open_cloudy-day_March-12-2019.csv'
 #path='../data/DIS_uptime/680uf/random-initial-conditions_8-nodes_5-mins_with-artificial-light_windows-fully-open_cloudy-day_March-12-2019.csv'
 #path='../data/DIS_uptime/680uf/random-initial-conditions_8-nodes_5-mins_with-artificial-light_windows-fully-open_night_March-12-2019.csv'
-
-## 680uf
-#path='../data/DIS_uptime/random-initial-conditions_7-nodes_5-mins_indoor_night_March-11-2019.csv'
-path='../data/DIS_uptime/random-initial-conditions_7-nodes_5-mins_no-artificial-light_windows-fully-open_cloudy-day_March-12-2019.csv'
+path='../data/DIS_uptime/680uf/random-initial-conditions_8-nodes_5-mins_with-artificial-light_windows-fully-open_cloudy-near-sunset_March-15-2019.csv'
 
 ## 1000uf
 #path='../data/DIS_uptime/1000uf/random-initial-conditions_3-nodes_5-mins_indoor_night_March-13-2019.csv'
