@@ -38,4 +38,10 @@ class Plotter:
         #print(np.sum(self.interpolatedStates, axis=1))
         plt.plot(self.interpolatedTimestamps,np.sum(self.interpolatedStates, axis=1))
         
+    def gbar(lsts, gapSize=0.1):
+        dataLen=len(lsts)
+        gap=gapSize
+        bw = (1-gap)/len(dataLen)
+        for i in range(datalen):
+            plt.bar(np.arange(len(lsts[0]))+bw*i, lsts[i], width=bw)  
 
