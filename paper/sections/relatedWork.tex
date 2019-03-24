@@ -2,6 +2,9 @@
 Many batteryless energy-harvesting platforms have been proposed, for example Wireless Identification and Sensing Platform (WISP)~\cite{smith_ubicomp_2006} and its variants such as NFC-WISP~\cite{zhao2015nfc}, WISPcam~\cite{naderiparizi_rfid_2015}, and NeuralWISP~\cite{yeager2009neuralwisp}, batteryless phone~\cite{talla2017battery}, ambient backscatter tag~\cite{liu2013ambient} and Moo~\cite{moo}.
 
 \subsection{Intermittent execution}
+\todo{brought from introduction}Mementos~\cite{mementos}proposed a
+Checkpointing-based approach to enable long-running applications on intermittently-powered devices. DINO~\cite{dino}enables safe non-volatile memory access despite power failures. Chain~\cite{colin2016chain} minimizes the amount of data need to be protected by introducing the concepts of atomic tasks and data-channels. Alpaca and Ratchet~\cite{maeng2017alpaca,woude2016ratchet} use compilers to automate intermittent code generation. Mayfly~\cite{hester2017timerly} enables time-aware intermittent computing. InK~\cite{yildirim2018ink} introduces event-driven intermittent execution.
+
 % Sleep not to die 
 Intermittent systems are regarded as the successor of energy-aware systems. Dewdrop~\cite{buettner2011dewdrop} is an energy-aware runtime for (Computational) RFIDs such as WISP. 
 Dewdrop goes into low-power mode until sufficient energy for a given task is accumulated. QuarkOS~\cite{zhang2013quarkos} divides the given task (i.e. sending a message) into small segments and sleeps after finishing a segment for charging energy. However, these systems are not disruption tolerance.  
