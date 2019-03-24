@@ -24,7 +24,7 @@ Events aware intermittent devices tend to have a longer effective on-time: the t
 %An intermittent device uses a capacitor (a buffer) to store energy and, usually, the capacitor has operational and shutdown thresholds (Figure\,\ref{fig:powerCycle}). 
 The on-time evolution of a event-oblivious distributed intermittent system, as more nodes join, depends on the special diversity of its individual nodes.
 %Depending on their spatial diversity, the nodes of a distributed intermittent system can experience the same energy harvesting conditions or not.
-\subsection{Spatially diverse intermittent devices}
+\subsection{Intermittent devices}
 %
 \begin{figure}
 	\centering
@@ -45,39 +45,35 @@ where $t_{off}$ is the off-time of the distributed system, $t_{sp}$ is the perio
 
 As Figure\,\ref{fig:independentCoverage} shows adding nodes to intermittent distributed systems increases its overall on-time, and consequently, its responsiveness. It is also clear that the benefit of an additional node is inversely proportional to the distributed system's on-time. Equation~\ref{eq:indCov}, however, holds only when nodes wake-ups approximate a uniform distribution. \checkit{When the nodes are in close proximity, we cannot model their power cycles as a random variable drawn from a uniform distribution because their energy charging rates are correlated}. 
 
-\subsection{Spatially invariant intermittent devices}
+%%
+%\begin{figure}
+%	\centering
+%	\begin{subfigure}[t]{0.49\columnwidth}
+%		\includegraphics[width=\textwidth]{figures/offtime.pdf}
+%			\caption{off-time length distribution}
+%		\label{fig:offtime}
+%	\end{subfigure}
+%	\begin{subfigure}[t]{0.49\columnwidth}
+%		\includegraphics[width=\textwidth]{figures/ontime.pdf}
+%		\caption{on-time length distribution}
+%		\label{fig:ontime}
+%	\end{subfigure}
+%		\caption{The distributions of the operational stages of a distributed intermittent system.}		
+%\end{figure}
+%%
+
+The \textit{off-time} of an intermittent device depends only on the environment: high charging rate results in short charging time and vice versa. Hence, we may model the off-time as a random variable drawn from a normal distribution (Figure\,\ref{fig:offtime}). The \textit{on-time}, however, depends on the buffered energy---the harvested energy while the device is off---; the harvested energy while the device is on, which only prolongs the execution; and the load of the device. Therefore, if we assume the load is constant, then we can model the on-time as a random variable drawn from a gamma distribution can be more appropriate (Figure\,\ref{fig:ontime}). Another important factor is \textit{the relation} between the off-time and the on-time. Short off-time indicates a high charging rate. A high harvesting rate results in a non-negligible amount of the harvested-while-executing energy. This energy lengthens the on-time. Therefore, we can conclude that there is an inverse relationship between the on-time and the off-time.
+
 %
-\begin{figure}
-	\centering
-	\begin{subfigure}[t]{0.49\columnwidth}
-		\includegraphics[width=\textwidth]{figures/offtime.pdf}
-			\caption{off-time length distribution}
-		\label{fig:offtime}
-	\end{subfigure}
-	\begin{subfigure}[t]{0.49\columnwidth}
-		\includegraphics[width=\textwidth]{figures/ontime.pdf}
-		\caption{on-time length distribution}
-		\label{fig:ontime}
-	\end{subfigure}
-		\caption{The distributions of the operational stages of a distributed intermittent system.}		
-\end{figure}
+%To flatten the normal distribution we need to add another random variable that is drawn from a uniform-like distribution. To achieve that, we further randomize the length of the on-time of intermittent nodes by injecting delays---putting the nodes into sleep mode---upon devices' power-ups (Figure\,\ref{fig:spreading}). The maximum delay that can be added is bounded by the buffer size and the minimum energy consumption of the load. The length of this delay represents the spreading factor by which we spread the original distribution of the nodes' wake-ups.  
 %
-To understand how the on-time of a distributed intermittent system evolves when devices' power-ups are correlated, we need to investigate the \checkit{variance} of the off-time and on-time intervals.  
+%\begin{figure}
+%	\centering
+%		\includegraphics[width=\columnwidth]{figures/spreading.pdf}
+%	\caption{Spreading normally distributed intermittent devices over a larger range by injecting delays with a uniformly distributed lengths.}
+%	\label{fig:spreading}
+%\end{figure}
 
-The \textit{off-time} of an intermittent device depends only on the environment: high charging rate results in short charging time and vice versa. Hence, we may model the off-time as a random variable drawn from a normal distribution (Figure\,\ref{fig:offtime}). The \textit{on-time}, however, depends on the buffered energy---the harvested energy while the device is off---; the harvested energy while the device is on, which only prolongs the execution; and the load of the device. Therefore, if we assume the load is constant, then we can model the on-time as a random variable drawn from a gamma distribution can be more appropriate (Figure\,\ref{fig:ontime}). Another important factor is \textit{the relation} between the off-time and the on-time. Short off-time indicates a high charging rate. A high harvesting rate results in a non-negligible amount of the harvested-while-executing energy. This energy lengthens the on-time. Therefore, we can conclude that there is an inverse relationship between the on-time and the off-time. \checkit{By considering these three factors (on-time, off-time, and their relation), we can model the variation in intermittent devices' power cycles as a normal distribution}. As a result, when charging rates are correlated, the power-ups of intermittent nodes will tend to cluster around the mean instead of spreading over the entire power cycle of the distributed intermittent system. 
-
-\todo{relocate the following paragraph}
-To flatten the normal distribution we need to add another random variable that is drawn from a uniform-like distribution. To achieve that, we further randomize the length of the on-time of intermittent nodes by injecting delays---putting the nodes into sleep mode---upon devices' power-ups (Figure\,\ref{fig:spreading}). The maximum delay that can be added is bounded by the buffer size and the minimum energy consumption of the load. The length of this delay represents the spreading factor by which we spread the original distribution of the nodes' wake-ups.  
-
-
-\todo{Update equation 1 to include the spreading factor}
-
-\begin{figure}
-	\centering
-		\includegraphics[width=\columnwidth]{figures/spreading.pdf}
-	\caption{Spreading normally distributed intermittent devices over a larger range by injecting delays with a uniformly distributed lengths.}
-	\label{fig:spreading}
-\end{figure}
 %The energy charging rate is environment dependent, while the discharge rate is load dependent. If we assume ambient energy does not fluctuate very quickly, then we can conclude that there is an inverse relationship between the on-time (discharging time) and the off-time (charging time). Short charging time means fast energy shots arrival. High energy harvesting rate prolongs discharge (execution) time, as the device harvests a nonible amount of energy while executing. 
 
 

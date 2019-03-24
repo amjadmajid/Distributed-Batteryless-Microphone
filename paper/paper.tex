@@ -6,15 +6,16 @@
 %% New command for TODOs
 \newcommand{\todo}[1]{}
 \renewcommand{\todo}[1]{{\color{red} [{#1}]}}
-\newcommand{\checkit}[1]{\textcolor{red}{Check---} \hl{#1}}
-\newcommand{\sys}{BFAlexa\xspace}
+\newcommand{\checkit}[1]{\textcolor{red}{Check---} \hl{#1}} 
+\newcommand{\sys}{CIS\xspace}
+\newcommand{\fullsys}{Coalesced Intermittent Sensor}
 %\newcommand{\fullsys}{\sys: Battery-less Distributed Microphone}
-\newcommand{\fullsys}{Distributed Batteryless Intermittent Sensors}
+%\newcommand{\fullsys}{Distributed Batteryless Intermittent Sensors}
 %\newcommand{\fullsys}{Distributed Intermittent Systems: Theory and Practice}
 
 \begin{document}
 
-\title{\fullsys} 
+\title{Continuous Sensing on Intermittent Power} 
 
 \input{preamble/authors}
 
@@ -66,10 +67,6 @@
 \label{sec:introduction}
 \input{sections/introduction}
 
-\section{Background}
-\label{sec:background}
-\input{sections/background}
-
 \section{Batteryless Distributed Sensing}
 \label{sec:disSensing}
 \input{sections/disSensing}
@@ -82,6 +79,10 @@
 \section{Evaluation}
 \label{sec:evaluation}
 \input{sections/evaluation}
+
+\section{Background}
+\label{sec:background}
+\input{sections/background}
 
 \section{Related Work}
 \label{sec:relatedWork}
