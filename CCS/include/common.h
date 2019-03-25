@@ -3,7 +3,7 @@
 
 #define UART
 #define LOGIC
-#define SIMULATION
+//#define SIMULATION
 
 #define SAMPLERATE  7812
 #define FRAMESIZE   256

@@ -40,9 +40,8 @@ int main(void)
 //            TA0CTL = MC__STOP;
             #endif
 
-                // choose 1
-//            mic_wait_for_sound();
-            desync();
+            mic_wait_for_sound();
+            desync();  // add loop with P=50%
 
             #if defined(SIMULATION)
 //            TA0CTL = TASSEL__SMCLK | MC__UP | ID_3;
@@ -57,6 +56,7 @@ int main(void)
             counter = 0;
             ADC_config();
             while(counter < SAMPLES);
+            mic_power_off();
 
             fp_rec.start = 0;
             fp_rec.end = NUM_FRAME;
@@ -107,8 +107,8 @@ void desync_init() {
     TA1CCTL0 = CCIE;                        // TACCR0 interrupt enabled
     TA1CCR0 = 0; // don't start timer yet
     TA1EX0 = TAIDEX_1; // pre-divider 2
-    TA1CTL = TACLR | TASSEL__SMCLK | MC__UP | ID_3;   // SMCLK, counting up, divider 8
-//    TA1CTL = TASSEL__ACLK | MC__UP;         // ACLK, up mode
+//    TA1CTL = TACLR | TASSEL__SMCLK | MC__UP | ID_3;   // SMCLK, counting up, divider 8
+    TA1CTL = TACLR | TASSEL__ACLK | MC__UP;   // ACLK, counting up
 }
 
 
@@ -117,19 +117,19 @@ void desync() {
      * Delay recording for de-synchronization
      * To be used in a setup with multiple nodes, to prevent all of them reacting to the same event, and miss the next one because of that.
      * The random number is based on LSBs from ADC values. P=50% is used
-     *
-     * NOT OPTIMIZED FOR POWER CONUSMPTION YET   (TODO)
      */
-    do {
+    while (sampled_input[__randSel++] & 0x01) {
         if(__randSel >= SAMPLES) __randSel=0;
         // sleep for the time of 1 word
-        TA1CCR0 = 43750;  // 700 ms
-        __bis_SR_register(LPM0_bits | GIE);     // Enter LPM0 w/ interrupt  // note: LPM3 could be used for less power consumption. Works only with VLO clock though.
-        mic_wait_for_sound();
+        mic_power_off();
+        TA1CCR0 = 13000;  // +-700 ms
 
-    } while ( (sampled_input[__randSel++] & 0x01) == 1);
+        P3OUT &= ~BIT0;
+        __bis_SR_register(LPM3_bits | GIE);
+        P3OUT |= BIT0;
 
-    if(__randSel >= SAMPLES) __randSel=0;
+        mic_wait_for_sound(); // will go into normal mode when wakes up.
+    }
 }
 
 void compare_init() {
@@ -314,7 +314,6 @@ __attribute__((interrupt(ADC12_VECTOR)))
 #endif
 void ADC12_ISR(void)
 {
-
     switch(__even_in_range(ADC12IV,12))
     {
     case 12:                                // Vector 12:  ADC12BMEM0 Interrupt
@@ -336,30 +335,19 @@ void ADC12_ISR(void)
 __interrupt void port5_isr_handler(void)
 #elif defined(__GNUC__)
 void __attribute__ ((interrupt(PORT5_VECTOR))) port5_isr_handler (void)
-#else
-#error Compiler not supported!
 #endif
 {
     switch(__even_in_range(P5IV, P5IV__P5IFG7))
         {
-            case P5IV__NONE:    break;          // Vector  0:  No interrupt
-            case P5IV__P5IFG0:  break;          // Vector  2:  P5.0 interrupt flag
             case P5IV__P5IFG1:                  // Vector  4:  P5.1 interrupt flag
-
                 #if defined(SIMULATION)
 //                    switch_timer_to_short();
                     __bic_SR_register_on_exit(LPM0_bits); // Exit LPM0
                 #else
-                    __bic_SR_register_on_exit(LPM4_bits); // Exit LPM4
+                    __bic_SR_register_on_exit(LPM3_bits); // Exit LPM3
                 #endif
                 mic_normal_mode();
                 break;
-            case P5IV__P5IFG2:  break;          // Vector  6:  P5.2 interrupt flag
-            case P5IV__P5IFG3:  break;          // Vector  8:  P5.3 interrupt flag
-            case P5IV__P5IFG4:  break;          // Vector  10:  P5.4 interrupt flag
-            case P5IV__P5IFG5:  break;          // Vector  12:  P5.5 interrupt flag
-            case P5IV__P5IFG6:  break;          // Vector  14:  P5.6 interrupt flag
-            case P5IV__P5IFG7:  break;          // Vector  16:  P5.7 interrupt flag
             default: break;
         }
 }
@@ -371,12 +359,10 @@ void __attribute__ ((interrupt(PORT5_VECTOR))) port5_isr_handler (void)
 __interrupt void Timer1_A0_ISR(void)
 #elif defined(__GNUC__)
 void __attribute__ ((interrupt(TIMER1_A0_VECTOR))) Timer1_A0_ISR (void)
-#else
-#error Compiler not supported!
 #endif
 {
     TA1CCR0 = 0; //stop timer
-    __bic_SR_register_on_exit(LPM0_bits); // Exit LPM0
+    __bic_SR_register_on_exit(LPM3_bits); // Exit LPM3
 
 }
 
