@@ -1,25 +1,24 @@
-
+\todo {Make it clear that the goal of this work is continuous sensing}
+\todo{Explain that we approach continuous sensing on two stages: 1) continuous availability and 2) randomized response}
 \begin{figure}
 	\centering
 %	\begin{subfigure}{\columnwidth}
-		\includegraphics[width=\columnwidth]{figures/intermittent_problem}
-		\caption{The up time percentage of an intermittent device powered by different energy sources relative to its on/off cycle length}
-		\label{fig:disInterSys}
+%		\includegraphics[width=\columnwidth]{figures/intermittent_problem}
+%		\caption{The up time percentage of an intermittent device powered by different energy sources relative to its on/off cycle length}
+%		\label{fig:disInterSys}
 %	\end{subfigure}
 %	\begin{subfigure}{\columnwidth}
-%		\includegraphics[width=\columnwidth]{figures/PowerCycleIntermittentSystem}
-%		\caption{The power cycle of an intermittently powered device.}
-%		\label{fig:powerCycle}
+		\includegraphics[width=\columnwidth]{figures/PowerCycleIntermittentSystem}
+		\caption{The power cycle of an intermittently powered device.}
+		\label{fig:powerCycle}
 %	\end{subfigure}
 \end{figure}
 
+The Internet of Things is the engine that will drive smart cities. In these cities, cars will not need to wait in front of traffic lights for non-existing pedestrians to cross the road; doors, upon leaving, will provide people with weather forecast; and jackets will adjust air circulation based on body temperature. Smart cities will gain their awareness through billions of sensors.
 
+Battery-powered sensors do not provide a viable solution to power all the sensors in smart cities. Batteries require (i) regular maintenance, even rechargeable ones wear out in a few years \cite{xxx}; and (ii) hazard waste management. Moreover, the batteries raw materials are also limited. The edges of the future Internet of Things must leave batteries behind and rely on perpetual energy sources. 
 
-The Internet of Things is the engine that will drive smart cities. In these cities, cars will not need to wait in front of traffic lights for non-existing pedestrians to cross the road; upon leaving, doors will provide people with weather forecast; and jackets will adjust air circulation based on body temperature. Smart cities will gain their awareness through billions of sensors.
-
-Battery-powered sensors do not provide a viable solution, as batteries require (i) regular maintenance, even rechargeable ones wear out in a few years \cite{xxx}; and (ii) hazard waste management. The edges of the future Internet of Things must leave batteries behind and rely on perpetual energy sources. 
-
-Sunlight, artificial light, and radio frequency waves are examples of perpetual energy sources that can replace the fixed energy reservoirs (batteries). Tiny energy harvesters, however, can only scavenge a very limited power from such energy sources. Therefore, harvesters power sensory nodes intermittently: first, they accumulate a certain amount of energy in their buffers (i.e. super-capacitors). Then, they trigger nodes operation which depletes the buffered energy quickly as power consumption rates tend to be much higher than power accumulation rates. Intermittent Power supply generates many challenges. For example, preserving forward computation progress, enabling timely operations, and the fact that nodes are not always available. 
+Natural energy sources such as light, vibration, and heat can power these sensors directly. Tiny energy harvesters, however, can only scavenge a very limited power from such energy sources. Therefore, an energy-harvesting sensor operate intermittently. An intermittent sensor starts by harvesting a certain amount of energy in its buffer (i.e. a super-capacitor). Then, it triggers operation which depletes the buffered energy quickly, as the power consumption rate tends to be much higher than the power accumulation rate. Once the energy is below a certain level, the sensor experience a complete power-down and the harvester starts accumulating energy again (Figure~\ref{fig:powerCycle}). Intermittent nodes trade-off reliability (reliable energy source) for sustainability (sustainable energy source for a very large number of sensory nodes). This trade-off generates many challenges. For example, preserving forward computation progress, enabling timely operations, and the fact that nodes are not always available. 
 
 %Energy harvesters are a promising battery replacement, scavenging power from ambient sources instead of fixed reservoirs. A tiny energy harvester, however, powers a device intermittently: it accumulates energy in its buffer (i.e. super-capacitor) until a threshold is reached, and then it powers the sensors which depletes the energy reservoir and terminates execution. 
 
