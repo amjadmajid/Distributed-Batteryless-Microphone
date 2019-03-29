@@ -4,16 +4,14 @@
 #
 import matplotlib.pyplot as plt
 import numpy as np
+import sys
+from fileSelector import FileSelector
 from logicAnalyzerData import LogicAnalyzerData
 from dataAnalyzer import Analyzer
 from plotter import Plotter
-import sys
 
 np.set_printoptions(threshold=sys.maxsize)
 
-
-def getPath():
-    return( input("Enter the path to the file: "))
 
 def sysAvailable(totTime, timeInterval,nodesIndices, dataHandler):
     """ 
@@ -82,9 +80,8 @@ def sysDutyCycle(totTime, timeInterval,nodes, dataHandler):
 
 
 def main():
-    #path = getPath()
-    path = input("Enter the path to the file: ")
-
+    fs = FileSelector('../data/')
+    path = fs.getPath()
     dataHandler = LogicAnalyzerData(path)
     numOfNodes =  dataHandler.getNumOfNodes()
     totTime=int(dataHandler.getTotalExperimentTime())+1 # seconds
