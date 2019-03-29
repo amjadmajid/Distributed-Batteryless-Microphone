@@ -8,7 +8,7 @@ import numpy as np
 class LogicAnalyzerData:
     """This class requires a csv file of time stamped binary states,
     like files generated from Saleae logic analyzer. It extracts the 
-    rows within the given time interval, and it selects the states 
+ i   rows within the given time interval, and it selects the states 
     columns based on the given list of columns' indices. 
     """
 
@@ -66,6 +66,7 @@ class LogicAnalyzerData:
         # print("rawStates", rawStates)
         timestamps = np.array([ self.timestamps[i] for i in indices])
         states = self.__statesSelector(cols,rawStates)
+        #print("getData->states", states)
         return timestamps, states
 
     # for debugging

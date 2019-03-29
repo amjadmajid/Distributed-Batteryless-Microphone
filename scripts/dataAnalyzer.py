@@ -7,7 +7,6 @@ class Analyzer:
     def __init__(self, data):
         self.timestamps= data[0]
         self.states   = data[1]
-
     def collectiveOnTime(self):
 
         dataLen=len(self.timestamps)
@@ -33,6 +32,7 @@ class Analyzer:
                 onTime_start=False
                 onTimeIntervals.append(self.timestamps[idx] - onTime_stamp)
 
+        #print("On time intervals", onTimeIntervals)
         return onTimeIntervals
 
     def getTotalTime(self):
