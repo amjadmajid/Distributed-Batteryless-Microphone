@@ -5,6 +5,10 @@
 import csv
 import numpy as np
 
+class DataException(Exception):
+    def __init__(self, msg):
+        super().__init__(msg)
+
 class LogicAnalyzerData:
     """This class requires a csv file of time stamped binary states,
     like files generated from Saleae logic analyzer. It extracts the 
@@ -44,6 +48,8 @@ class LogicAnalyzerData:
         rowsIndices = [self.timestamps.index(ts) for ts in self.timestamps \
                 if ts >= minTimestamp and ts < maxTimestamp]
         #print(rowsIndices)
+        if not rowsIndices:
+            raise DataException("Not data in the found between {} and {}".format(minTimestamp, maxTimestamp))
         return rowsIndices 
 
     def __statesSelector(self, cols, states):

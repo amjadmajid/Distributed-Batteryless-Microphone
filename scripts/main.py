@@ -6,12 +6,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 import sys
 from fileSelector import FileSelector
-from logicAnalyzerData import LogicAnalyzerData
+from logicAnalyzerData import LogicAnalyzerData, DataException
 from dataAnalyzer import Analyzer
 from plotter import Plotter
 
 np.set_printoptions(threshold=sys.maxsize)
-
 
 def sysAvailable(totTime, timeInterval,nodesIndices, dataHandler):
     """ 
@@ -38,11 +37,15 @@ def sysAvailable(totTime, timeInterval,nodesIndices, dataHandler):
     for interval in range(0,totTime, timeInterval):
         for idx, node in enumerate(nodesIndices):
             # System availability 
-            data = dataHandler.getData(interval, interval+timeInterval, range(node+1))
-            #print("data: ", data)
-            dataAnalyzer = Analyzer(data)
-            collecOnTime = sum(dataAnalyzer.collectiveOnTime())
-            availability[idx].append(collecOnTime / timeInterval)
+            try:
+                data = dataHandler.getData(interval, interval+timeInterval, range(node+1))
+            except DataException as e:
+                print("Error", e)
+            else:
+                #print("data: ", data)
+                dataAnalyzer = Analyzer(data)
+                collecOnTime = sum(dataAnalyzer.collectiveOnTime())
+                availability[idx].append(collecOnTime / timeInterval)
     return availability
 
 def sysDutyCycle(totTime, timeInterval,nodes, dataHandler):
@@ -86,7 +89,7 @@ def main():
     numOfNodes =  dataHandler.getNumOfNodes()
     totTime=int(dataHandler.getTotalExperimentTime())+1 # seconds
     timeInterval = totTime # seconds
-    timelineInterval = 30
+    timelineInterval = 10
     maxAvgSpan=[]
 
     availability = sysAvailable(totTime, timeInterval,range(numOfNodes), dataHandler)
@@ -137,14 +140,12 @@ def main():
     plt.legend()
     plt.plot(range(len(lst)),lst, '-*', label='on-time')
     plt.legend()
-    
 
     plt.figure()
     plt.title("Availability Timeline")
     plt.plot(availabilityTimeline[0])
     plt.plot( [np.mean(availabilityTimeline[0])] * len(availabilityTimeline[0]) )
     plt.show()
-
 
 if __name__=="__main__":
     main()
