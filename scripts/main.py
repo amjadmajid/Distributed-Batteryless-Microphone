@@ -91,10 +91,15 @@ def main():
     timeInterval = totTime # seconds
     timelineInterval = 10
     maxAvgSpan=[]
+    
 
     availability = sysAvailable(totTime, timeInterval,range(numOfNodes), dataHandler)
     sysDutyCycles = sysDutyCycle(totTime, timeInterval,range(numOfNodes), dataHandler)
     #exit()      ##### EXIT #-#--#---#----#
+
+    # interpolate the data according to the given interval
+    dataHandler.intervalDataInterpolation(timelineInterval)
+    
     availabilityTimeline = sysAvailable(totTime, timelineInterval,[numOfNodes-1], dataHandler)
     with open("availability.txt", "w") as f:
         print(availability, file=f)
@@ -143,7 +148,7 @@ def main():
 
     plt.figure()
     plt.title("Availability Timeline")
-    plt.plot(availabilityTimeline[0])
+    plt.plot(availabilityTimeline[0], '-*')
     plt.plot( [np.mean(availabilityTimeline[0])] * len(availabilityTimeline[0]) )
     plt.show()
 

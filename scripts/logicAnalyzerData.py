@@ -80,6 +80,39 @@ class LogicAnalyzerData:
         for idx in range(len(self.timestamps)):
             print(self.timestamps[idx], self.states[idx])
 
+    def intervalDataInterpolation(self,interval):
+        timespan=interval
+        if interval < 1:
+            raise ValueError("interval must be greater than 0")
+        timestamps=[]
+        states=[]
+        idx = 0
+        while idx < len(self.timestamps):
+            if self.timestamps[idx] == timespan:
+                # we do not need to do anyting
+                timestamps.append(self.timestamps[idx])
+                states.append(self.states[idx])
+                timespan += interval
+                idx+=1
+
+            elif self.timestamps[idx] > timespan:
+                # inject an entry 
+                timestamps.append(timespan)
+                states.append(self.states[idx-1])
+                timespan += interval
+                # do not increase the index to check the entry on the entry
+                # against the new interval
+            else:
+                timestamps.append(self.timestamps[idx])
+                states.append(self.states[idx])
+                idx+=1
+        self.timestamps  = timestamps
+        self.states = states
+        #return timestamps, states
+
+                
+
+
 
 
 
