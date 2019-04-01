@@ -42,9 +42,10 @@ def sysAvailable(totTime, timeInterval,nodesIndices, dataHandler):
             except DataException as e:
                 print("Error", e)
             else:
-                #print("data: ", data)
+                print("data: ", data)
                 dataAnalyzer = Analyzer(data)
                 collecOnTime = sum(dataAnalyzer.collectiveOnTime())
+                print("collectOntime", collecOnTime)
                 availability[idx].append(collecOnTime / timeInterval)
     return availability
 
@@ -99,8 +100,8 @@ def main():
 
     # interpolate the data according to the given interval
     dataHandler.intervalDataInterpolation(timelineInterval)
-    
     availabilityTimeline = sysAvailable(totTime, timelineInterval,[numOfNodes-1], dataHandler)
+
     with open("availability.txt", "w") as f:
         print(availability, file=f)
 
@@ -143,8 +144,8 @@ def main():
 
     plt.plot(range(len(maxAvgSpan)), maxAvgSpan, '-^',label='Max time Span')
     plt.legend()
-    plt.plot(range(len(lst)),lst, '-*', label='on-time')
-    plt.legend()
+    #plt.plot(range(len(lst)),lst, '-*', label='on-time')
+    #plt.legend()
 
     plt.figure()
     plt.title("Availability Timeline")

@@ -46,7 +46,7 @@ class LogicAnalyzerData:
         """
         #TODO to optimize this method find the beginning of the time interval using binary search
         rowsIndices = [self.timestamps.index(ts) for ts in self.timestamps \
-                if ts >= minTimestamp and ts < maxTimestamp]
+                if ts >= minTimestamp and ts <= maxTimestamp]
         #print(rowsIndices)
         if not rowsIndices:
             raise DataException("Not data in the found between {} and {}".format(minTimestamp, maxTimestamp))
