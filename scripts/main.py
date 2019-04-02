@@ -2,6 +2,8 @@
 # @Author: Amjad Majid
 # @Date  : March 14, 2019
 #
+import re
+import json
 import matplotlib.pyplot as plt
 import numpy as np
 import sys
@@ -42,10 +44,10 @@ def sysAvailable(totTime, timeInterval,nodesIndices, dataHandler):
             except DataException as e:
                 print("Error", e)
             else:
-                print("data: ", data)
+                #print("data: ", data)
                 dataAnalyzer = Analyzer(data)
                 collecOnTime = sum(dataAnalyzer.collectiveOnTime())
-                print("collectOntime", collecOnTime)
+                #print("collectOntime", collecOnTime)
                 availability[idx].append(collecOnTime / timeInterval)
     return availability
 
@@ -82,10 +84,33 @@ def sysDutyCycle(totTime, timeInterval,nodes, dataHandler):
             sysDCycle[node] += collecOnTime
     return sysDCycle
 
+def labelFinder(path, pattern):
+    """LabelFinder extracts label from the file name. It looks for the labels
+    `night`, `day`, `cloudy`, and `sunny` with some other descriptive words 
+    
+    @param  : str
+              File name
+    """
+    try:
+        label = re.search(pattern, path).group()
+        print("label", label)
+    except AttributeError as e:
+        print("label is not found")
+        print()
+        print(e)
+    label = label.replace("_", " ")
+    label = label.replace("-", " ")
+    return label
 
 def main():
     fs = FileSelector('../data/')
     path = fs.getPath()
+    labelPattern = "(_?[s|S]unny_?|_?[D|d]ay_?|_?[N|n]ight_?|_?cloudy.*?_|[C|c]loudy)"
+    label = labelFinder(path, labelPattern)
+    capPattern = "220|470|680|1000"
+    cap = labelFinder(path, capPattern)
+    print(cap)
+        
     dataHandler = LogicAnalyzerData(path)
     numOfNodes =  dataHandler.getNumOfNodes()
     totTime=int(dataHandler.getTotalExperimentTime())+1 # seconds
@@ -102,13 +127,14 @@ def main():
     dataHandler.intervalDataInterpolation(timelineInterval)
     availabilityTimeline = sysAvailable(totTime, timelineInterval,[numOfNodes-1], dataHandler)
 
-    with open("availability.txt", "w") as f:
-        print(availability, file=f)
+    jsonObj = json.dumps([label,availability])
+    with open("processed_data/availability"+cap+".json", "a") as f:
+        print(jsonObj, file=f)
 
-    with open("dutyCycle.txt", "w") as f:
+    with open("debugging_data/dutyCycle.txt", "w") as f:
         print(np.array(sysDutyCycles), file=f)
 
-    with open("availabilityTimeline.txt", "w") as f:
+    with open("debugging_data/availabilityTimeline.txt", "w") as f:
         print(availabilityTimeline, file=f)
 
 #------------------------Plotting------------------------------#
@@ -136,11 +162,11 @@ def main():
     plt.figure()
     plt.title("system availability")
     lst=np.mean(np.array(availability), axis=1)
-    fileName =path.replace('.csv', '.txt')
-    #print(fileName)
-    with open(fileName,'w') as res_file:
-        for v in lst:
-            print(v,file=res_file )
+#    fileName =path.replace('.csv', '.txt')
+#    #print(fileName)
+#    with open(fileName,'w') as res_file:
+#        for v in lst:
+#            print(v,file=res_file )
 
     plt.plot(range(len(maxAvgSpan)), maxAvgSpan, '-^',label='Max time Span')
     plt.legend()
