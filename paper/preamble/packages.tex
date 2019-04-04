@@ -11,7 +11,9 @@
 \usepackage{xspace}
 \usepackage{siunitx}
 \usepackage[inline]{enumitem}
-
+\usepackage{tikz}
+\DeclareRobustCommand*\circled[1]{\tikz[baseline=(char.base)]{
+            \node[shape=circle,draw,inner sep=1pt] (char) {#1};}}
 %%%% Control the packages behavior
 %\graphicspath{{../figures/}}
 
