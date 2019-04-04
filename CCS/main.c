@@ -1,8 +1,25 @@
 #include "main.h"
 
+void gpio_init()
+{
+    P1OUT = 0;                                  // All P1.x reset
+    P1DIR = 0xFF;                               // All P1.x outputs
+    P2OUT = 0;                                  // All P2.x reset
+    P2DIR = 0xFF;                               // All P2.x outputs
+    P3OUT = 0;                                  // All P3.x reset
+    P3DIR = 0xFF;                               // All P3.x outputs
+    P4OUT = 0;                                  // All P4.x reset
+    P4DIR = 0xFF;                               // All P4.x outputs
+    PJOUT = 0;                                  // All PJ.x reset
+    PJDIR = 0xFFFF;                             // All PJ.x outputs
+
+}
+
 void main_init() {
     WDTCTL = WDTPW | WDTHOLD;   // stop watchdog timer
     PM5CTL0 &= ~LOCKLPM5;       // deactivate high impedance mode for GPIO
+
+    gpio_init();
 
     // wake on sound
     mic_wake_up_init();
@@ -13,15 +30,18 @@ void main_init() {
 
 #if defined(LOGIC)
     // output pins for logic analyzer
-    P3DIR = BIT0|BIT1;
-    P3OUT = BIT0;
+    P3DIR |= BIT0|BIT1;
+    P3OUT = 0;
+    P3OUT |=BIT0;
 #endif
 
 #if defined(UART)
     uart_init();
 #endif
 
-desync_init();
+#if defined(DESYNC)
+    desync_init();
+#endif
 }
 
 
@@ -40,8 +60,12 @@ int main(void)
 //            TA0CTL = MC__STOP;
             #endif
 
+//                mic_normal_mode();
             mic_wait_for_sound();
-            desync();  // add loop with P=50%
+
+            #if defined(DESYNC)
+                desync();  // add loop with P=50%
+            #endif
 
             #if defined(SIMULATION)
 //            TA0CTL = TASSEL__SMCLK | MC__UP | ID_3;
@@ -58,6 +82,7 @@ int main(void)
             while(counter < SAMPLES);
             mic_power_off();
 
+            // needed for get_fingerprints()
             fp_rec.start = 0;
             fp_rec.end = NUM_FRAME;
             i_nv = fp_rec.start;

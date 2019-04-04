@@ -4,6 +4,7 @@
 #define UART
 #define LOGIC
 //#define SIMULATION
+//#define DESYNC
 
 #define SAMPLERATE  7812
 #define FRAMESIZE   256
@@ -11,9 +12,7 @@
 #define VERY_BIG    65535
 #define BANDS       12
 #define NUM_FRAME   9
-//#define MAXFRAMES   (SAMPLES/FRAMESIZE)
-#define SAMPLES     (NUM_FRAME*FRAMESIZE)//(SAMPLERATE*TIMEWINDOW)
-//#define TIMEWINDOW  2      // 2 second recording
+#define SAMPLES     (NUM_FRAME*FRAMESIZE)
 
 // For endpoint detection:
 #define RECORDING_OFFSET 980//2048
