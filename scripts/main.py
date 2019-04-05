@@ -105,11 +105,11 @@ def labelFinder(path, pattern):
 def main():
     fs = FileSelector('../data/')
     path = fs.getPath()
-    labelPattern = "(_?[s|S]unny_?|_?[D|d]ay_?|_?[N|n]ight_?|_?cloudy.*?_|[C|c]loudy)"
+    labelPattern = "(_?[s|S]unny_?|_?[D|d]ay_?|_?[N|n]ight_?|_?cloudy.*?_|[C|c]loudy|[0-9]*lux)"
     label = labelFinder(path, labelPattern)
     capPattern = "220|470|680|1000"
     cap = labelFinder(path, capPattern)
-    print(cap)
+    #print(cap)
         
     dataHandler = LogicAnalyzerData(path)
     numOfNodes =  dataHandler.getNumOfNodes()
@@ -121,6 +121,7 @@ def main():
 
     availability = sysAvailable(totTime, timeInterval,range(numOfNodes), dataHandler)
     sysDutyCycles = sysDutyCycle(totTime, timeInterval,range(numOfNodes), dataHandler)
+    #print(sysDutyCycles)
     #exit()      ##### EXIT #-#--#---#----#
 
     # interpolate the data according to the given interval
@@ -128,11 +129,15 @@ def main():
     availabilityTimeline = sysAvailable(totTime, timelineInterval,[numOfNodes-1], dataHandler)
 
     jsonObj = json.dumps([label,availability])
-    with open("processed_data/availability"+cap+".json", "a") as f:
-        print(jsonObj, file=f)
+    #TODO prevent duplicated entries
+#    with open("processed_data/availability"+cap+".json", "a") as f:
+#        print(jsonObj, file=f)
 
-    with open("debugging_data/dutyCycle.txt", "w") as f:
-        print(np.array(sysDutyCycles), file=f)
+    jsonObj = json.dumps([label,sysDutyCycles])
+    with open("processed_data/sysDutyCycles"+cap+".json", "a") as f:
+        print(jsonObj, file=f)
+#    with open("debugging_data/dutyCycle.txt", "w") as f:
+#        print(np.array(sysDutyCycles), file=f)
 
     with open("debugging_data/availabilityTimeline.txt", "w") as f:
         print(availabilityTimeline, file=f)
