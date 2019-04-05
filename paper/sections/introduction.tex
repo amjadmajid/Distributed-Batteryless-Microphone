@@ -1,43 +1,40 @@
-\todo {Make it clear that the goal of this work is continuous sensing}
 \todo{Explain that we approach continuous sensing on two stages: 1) continuous availability and 2) randomized response}
 \begin{figure}
 	\centering
 	\includegraphics[width=\columnwidth]{figures/coalInterSen}
-	\caption{\fullsys}
+	\caption{\fullsys (\sys) is a group of intermittently powered sensory nodes that sense continuously despite the intermittent power supply. \sys exploits the inherent randomization of energy harvesting systems and enforce artificial randomization to preserve an efficient and continuous sensing functionality.}
 	\label{fig:powerCycle}
 \end{figure}
 
 The Internet of Things is the engine that will drive smart cities. In these cities, cars will not need to wait in front of traffic lights for non-existing pedestrians to cross the road; doors, upon leaving, will provide people with weather forecast; and jackets will adjust air circulation based on body temperature. Smart cities will gain their awareness through billions of sensors.
 
-Battery-powered sensors do not provide a viable solution to power all the sensors in smart cities. Batteries require (i) regular maintenance, even rechargeable ones wear out in a few years \cite{xxx}; and (ii) hazard waste management. Moreover, batteries raw materials are also limited. Therefore, the edges of the future Internet of Things must leave batteries behind and rely on perpetual energy sources. 
+Battery-powered sensors do not provide a viable solution to power all the sensors in smart cities. Batteries require (i) regular maintenance, even rechargeable ones wear out in a few years \cite{xxx}; and (ii) hazard waste management. Moreover, the raw materials for making batteries are  also limited. Therefore, the future sensors must leave batteries behind and rely on perpetual energy sources. 
 
-Natural energy sources such as light, vibration, and heat can power tiny sensors directly. Tiny energy harvesters, however, can only scavenge a very limited power from such energy sources. Therefore, an energy-harvesting sensor operate intermittently. An intermittent sensor starts by harvesting a certain amount of energy, in its buffer (i.e. a super-capacitor). Then, it triggers operation which depletes the buffered energy quickly, as the power consumption rate tends to be much higher than the power accumulation rate. Once the energy is below a certain level, the sensor experience a complete power-down, the cycle of charging and operating continues indefinitely (Figure~\ref{fig:powerCycle}). 
+Natural energy sources such as light, vibration, and heat can power tiny sensors directly. Tiny energy harvesters, however, can only scavenge a very limited power from such energy sources. Therefore, an energy-harvesting sensor operate intermittently. An intermittent sensor starts by harvesting a certain amount of energy, in its buffer (i.e. a super-capacitor). Then, it triggers operation which depletes the buffered energy quickly, as the power consumption rate tends to be much higher than the power accumulation rate. Once the energy is below a certain level, the sensor experience a complete power-down, the cycle of charging and operating continues indefinitely.
 
-Intermittent nodes trade-off reliability (reliable energy source) for sustainability (sustainable energy source for a very large number of sensory nodes). This trade-off generates many challenges. For example, preserving forward computation progress, enabling timely operations, and the fact that nodes are not always available. 
+Intermittent devices trade-off a reliable energy source (the battery) for sustainable---when a large quantity of sensors are consider---energy source (ambient energy). This trade-off generates many challenges. For example, preserving computation progress under frequent power interrupts, enabling timely operations with indeterminate power-down duration, and the fact that nodes are not always available. 
 %
 %Energy harvesters are a promising battery replacement, scavenging power from ambient sources instead of fixed reservoirs. A tiny energy harvester, however, powers a device intermittently: it accumulates energy in its buffer (i.e. super-capacitor) until a threshold is reached, and then it powers the sensors which depletes the energy reservoir and terminates execution. 
 
-Many of these challenges have been tackled. For example, the intermittent computation problem, which is concerned with the preservation of an application progress and memory integrity under frequent power failures~\cite{mementos,dino,colin2016chain}; timely operation, which is concerned with data freshness after a power interrupt~\cite{hester2017timely}; and event-driven execution, which is concerned with input output operations under arbitrarily-timed power loss~\cite{yildirm2018ink}.% However, all previous work has considered the intermittency as an inherent characteristic of these systems and have not attempted to control it. 
+Many of these challenges have been tackled. For example, \cite{mementos,dino,colin2016chain} studied the intermittent computation problem, which is concerned with the preservation of an application progress and memory integrity under frequent power failures; \cite{hester2017timely} investigated the timely operation challenge, which is concerned with data freshness after a power interrupt; and \cite{yildirm2018ink} introduced the event-driven execution for the intermittent domain, which is concerned with input and output operations under arbitrarily-timed power loss.% However, all previous work has considered the intermittency as an inherent characteristic of these systems and have not attempted to control it. 
 
-Despite the significant progress that has been achieved in intermittent domain, \textit{the system availability problem} has not been addressed. A monitoring sensor that has a very low probability to be available when an external event occurs is not worth deploying. A sensor that is capable of capturing only very short events has a limited number of potential applications (imagine that you want to control a room lights with batteryless microphone. The microphone is capable of processing a single word. If you say "on" lights turns on but other systems might start operate also, a specification problem. If you say "light" to eliminate other systems you lose the control functionality). Consequently, intermittent sensors have not gained widespread adaptation. 
+Despite the significant progress that has been achieved in intermittent domain, \textit{the system availability problem} has not been addressed. A monitoring sensor that has a very low probability to be available when an external event occurs is not worth deploying. A sensor that is capable of capturing only very short events has a limited number of potential applications (imagine that you want to control room lights with batteryless microphone. The microphone is capable of processing a single word. If you say "on" lights turned on but other systems might start operate also---a specification problem. If you say "light" to eliminate other systems you lose the ability to control the light---a functionality problem). Consequently, intermittent sensors have not gained widespread adaptation. 
 
-This paper tackles the paradox of continuous sensing on intermittent devices by introducing a new type of sensors that we call \textit{\fullsys} (\sys). The \sys is defined as a group of intermittent nodes with randomized on/off cycles. \sys distinguishes between different energy conditions and adapts its response accordingly to efficiently distribute its resources and to approach continuous sensing.  
-
-We put our observations and theory into test by realizing a \sys instant in the form of distributed intermittent voice assistant agent. We tested the voice assistant in different energy conditions and the results validate our assumptions and observations. 
+This paper tackles the paradox of continuous sensing on intermittent devices by introducing a new type of sensors that we call \textit{\fullsys} (\sys). The \sys is defined as a group of intermittent nodes with randomized on/off cycles. \sys distinguishes between different energy conditions and adapts its response accordingly to efficiently distribute its resources and to approach continuous sensing. We put our observations and theory into test by realizing a \sys instant in the form of a distributed intermittent voice assistant agent. We tested the voice assistant in different energy conditions and the results validate our assumptions and observations. 
 
 Highlights of the paper contributions:
 \begin{itemize}
-		\item Introducing a new sensor type: \textit{\fullsys} (\sys) is a group of intermittently powered nodes that takes advantage of the randomized nature of the powering subsystem (energy source and energy harvester) to approach 100\% system availability. \sys has a sensing algorithm that is energy harvesting conditions aware and therefore it is an efficient sensor. 
-		\item Characterizing the behavior of coalesced intermittent sensor under different energy conditions.
-		\item Characterizing the behavior of coalesced intermittent sensor under different event occurrence frequencies and patterns. 
-		\item Implement a coalesced intermittent sensor in the form of a distributed intermittent microphone array. 
+		\item Introducing a new sensor type: \textit{\fullsys} (\sys) is a group of intermittently powered nodes that take advantage of the randomized nature of the powering subsystem (energy source and energy harvester) to approach 100\% system availability. \sys adapts its behavior based on the harvested energy conditions to preserve efficient and continuous operations. 
+		\item Characterizing the behavior of \fullsys under different power arrival rates. We define four \sys operational states and investigate the associated operational challenges of these states. 
+		\item Characterizing the behavior of \fullsys under different event occurrence frequencies and patterns. 
+		\item Implement a \fullsys in the form of a distributed intermittent voice assistant agent. Voice control is a convenient interface for human to interact with miniaturized devices. Moreover, it enable us to easily study the behavior of the \sys under different type of external events (i.e. bursty arrival of events).
 \end{itemize}
 
 
 
 
 
-\todo{to be removed!}
+\todo{Potential applications, relocate to the appreciated location}
 %
 %%% Hypothesis, question, purpose statement
  It increases the temporal and spatial availability of an intermittent system and enables resource distribution such as large number of words templates for spoken words recognition systems. 
