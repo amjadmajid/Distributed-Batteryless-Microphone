@@ -14,15 +14,15 @@
 
 ## Evaluation 
 * Environment related experiments 
- * Source randomness 
- * Duty cycles (reason for the randomness)
+  * Source randomness 
+  * Duty cycles (reason for the randomness)
 * Microphone experiments
- * Show the effect of the power states 
- * Loss of randomness on sleep mode
- * The need for enforced randomness 
- * number of catched events
-  * Bursty events
-  * Regular events
+  * Show the effect of the power states 
+  * Loss of randomness on sleep mode
+  * The need for enforced randomness 
+  * number of catched events
+   * Bursty events
+   * Regular events
 
 ## Conclusion 
 
