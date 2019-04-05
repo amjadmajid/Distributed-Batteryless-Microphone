@@ -13,7 +13,6 @@ then
 		echo Flashing $i;
 		./MSP430Flasher -i ${i#/dev/} -w ../CCS/Debug/BatterylessMic.hex -v -s -z [VCC];
 	done
-	read -p "Press any key to continue..."
 
 else
     echo "File 'CCS/Debug/BatterylessMic.hex' not found in Debug directory!"
