@@ -1,8 +1,31 @@
-# Intermittent Clock Paper Repository
+# Continuous Sensing on Intermittent Power
+## Abstract
+## Introduction
 
-### Using Makefile to build and clean the paper and the figures
-0. In the root directory of the paper
-1. To build the paper run `make`
-2. To clean run `make clean`
-% 3. To build the figures run `make fig`
-% 4. To clean the figures run `make figclean`
+## Related Work and Background
+
+## Coalesced Intermittent Sensor
+### Coalesced Intermittent Sensor's Nodes
+### Coalesced Intermittent Sensor's On-time
+### Coalesced Intermittent Sensor's Power States
+
+## Coalesced Intermittent Microphone---A coalesced Intermittent Sensor Instant (implementation)
+
+
+## Evaluation 
+### Environment related experiments 
+#### Source randomness 
+#### Duty cycles (reason for the randomness)
+
+### Microphone experiments
+#### Show the effect of the power states 
+#### Loss of randomness on sleep mode
+#### The need for enforced randomness 
+#### number of catched events
+##### Bursty events
+##### Regular events
+
+## Conclusion 
+
+## Acknowledgements 
+
