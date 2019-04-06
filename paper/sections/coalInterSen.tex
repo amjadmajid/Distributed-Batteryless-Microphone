@@ -32,22 +32,23 @@ An intermittent sensor has a limited energy budget per power cycle. When it is t
 \end{figure} 
 %
 The \sys's on-time is the projection of its underlying intermittent nodes' uptimes on the time axis. The \sys's on-time ranges from minimum (when all nodes cluster together, see the red regions in Figure~\ref{fig:cisOntime} to the maximum (when the overlapping between its nodes' uptimes is zero or when continuous time is reached). Two broad controlling strategies for approaching maximum \sys's time span can be imagined: 
-\begin{enumerate}[wide, labelwidth=!, labelindent=0pt]
+\begin{enumerate}%[wide, labelwidth=!, labelindent=0pt]
 %
 		\item \textit{Explicit on-time division method}: Recent advancements in intermittent timing enabled intermittent nodes to measure their on and off times (with help of an external ultra-low-power timer)~\cite{mayfly2017hester}. Passive light communication~\cite{marco} is mean for an ultra-low-power communication between batteryless nodes. Intermittent nodes can use these recent advancements to apply time division multiplexing strategy to explicitly avoid waking up at the same time slot. For example, a node calculates its average on-time $\overline{t_{on}}$ and off-time $\overline{t_{off}}$ for $N$ power cycles. Then it measures the time difference between its power-up and the intended transmitting time $\delta\tau$. Then it encodes the these information $({\overline{t_{off}}, \overline{t_{on}}, \delta\tau})$ in a message and broadcasts it. If a node receives this message it will have a full information about the transmitting node power cycle. It can then alter its power cycle, relative to the transmitting nodes cycle, by either increasing (or decreasing) its power consumption to shorten (or lengthen) its on-time and shift its power cycle. This approach, obviously, assumes relatively stable nodes power cycles. 
 %
-%\begin{figure}
-%		\centering
-%		\includegraphics[width=\columnwidth]{figures/nodesDistribution}
-%		\caption{When intermittent nodes power cycles are different their on-times tend to be uniformly distributed over the \sys power cycle}
-%		\label{fig:implicitDistribution}
-%\end{figure} 
+\begin{figure}
+		\centering
+		\includegraphics[width=\columnwidth]{figures/cisModel}
+		\caption{\fullsys availability percentage for different number of nodes and different duty cycles. The nodes are uniformly distributed and the \sys on-time evolves according to the equation~\ref{eq:cisModel} when new nodes are added.}
+		\label{fig:cisModel}
+\end{figure} 
 %
-		\item \textit{Implicit on-time division method}: With no information being exchanged between the intermittent nodes, the best \sys can do is to uniformly distribute its node's on-times and maintaining this distribution overtime. The key observation to enable uniform distribution of nodes' on-times is to ensure that their power cycles are different. Figure~\ref{cisOntime} shows the scenario of two intermittent nodes with a different power cycles. Node 1 has a power cycle of 6 units of time and an on/off cycle of $\frac{1}{3}$. Node 2 has a power cycle of 5 units of time and an on/off cycle of $\frac{1}{5}$. Following the time axis from the left, we can see that after the position of the on-time of Node 2 is shifted by 1 unit of time after each power cycle of Node 2. This implies that the on-time of Node 2 spends $\frac{1}{3}$ of the time clustered under the on-time of the Node 1 and the $\frac{2}{3}$ of the time while Node 1 is charging. When the intermittent nodes power cycles are uniformly distributed over the \sys power cycle, which equals the longest power cycle of its intermittent nodes, then the \sys on-time will evolve according to the following formula when a new node is added to the system
-$$
+		\item \textit{Implicit on-time division method}: With no information being exchanged between the intermittent nodes, the best \sys can do is to uniformly distribute its node's on-times and maintaining this distribution overtime. The key observation to uniformly distribute the nodes' on-times is to ensure that their power cycles are different. This can be achieved by forcing intermittent nodes to go into low power mode upon power-ups. The length of this mode is randomly chosen for each node. This will change the length of the nodes on-time and alter their power cycles. Figure~\ref{cisOntime} shows the scenario of two intermittent nodes with a different power cycles. Node 1 has a power cycle of 6 units of time and an on/off cycle of $\frac{1}{3}$. Node 2 has a power cycle of 5 units of time and an on/off cycle of $\frac{1}{5}$. Following the time axis from the left, we can see that after the position of the on-time of Node 2 is shifted by 1 unit of time after each power cycle of Node 2. This implies that the on-time of Node 2 spends $\frac{1}{3}$ of the time clustered under the on-time of the Node 1 and the $\frac{2}{3}$ of the time while Node 1 is charging. When the intermittent nodes power cycles are uniformly distributed over the \sys power cycle, which equals the longest power cycle of its intermittent nodes, then the \sys on-time will evolve according to the following formula when a new node is added to the system
+\begin{equation}
 	t_{on}(N) = t_{on}(N-1) + \frac{t_{off}(N-1)}{t_{off}(N-1)+t_{off}(N-1)} \times t_{on}(1),
-$$
-				where $t_{on}(N)$ is the on-time of a \sys with $N$ intermittent nodes.
+		\label{eq:cisModel}
+\end{equation}
+				where $t_{on}(N)$ is the on-time of a \sys with $N$ intermittent nodes. Figure~\ref{fig:cisModel} shows the \sys availability percentage for different duty cycles and different number of intermittent nodes.
 \end{enumerate}
 There is a clear trade-off between the aforementioned methods. While the explicit control method provide a fine control over the system distribution, the implicit method does not suffer from control messages exchange overhead. Although the implicit method is relatively simple to implement and explore, the explicit control method is not a far fetched idea considering the recent advancements in passive communication and intermittent timing. However, we opt to explore the implicit distribution control method as the hardware used to demonstrate the feasibility of passive light communication and ambient RF backscattering are not open source and re-making it is beyond the scope of this study.
 
