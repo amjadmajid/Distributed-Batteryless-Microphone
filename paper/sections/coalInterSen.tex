@@ -1,41 +1,57 @@
-\fullsys (\sys) is the abstraction of a group of batteryless intermittent sensors. \sys seeks to offer continuous sensing despite its reliance on ambient energy: an unpredictable and marginal power source. 
+\fullsys (\sys) is the abstraction of a group of batteryless intermittent sensors. \sys seeks to offer continuous sensing despite relying on ambient energy: an unpredictable and marginal power source. 
 %orchestrates its nodes power cycles using a distributed approach (instead of relying on a master powerful node to coordinate coalesced nodes activities). 
 %\sys seeks maximum time span of its underlying coalesced nodes through a distributed approach instead of a master node that orchestrates coalesced nodes on/off cycles. 
 
-\subsection{\fullsys Nodes}
-As Figure~\ref{fig:cisPwrCycle} shows, an intermittent node can have two or three distinct energy consumption rates. If the node does a polling-based sensing then its energy consumption, generally, switches between zero when charging and a maximum when it activates its microcontroller  (we assume that the microcontroller is the dominate energy consumer module of the node). However, in event-based sensing a node puts its microcontroller into low power mode and wait (or listen) for an external event to make up the microcontroller. This idle listening mode adds a third energy consumption level which has an important impact on the design of the \sys.
+\subsection{Energy consumption}
 %
 \begin{figure}[t]
 	\centering
 		\begin{subfigure}{\columnwidth}
 			\includegraphics[width=\columnwidth]{figures/PowerCycleIntermittentSystem}
 			\caption{When \sys does polling-based sensing, its energy consumption profile has, generally, two distinct levels.}
-			\label{fig:solarPwrCoIS}
+			\label{fig:pollingBasedSensing}
 	\end{subfigure}
 	\begin{subfigure}{\columnwidth}
 		\includegraphics[width=\columnwidth]{figures/PowerCycleIntermittentSensor}
 		\caption{When \sys does event-based sensing---staying in low power mode listening for an external event to happen---, its energy consumption profile has three distinct levels.}
-		\label{fig:solarPwrCoIS}
+		\label{fig:eventBasedSensing}
 \end{subfigure}
-		\caption{\fullsys energy consumption profile for different sensing strategies}
+		\caption{\fullsys energy profile for different sensing strategies}
 		\label{fig:cisPwrCycle}
 \end{figure} 
 %
-\subsection{\fullsys On-time}
-To distribute intermittent nodes' uptimes, two broad controlling methods can be imagined:
+An intermittent sensor has a limited energy budget per power cycle. When it is tasked with a polling-based sensing activity, its energy consumption, generally, switches between two levels: zero when charging and a maximum when it activates its microcontroller  for data acquisition and processing, (see Figure~\ref{fig:pollingBasedSensing})---we assume that the microcontroller is the dominate energy consumer module of a node. However, in event-based sensing  a node puts its microcontroller into low power mode and waits (or listen) for an external event to wake up the microcontroller. This is important to minimize the energy wasted on the listening and to maintain the required energy budget for sensing for the longest possible time (Figure~\ref{fig:eventBasedSensing}). The idle listening mode, which is important for successful sensing, complicates the design of the \sys.
+
+\subsection{On-time}
+%
+\begin{figure}[t]
+		\centering
+		\includegraphics[width=\columnwidth]{figures/cisOntime}
+		\caption{\fullsys's on-time is the projection of its intermittent nodes uptimes on the time axis. When the power cycles of the intermittent nodes are different their uptimes distribution approaches uniform distribution.}
+		\label{fig:cisOntime}
+\end{figure} 
+%
+The \sys's on-time is the projection of its underlying intermittent nodes' uptimes on the time axis. The \sys's on-time ranges from minimum (when all nodes cluster together, see the red regions in Figure~\ref{fig:cisOntime} to the maximum (when the overlapping between its nodes' uptimes is zero or when continuous time is reached). Two broad controlling strategies for approaching maximum \sys's time span can be imagined: 
 \begin{enumerate}[wide, labelwidth=!, labelindent=0pt]
-		\item An explicit uptimes control method which requires inter-nodes communication; uptimes chaining techniques, to enable message passing across different time slots; and number of active nodes estimation per a time slot. Once a node estimates the number of active nodes, within its uptime, it must decide, based on per defined criteria, on leaving this power cycle or maintaining it. A node can change its on/off cycle relative to other nodes' cycles by either increasing (or decreasing) its power consumption to shorten (or lengthen) its uptime and shift its power cycle. 
-		\item An implicit uptimes control method seeks to use a random process to "ideally" uniformly distribute nodes' on/off cycles over the \sys's power cycle: when all the nodes complete their individual power cycles.  
+%
+		\item \textit{Explicit on-time division method}: Recent advancements in intermittent timing enabled intermittent nodes to measure their on and off times (with help of an external ultra-low-power timer)~\cite{mayfly2017hester}. Passive light communication~\cite{marco} is mean for an ultra-low-power communication between batteryless nodes. Intermittent nodes can use these recent advancements to apply time division multiplexing strategy to explicitly avoid waking up at the same time slot. For example, a node calculates its average on-time $\overline{t_{on}}$ and off-time $\overline{t_{off}}$ for $N$ power cycles. Then it measures the time difference between its power-up and the intended transmitting time $\delta\tau$. Then it encodes the these information $({\overline{t_{off}}, \overline{t_{on}}, \delta\tau})$ in a message and broadcasts it. If a node receives this message it will have a full information about the transmitting node power cycle. It can then alter its power cycle, relative to the transmitting nodes cycle, by either increasing (or decreasing) its power consumption to shorten (or lengthen) its on-time and shift its power cycle. This approach, obviously, assumes relatively stable nodes power cycles. 
+%
+%\begin{figure}
+%		\centering
+%		\includegraphics[width=\columnwidth]{figures/nodesDistribution}
+%		\caption{When intermittent nodes power cycles are different their on-times tend to be uniformly distributed over the \sys power cycle}
+%		\label{fig:implicitDistribution}
+%\end{figure} 
+%
+		\item \textit{Implicit on-time division method}: With no information being exchanged between the intermittent nodes, the best \sys can do is to uniformly distribute its node's on-times and maintaining this distribution overtime. The key observation to enable uniform distribution of nodes' on-times is to ensure that their power cycles are different. Figure~\ref{cisOntime} shows the scenario of two intermittent nodes with a different power cycles. Node 1 has a power cycle of 6 units of time and an on/off cycle of $\frac{1}{3}$. Node 2 has a power cycle of 5 units of time and an on/off cycle of $\frac{1}{5}$. Following the time axis from the left, we can see that after the position of the on-time of Node 2 is shifted by 1 unit of time after each power cycle of Node 2. This implies that the on-time of Node 2 spends $\frac{1}{3}$ of the time clustered under the on-time of the Node 1 and the $\frac{2}{3}$ of the time while Node 1 is charging. When the intermittent nodes power cycles are uniformly distributed over the \sys power cycle, which equals the longest power cycle of its intermittent nodes, then the \sys on-time will evolve according to the following formula when a new node is added to the system
+$$
+	t_{on}(N) = t_{on}(N-1) + \frac{t_{off}(N-1)}{t_{off}(N-1)+t_{off}(N-1)} \times t_{on}(1),
+$$
+				where $t_{on}(N)$ is the on-time of a \sys with $N$ intermittent nodes.
 \end{enumerate}
-There is a clear trade-off between the aforementioned methods. While the explicit control method provide a fine control over the system distribution, the implicit method does not suffer from control messages exchange overhead. Although the implicit method is relatively simple to implement and explore, the explicit control method is not a far fetched idea (the recent advancements in passive light~\cite{marco} and ambient radio waves backscattering~\cite{} that enable extremely energy efficient passive communication for batteryless devices). However, we opt to explore the implicit distribution control methods as we think that the uptimes chaining technique and number of nodes per a time slot estimation, required by the explicit control method, are not trivial tasks and deserve there own study. Additionally, the hardware used to demonstrate the feasibility of passive light communication and ambient RF backscattering are not open source and re-making it is beyond the scope of this study.
+There is a clear trade-off between the aforementioned methods. While the explicit control method provide a fine control over the system distribution, the implicit method does not suffer from control messages exchange overhead. Although the implicit method is relatively simple to implement and explore, the explicit control method is not a far fetched idea considering the recent advancements in passive communication and intermittent timing. However, we opt to explore the implicit distribution control method as the hardware used to demonstrate the feasibility of passive light communication and ambient RF backscattering are not open source and re-making it is beyond the scope of this study.
 
-%Effective message passing between batteryless nodes requires an ultra low power communication regime. Thanks to the recent advancements in passive visible light communication~\cite{Marco} and ambient radio frequency backscattering~\cite{} that demonstrate the feasibility of extremely energy efficient communication between batteryless nodes. Once messages exchange is possible, an intermittent node's duty is to estimate the number of active nodes in its time slot and to decide on leaving this power cycle of maintaining it (Figure~\ref{xxx}). Nodes can influence their power cycles by altering their loads---a node can shorten its uptime (and consequently its power cycle) by increasing its energy consumption. Inversely, a node's low power consumption mode extends its uptime and lengthen its on/off cycle. 
-\paragraph{Light-based Implicit Nodes' Uptimes Control}
-%
-%
-As Figure~\ref{fig:solarPwrCoIS} shows light powers tiny sensory nodes intermittently. It also indicates that \sys availability increases as more intermittent nodes added. The dashed line is the simulated time coverage of the system as the intermittent nodes power-ups are uniformly distributed. By comparing the measured \sys's availability line graphs to the simulated one we can conclude that harvesting solar power of artificial light provides sufficient randomness to distribute the coalesced nodes uptimes uniformly. Figure~\ref{fig:sysDutyCycle} shades more light on this observation. It show that each node has it own unique duty cycle. The little differences between the duty cycles causes them to have a "near" constant shifts relative to each other which in turn causes the system to nodes' uptimes to have near uniform distribution.
-
-\subsection{\fullsys Power States}
+\subsection{Power States}
 From~\ref{fig:solarPwrCoIS} we can identify four operational stages for a \sys:
 \begin{enumerate}
 		\item \textit{Under-targeted energy conditions}---a \sys should be designed for near worst case energy conditions in order to comply with design requirements. However, a solar powered \sys, for example,  will come to a perpetual power down in the darkness. In general, for under-targeted energy conditions the system behavior is undefined.
