@@ -30,14 +30,16 @@ print(maxVal)
 print(dataIndices)
 colors=['r','b','k']
 ## Data plotting
+box=[]
 for idx, d in enumerate(data):
     #print(d[0])
     #print(d[1]) 
-    box=ax.boxplot(np.array(d[1]), showfliers=False)
-    for _, line_list in box.items():
+    box.append(ax.boxplot(np.array(d[1]), showfliers=False))
+    for _, line_list in box[idx].items():
         for line in line_list:
             line.set_color(colors[idx])
             line.set_linewidth(1.25)
+
 ## axes formatting 
 ylabels = ["{:4d}%".format(x*10) for x in dataIndices-1]
 ax.set_yticks(dataIndices-1)
@@ -45,6 +47,7 @@ ax.set_yticklabels(ylabels, fontsize=fontSize)
 ax.set_xticklabels(range(1,9), fontsize=fontSize)
 ax.set_xticks(range(1,9))
 
+ax.legend([box[0]["boxes"],box[1]["boxes"], box[1]["boxes"]], ['A', 'B','C'] )
 ## Plotting output
 #ax.legend(frameon=False, fontsize=fontSize)
 plt.tight_layout()
