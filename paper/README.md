@@ -10,7 +10,12 @@
 * Coalesced Intermittent Sensor's Power States
 
 ## Coalesced Intermittent Microphone---A coalesced Intermittent Sensor Instant (implementation)
-
+* System architecture 
+  * Hardware 
+  * Software
+    * Command Recognition Implemenation
+    * Intermittent Execution
+    * Desynchronization 
 
 ## Evaluation 
 * Environment related experiments 

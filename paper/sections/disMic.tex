@@ -5,24 +5,31 @@
 	\label{fig:powerCycle}
 \end{figure}
 
-\sys is a prototype of a distributed battery-free audio assistant agent. \sys is envisioned to be embedded in, for example, wallpapers and furniture coverage to turn these objects to smart and controllable ones. The distributed nature of the \sys system enables it to exploit the inherent randomness of intermittent devices to offer a reliable interaction. 
+We have developed a prototype of a \fullcim (\cim): an instant of a \fullsys. The reason behind developing a \cim is threefold: (i) voice is a natural and convenient way for human to interact with miniaturized devices; (ii) By demonstrating \textit{the world's first} \fullcim, we are shading light on the potential of intermittent systems; and (iii) it facilitates testing with different sensing strategies and with different type of external events arrival (i.e. regular  or burst). 
 
-\sys is a battery-less distributed microphone. It operates intermittently, when a threshold amount of energy accumulates.  
+We envision that a \cim can be embedded in clothes, walls, wallpapers, and furniture coverage. \cim can enable local communication by taking advantage of the recent advancements in passive communication (\cite{marco} shows 60\,m distance of direct passive light communication). 
 
-Audio is recorded for a fixed time period. After that, if the audio recording has finished successfully, the recording is divided into smaller parts called \textit{frames} and speech recognition is performed using an algorithm consisting of three steps:
-\begin{enumerate*}
-	\item endpoint detection
-	\item feature extraction
-	\item feature matching
-\end{enumerate*}.
-This steps are also depicted in figure \ref{fig:mic}.
+\subsection{Hardware}
+A \cim node consists of thee main parts: a microphone, a microcontroller, and a harvester. we used MSP430RF5994~\cite{ti_msp430_website} an ultra-low-power microcontroller for data acquisition and processing. This microcontroller has a 16-bit RISC processor running on 1 MHz, 8KB of SRAM (volatile), 256KB of FRAM (non-volatile), and a 12-bit analog to digital converter (ADC). It also features a Low Energy Accelerator (LEA), which offloads the main CPU for specific operations, such as FFT. For recording we used the PMM-3738-VM1010-R piezoelectric MEMS microphone, which features Wake on Sound and ZeroPower listening technologies \cite{microphone}, allowing both the microcontroller and the microphone to sleep in a low-power mode until a sound is detected.
+The microcontroller and microphone are powered by a BQ25570 solar power harvester~\cite{BQ25570EVM-206_website} connected to an IXYS SLMD121H04L solar cell~\cite{SLMD121H04L_website} and a super-capacitor of 220 \si{\micro F}. For debugging we used the Saleae logic analyzer~\cite{saleae}.
 
-\begin{figure}
-	\centering
-	\includegraphics[width=\columnwidth]{figures/distributedMicrophone}
-	\caption{ (1) endpoint detection algorithms extract the part of the signal corresponds to the input word, (2) feature extraction calculates the energy spectrum of the trimmed signal, and (3) feature matching searches the local database for the closest word}
-	\label{fig:mic}
-\end{figure}
+\subsection{Data acquisition}
+To cover the frequency range of the human voice, we used a sample rate of 7,812 Hz. To determine the location of the word within the recorded signal, we relied on the microphone feature  \textit{Wake-on-sound} and on the characteristics of the targeted vocabulary. The wake-on-sound triggers the data recording on the beginning of a word---once the energy in the sound wave crosses a certain level the recording begins. Experimentally, we defined the effective recoding length to be 259\,ms. Thus, endpoint detection algorithm is not needed, greatly improving the processing time and system efficiency from the energy perspective.
+
+only trigger the recording process after the energy in the sound wave crosses a certain threshold
+
+By studying the characteristics of the targeted vocabulary -- in particular the minimum effective recording length (\cref{sec:rec_length}) -- we selected a fixed recording length of 295 ms. Because we used a fixed recording length and exploited the \textit{wake-on-sound} microphone feature, the position of the word in the recording is always the same and endpoint detection is not needed, greatly improving the processing time and system efficiency from the energy perspective.
+
+Once a recording has finished, framing and data processing begin. We used non-overlapping frames of 256 samples ($\approx$ 33 milliseconds). This size is beneficial for doing a Fast Fourier Transform and short enough for the voice-features to be considered constant inside one frame (see \cref{sec:speech_recognition}).
+
+% \begin{figure}
+% 	\centering
+% 	\includegraphics[width=\columnwidth]{figures/distributedMicrophone}
+% 	\caption{ (1) endpoint detection algorithms extract the part of the signal corresponds to the input word, (2) feature extraction calculates the energy spectrum of the trimmed signal, and (3) feature matching searches the local database for the closest word}
+% 	\label{fig:mic}
+% \end{figure}
+
+\subsection{Software}
 
 %\textit{Endpoint detection} determines if there is a word in the recorded audio sample and, if there indeed is, the location of the word inside the recording is determined. There are several methods for doing endpoint detection. Two of them have been implemented and tested: power based and zero crossing rate (ZCR) based. The power based method estimates the energy of the audio signal by calculating the sum of amplitudes squared ($E = \sum A^2$) for each frame. The ZCR method counts how often the zero line is crossed per frame. The zero line in this case is equal to the microphone offset.
 
@@ -34,8 +41,6 @@ There exist many feature matching methods, yet only few are able to run under th
 Two methods have been implemented and tested. The first is Dynamic Time Warping (DTW), which is able to compare two sequences of data, even when they vary in speed. This way if a word is spoken slower or faster, the algorithm can compensate for that.
 The second is a method that linearly compares two feature vectors. This requires less computations than DTW.
 
-\subsection{Hardware description}
-we used MSP430RF5994~\cite{ti_msp430_website} an ultra-low-power microcontroller to drive the PMM-3738-VM1010-R microphone that features zero power listening and wake-on-sound technology~\cite{microphone}. A BQ25570EVM-206~\cite{BQ25570EVM-206_website} solar power harvester connected to a pair of SLMD121H04L~\cite{SLMD121H04L_website} solar panels intermittently powers a \sys sensor. For some experiments simulated intermittent power is used. For debugging, we used saleae logic analyzer~\cite{saleae}. 
 
 \subsection{Implementation}
 During recording a sample rate was used of 7812 Hz, which covers the human voice frequency range. The used frame size was 256 samples. This size was beneficial for doing a Fast Fourier Transform and corresponds to approximately 33 milliseconds of speech.
