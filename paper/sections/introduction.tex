@@ -1,8 +1,7 @@
-\todo{Explain that we approach continuous sensing on two stages: 1) continuous availability and 2) randomized response}
 \begin{figure}
 	\centering
 	\includegraphics[width=\columnwidth]{figures/coalInterSen}
-	\caption{\fullsys (\sys) is a group of intermittently powered sensory nodes that sense continuously despite the intermittent power supply. \sys exploits the inherent randomization of energy harvesting systems and enforce artificial randomization to preserve an efficient and continuous sensing functionality.}
+	\caption{\fullsys (\sys) is a group of intermittently powered sensory nodes that sense continuously despite the intermittent power supply. \sys exploits the inherent randomization of energy harvesting systems or enforce artificial randomization to preserve an efficient and continuous sensing functionality.}
 	\label{fig:powerCycle}
 \end{figure}
 
@@ -16,7 +15,7 @@ Intermittent devices trade-off a reliable energy source (the battery) for sustai
 %
 %Energy harvesters are a promising battery replacement, scavenging power from ambient sources instead of fixed reservoirs. A tiny energy harvester, however, powers a device intermittently: it accumulates energy in its buffer (i.e. super-capacitor) until a threshold is reached, and then it powers the sensors which depletes the energy reservoir and terminates execution. 
 
-Many of these challenges have been tackled. For example, \cite{mementos,dino,colin2016chain} studied the intermittent computation problem, which is concerned with the preservation of an application progress and memory integrity under frequent power failures; \cite{hester2017timely} investigated the timely operation challenge, which is concerned with data freshness after a power interrupt; and \cite{yildirm2018ink} introduced the event-driven execution for the intermittent domain, which is concerned with input and output operations under arbitrarily-timed power loss.% However, all previous work has considered the intermittency as an inherent characteristic of these systems and have not attempted to control it. 
+Many of these challenges have been tackled. For example, \cite{mementos,dino,colin2016chain} studied the intermittent computation problem, which is concerned with the preservation of an application progress and memory integrity under frequent power failures; \cite{hester2017timely} investigated the timely operation challenge, which is concerned with data freshness after a power interrupt; and \cite{yildirim2018ink, samoyed_pldi_2019} introduced the event-driven execution for the intermittent domain, which is concerned with input and output operations under arbitrarily-timed power loss.% However, all previous work has considered the intermittency as an inherent characteristic of these systems and have not attempted to control it. 
 
 Despite the significant progress that has been achieved in the intermittent domain, \textit{the system availability problem} has not been addressed. A monitoring sensor that has a very low probability to be available when an external event occurs is not worth deploying. A sensor that is capable of capturing only very short events has a limited number of potential applications (imagine that you want to control room lights with a batteryless microphone. The microphone is capable of processing a single word. If you say "on" lights turned on but other systems might start to operate also---a specification problem. If you say "light" to eliminate other systems you lose the ability to control the light---a functionality problem). Consequently, intermittent sensors have not gained widespread adaptation. 
 
@@ -24,6 +23,12 @@ This paper tackles the paradox of continuous sensing on intermittent devices by 
 
 Highlights of the paper contributions:
 \begin{itemize}
+		\item\todo{We introduce a new type of sensor that is intermittently powered, yet continuously senses.}
+		\item\todo{We modeled the \sys availability and validated it against on-a-real-hardware measured data.}
+		\item\todo{We introduced \textit{intermittent timer} an algorithm that enables intermittent nodes to self-time their power cycles, without the need for extra hardware.}
+		\item\todo{We studied nodes overlapping when the power cycles of the intermittent nodes change.}
+		\item\todo{[maybe we skip this one]We proposed and algorithm for \sys event-based sensing.}
+		\item\todo{We prototype \fullsys in a form of \fullcim.}
 		\item Introducing a new sensor type: \textit{\fullsys} (\sys) is a group of intermittently powered nodes that take advantage of the randomized nature of the powering subsystem (energy source and energy harvester) to approach 100\% system availability. \sys adapts its behavior based on the harvested energy conditions to preserve efficient and continuous operations. 
 		\item Characterizing the behavior of \fullsys under different power arrival rates. We define four \sys operational states and investigate the associated operational challenges of these states. 
 		\item Characterizing the behavior of \fullsys under different event occurrence frequencies and patterns. 
@@ -39,5 +44,5 @@ Highlights of the paper contributions:
 %%% Hypothesis, question, purpose statement
  It increases the temporal and spatial availability of an intermittent system and enables resource distribution such as a large number of words templates for spoken words recognition systems. 
 
-Controlling the on/off cycle of intermittent devices enables adapting them to many real-world applications. For example, once a certain on/off cycle is preserved, an intermittent wake-up receiver can be implemented; an intermittent acoustic monitoring system for monitoring engines modules---the sound produced by a deformed gear tooth---can be made. Moreover, with the advances in passive communication (such as passive light~\cite{}, and backscatter tag-to-tag~\cite{} communication) battery-free miniaturized sensors can form self-powered wireless sensor network to, for instance, create smart wallpaper and revolutionize smart buildings. 
+Controlling the on/off cycle of intermittent devices enables adapting them to many real-world applications. For example, once a certain on/off cycle is preserved, an intermittent wake-up receiver can be implemented; an intermittent acoustic monitoring system for monitoring engines modules---the sound produced by a deformed gear tooth---can be made. Moreover, with the advances in passive communication (such as passive light~\cite{}, and backscatter tag-to-tag~\cite{liu2013ambient} communication) battery-free miniaturized sensors can form self-powered wireless sensor network to, for instance, create smart wallpaper and revolutionize smart buildings. 
 

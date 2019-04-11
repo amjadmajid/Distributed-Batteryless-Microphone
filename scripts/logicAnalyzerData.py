@@ -52,7 +52,7 @@ class LogicAnalyzerData:
             raise DataException("Not data in the found between {} and {}".format(minTimestamp, maxTimestamp))
         return rowsIndices 
 
-    def __statesSelector(self, cols, states):
+    def statesSelector(self, cols, states):
         s = np.array(states)
         # print(s)
         # print("cols",cols)
@@ -71,7 +71,7 @@ class LogicAnalyzerData:
         rawStates = [ self.states[i] for i in indices]
         # print("rawStates", rawStates)
         timestamps = np.array([ self.timestamps[i] for i in indices])
-        states = self.__statesSelector(cols,rawStates)
+        states = self.statesSelector(cols,rawStates)
         #print("getData->states", states)
         return timestamps, states
 
