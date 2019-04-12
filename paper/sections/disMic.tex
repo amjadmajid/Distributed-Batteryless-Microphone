@@ -1,50 +1,112 @@
 \begin{figure}
 	\centering
 	\includegraphics[width=\columnwidth]{figures/cis}
-	\caption{Coalesced Intermittent Command Recognizer: an instant of a \fullsys. On the left is the hardware of an individual intermittent sensory node. Our prototype consists of 8 coalesced intermittent nodes. \circled{1} is an SLMD121H04L solar panel. \circled{2} is a BQ25570EVM-206 solar power harvester, \circled{3} is an MSP430FR5994 ultra low power microcontroller, and \circled{4} is a home soldered PCB with KPMM-3738-VM1010-R microphone. The block diagram on the right shows the data acquisition and processing stages.}
-	\label{fig:powerCycle}
+	\caption{\fullCIM: an instant of a \fullsys. \cim features a power failure immune word recognizer. Once a word is recorded, the word's spectral features extraction begins. The resulting features vector is compared against previously-stored words' templates for recognition. The comparison using a liner distance matching algorithm}
+	\label{fig:cis}
 \end{figure}
 
-\sys is a prototype of a distributed battery-free audio assistant agent. \sys is envisioned to be embedded in, for example, wallpapers and furniture coverage to turn these objects to smart and controllable ones. The distributed nature of the \sys system enables it to exploit the inherent randomness of intermittent devices to offer a reliable interaction. 
+We have developed a prototype of a \fullcim (\cim): an instant of a \fullsys. The \cim consists of eight batteryless intermittent nodes. Each node is capable of performing isolated words recognition. 
 
-\sys is a battery-less distributed microphone. It operates intermittently, when a threshold amount of energy accumulates.  
+The reason behind developing a \cim is threefold: (i) voice is a natural and convenient way for human to interact with miniaturized devices; (ii) demonstrating \textit{the world's first} batteryless intermittently-powered command recognizer, which shades light on the potential of batteryless intermittent systems; and (iii) facilitating testing with different sensing strategies and different type of external events arrival (i.e. regular  or burst). 
 
-Audio is recorded for a fixed time period. After that, if the audio recording has finished successfully, the recording is divided into smaller parts called \textit{frames} and speech recognition is performed using an algorithm consisting of three steps:
-\begin{enumerate*}
-	\item endpoint detection
-	\item feature extraction
-	\item feature matching
-\end{enumerate*}.
-This steps are also depicted in figure \ref{fig:mic}.
+Moreover, we believe that a \cim can facilitate direct human-to-human or human-to-objects communication. Imagine that a \cim based system is deployed in a play ground, embedded in ground and other objects. You want to call your child, and a \cim based system is embedded in your shirt and his shirt. You say his name and the \cim picks up the word and scatter it over light---\cite{marco} demonstrates the feasibility of scattering sunlight to communicate between two nodes that are up to 60\,m apart. The scattered signal will be relied on other \cim nodes until the receiving node on his shirt receives the message and notify him, daddy is calling. 
 
-\begin{figure}
+\subsection{Hardware}
+A \cim node consists of thee main parts: a microphone, a microcontroller, and a harvester. MSP430RF5994~\cite{ti_msp430_website} an ultra-low-power microcontroller is used for data acquisition and processing. This microcontroller has a 16-bit RISC processor running on 1 MHz, 8KB of SRAM (volatile), 256KB of FRAM (non-volatile), and a 12-bit analog to digital converter (ADC). It also features a Low Energy Accelerator (LEA), which offloads the main CPU for specific operations, such as FFT. For recording we use the PMM-3738-VM1010-R piezoelectric MEMS microphone, which features Wake on Sound and ZeroPower listening technologies \cite{microphone}, allowing both the microcontroller and the microphone to sleep in a low-power mode until a sound wave is detected.
+The microcontroller and microphone are powered by a BQ25570 solar power harvester~\cite{BQ25570EVM-206_website} connected to an IXYS SLMD121H04L solar cell~\cite{SLMD121H04L_website} and a super-capacitor of 470 \si{\micro F}. For debugging we used the Saleae logic analyzer~\cite{saleae}.
+
+\subsection{System Description}
+The \cim has a power interrupts immune command recognizer. The recognizer is capable of recognizing isolated-word type of speech. 
+The main parts of the recognizer are illustrated in Figure~\ref{fig:cis} and explained below:
+
+\subsubsection{Data acquisition}
+The \textit{Wake-on-Sound} feature of the microphone triggers the data acquisition process once the energy level in the sound signal crosses a certain level. The ADC, then, samples the output of the microphone at 7,812\,Hz. This sampling rate is sufficient to cover most of the frequency range of the human voice. To determine the end of the recording we relied on the characteristics of the targeted vocabulary. In particular, we identified, experimentally, the minimum effective recording length, which is happened be 259\,ms for the chosen set of words. By exploiting the Wake-on-Sound feature and the minimum effective recording length we eliminate the need for an endpoint detection algorithm~\cite{}, greatly improving the processing time and system efficiency from the energy perspective.
+
+
+\subsubsection{Feature Extraction}
+Once a recording has finished, framing and data processing begin. \cim divides the digitized signal into non-overlapping frames of 256 samples ($\approx$ 33 milliseconds). This size is beneficial for doing a Fast Fourier Transform and short enough for the voice-features to be considered constant inside a frame.
+
+To extract the spectral features of a frame, \cim divides the frequency of interest into 12 bands (as in~\cite{hopper1992}). The first five bands has a bandwidth of 200\,Hz. The next three has a bandwidth of 300\,Hz which is followed by two bands of 500\,Hzs. Finally, the last two bands has a 600\,Hz bandwidth. This division is motivated by how the energy is concentrated in human speech~\cite{hopper1992}. Then, \cim computes the 256-point Fast Fourier Transform for each frame. The resulting feature vector contains the amount of energy concentrated in each frequency band defined earlier. This feature vector forms the basis for the words identifying process once it is normalized.
+
+Normalization minimizing detection errors that result from differences in the amplitude of the speech input of a word. To normalize a feature vector, \cim computes the binary algorithm of each entry of that vector. 
+Then it computes the mean of the resulting vector. Finally, it subtracts each entry of the resulting vector from the computed mean. This is summarized in the following equation: 
+\begin{equation}
+    f_i = \log(\hat{f}_i) - \frac{\sum\limits^S_{i=1}\log(\hat{f}_i)}{S},
+\end{equation}
+where $f_i$ is the normalized output for the $i^{\text{\tiny th}}$ spectral band of a feature vector, $\hat{f}_i$ is the energy in the $i^{\text{\tiny th}}$ spectral band of the frame, and $S$ is the number of spectral bands (12 in our case). 
+
+\subsubsection{Feature Matching}
+% %
+% \begin{figure}
+% \centering
+% \includegraphics[width=\linewidth]{figures/DTWvsLDM}
+% \caption{Recognition accuracy for linear matching and DTW when using 9 frames as the recording length.}
+% \label{fig:DTWvsLDM}
+% \end{figure}
+% %
+\begin{table}
 	\centering
-	\includegraphics[width=\columnwidth]{figures/distributedMicrophone}
-	\caption{ (1) endpoint detection algorithms extract the part of the signal corresponds to the input word, (2) feature extraction calculates the energy spectrum of the trimmed signal, and (3) feature matching searches the local database for the closest word}
-	\label{fig:mic}
-\end{figure}
+	\caption{Profiling of features matching algorithms: Dynamic Time Warping (DTW) and Linear Distance Matching (LDM)}
+	\label{tab:profiling}
+	\begin{tabular}{lll} \hline
+	Section & LDM (ms) & DTW (ms) \\\hline
+	Recording & 285  & 285 \\
+	Feature extraction & 501 & 501 \\
+	Feature matching &  99 & 1251 \\\hline
+	Total & 885 & 2037 \\\hline
+	\end{tabular}
+\end{table}
+%
+Feature matching is done by computing the distances between the normalized feature vectors of the recorded word and the vectors of the words stored during the training phase. 
+\cim computes the squared Euclidean distance between vectors as follows,
+\begin{equation}
+	 	d_j = \sum\limits^S_{i=1} (f_{s,i} - f_{r,i})^2,
+    \label{eq:frame_dist}
+\end{equation}
+where $d_j$ is the distance between the $j^{\text{\tiny th}}$ stored and recorded vectors. $f_{s,i}$ is the normalized output of the $i^{\text{\tiny th}}$ spectral band of a stored vector, $f_{r,i}$ is the normalized output of the $i^{\text{\tiny th}}$ spectral band of a recorded vector. 
+The total distance between two words is calculated as follows:
+\begin{equation}
+		D_k = \sum\limits^{l}_{j=1} d(j)
+\end{equation}
+where $D_k$ is the distance between the $k^{\text{\tiny th}}$ stored word and the recorded word, and $l$ is the recording length measured in frames.
 
-%\textit{Endpoint detection} determines if there is a word in the recorded audio sample and, if there indeed is, the location of the word inside the recording is determined. There are several methods for doing endpoint detection. Two of them have been implemented and tested: power based and zero crossing rate (ZCR) based. The power based method estimates the energy of the audio signal by calculating the sum of amplitudes squared ($E = \sum A^2$) for each frame. The ZCR method counts how often the zero line is crossed per frame. The zero line in this case is equal to the microphone offset.
+Once the recorded word has been compared to all \cim dictionary words, the word with the smallest distance to the recorded word is considered the correct word. However, if the smallest distance is bigger the garbage threshold \todo{Partick uses confusion matrix for setting this threshold. Maybe I need to consider adding it} which we experimentally set, then the \cim will return "undefined word". 
 
-During \textit{feature extraction} on frames containing the word Fast Fourier Transform is applied to obtain the energy spectrum. 
-The energy spectrum is then sorted into a feature vector, where each vector value holds the total energy of a specific frequency range. Finally each vector value is normalized over the total vector energy.
+It should be emphasized that in Linear distance matching (LDM) the feature vectors of two words are compared successively, not accounting for differences in pronunciation speed. This is sufficient for our case as we are targeting isolated words and speaker dependent speech recognition type. We also implemented Dynamic Time Warping algorithm which better handles the difference in the speed of speech. However, it is slower than the linear matching algorithm  (Table~\ref{tab:profiling}) and the detection accuracy were comparable in our case.% (Figure~\ref{fig:DTWvsLDM}). 
 
-After that, \textit{feature matching} is performed, where the features of the recorded word are compared against a local database to find the most similar word in the database.
-There exist many feature matching methods, yet only few are able to run under the constraints of an intermittent system.
-Two methods have been implemented and tested. The first is Dynamic Time Warping (DTW), which is able to compare two sequences of data, even when they vary in speed. This way if a word is spoken slower or faster, the algorithm can compensate for that.
-The second is a method that linearly compares two feature vectors. This requires less computations than DTW.
+\subsubsection{Power Failure Protection}
+In order to preserve the progress state and to protect \cim data against randomly timed power failures, we manually splitted \cim program into 19 atomic regions. We ensured the each of these regions requires less energy the what the energy buffer can provide with a single charge. The program progress state is saved in the non-volatile memory (FRAM) on the transition between these regions. This prevents the program from falling back to its starting point (\texttt{mian()}) after each power failure. Data in the non-volatile memory with Write-After-Read dependency are double buffered to ensure the data integrity when the power supply is interrupted. 
 
-\subsection{Hardware description}
-we used MSP430RF5994~\cite{ti_msp430_website} an ultra-low-power microcontroller to drive the PMM-3738-VM1010-R microphone that features zero power listening and wake-on-sound technology~\cite{microphone}. A BQ25570EVM-206~\cite{BQ25570EVM-206_website} solar power harvester connected to a pair of SLMD121H04L~\cite{SLMD121H04L_website} solar panels intermittently powers a \sys sensor. For some experiments simulated intermittent power is used. For debugging, we used saleae logic analyzer~\cite{saleae}. 
+\subsection{Code profiling}
+The entire command recognition software was written in the {\tt C} programming language. The total program consists of 973 lines of code, excluding the Texas Instrument DSP library, from which the FFT function was used. See \ref{tab:code_stats} for more information.
 
-\subsection{Implementation}
-During recording a sample rate was used of 7812 Hz, which covers the human voice frequency range. The used frame size was 256 samples. This size was beneficial for doing a Fast Fourier Transform and corresponds to approximately 33 milliseconds of speech.
+The memory footprint on the microcontroller was 20,064 bytes of FRAM and 1,134 bytes of SRAM. Execution times are shown in \ref{tab:profiling}.
 
-For normalization an integer log function was applied on every value, divided by the average log.
-The whole algorithm is implemented using only integer / fixed point arithmetic.
+The power usage of a node differs according to it's activity. When a node is waiting for a voice event, it is in low-power mode. When data needs to be processed or recorded it is in active mode. When recording, the microphone and ADC consume additional power. The power consumption rates are measured with a Monsoon power monitor~\cite{monsoon} and shown in \ref{tab:power_usage}.
 
-%DTW is a well known method in speech recognition.
-In the linear comparing method the feature vectors of two words are compared successively, not accounting for differences in the speed of pronunciation. If two words vary in length, the last frames cannot always be compared and instead a penalty is applied linear to the length difference.
 
-In between the different steps (see figure \ref{fig:mic}) checkpoints in non-volatile memory are used to assure progress while running on intermittent power. In some cases additional checkpoint were used inside the steps.
+\begin{table}
+	\centering
+	\caption{Code statistics: lines of code}
+	\label{tab:code_stats}
+	%Compiled without optimization flags:
+	\begin{tabular}{lrrrr} \hline
+		Language & Files & Blank & Comment & Code \\\hline
+		C & 7 & 264 & 173 & 736 \\
+		C/C++ Header & 8 & 62 & 40 & 237 \\\hline
+		Total &  15 & 326 & 213 & 973 \\\hline
+	\end{tabular}
+\end{table}
 
+\begin{table}
+	\centering
+	\caption{Power usage.}
+	\label{tab:power_usage}
+	%Compiled without optimization flags:
+	\begin{tabular}{lrrr}\hline
+	Section & Current (\si{\micro A}) & Voltage (V) &  Power (\si{\micro W}) \\\hline
+	Sleeping & 64 $\pm$20 & 2.008 $\pm$? & 128 $\pm$40 \\
+	Recording & 423 $\pm$20  & 2.008 $\pm$? &  849 $\pm$40\\
+	Processing &  282 $\pm$20 & 2.008 $\pm$?& 566 $\pm$40 \\\hline
+	\end{tabular}
+\end{table}

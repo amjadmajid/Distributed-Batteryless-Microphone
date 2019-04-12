@@ -9,7 +9,6 @@ def funcFormatter(val, idx):
 
 # for the simulated system availability
 ndc=0.15 
-n=len(data[0][1])
 
 # the average benefit of adding an INode is tot = (1-tot) * ndc +tot
 def tot(n,ndc):
@@ -22,12 +21,13 @@ def tot(n,ndc):
     return np.array(coverage)
 
 # Load Data 
-path = '../processed_data/availability220.json'
+path = '../processed_data/availability470.json'
 data=[]
 with open(path) as f:
     for l in f:
         data.append(json.loads(l))
 
+n=len(data[0][1])
 # Plotting
 ## Figure, Axes setup
 fig = plt.figure(figsize=(8,4))
@@ -35,19 +35,19 @@ ax = plt.axes()
 ax.grid(linestyle=":")
 
 ## Plotting parameters 
-plotPatterns = ['-*', '-^', '-+','-o']
+plotPatterns = ['-*', '-^', '-+','-o', '-d']
 fontSize = 16 
-
+#colors=['r','b','k']
 dataIndices = np.arange(len(data[0][1]))+1 
 
 ## Data plotting
 for idx, d in enumerate(data):
     #print(d[0])
     print("Data length", len(d[1]) )
-    ax.plot(dataIndices, np.array(d[1])*10,plotPatterns[idx], label=d[0])
+    ax.plot(dataIndices, np.array(d[1])*10,plotPatterns[idx], label=d[0] ) #, color=colors[idx]) 
 
 # Plotting the simulated system availability 
-ax.plot(range(1,n+1), tot(n,ndc)* 10, '--', label="on/off cycle={:0.2f}".format(ndc))
+ax.plot(range(1,n+1), tot(n,ndc)* 10, '--', label="on/off cycle={:0.0f}%".format(100*ndc))
 
 ## axes formatting 
 ylabels = ["{:4d}%".format(x*10) for x in dataIndices-1]
@@ -55,10 +55,11 @@ ax.set_yticks(dataIndices-1)
 ax.set_yticklabels(ylabels, fontsize=fontSize)
 ax.set_xticklabels(dataIndices, fontsize=fontSize)
 ax.set_xticks(dataIndices)
-
+ax.set_ylabel("Availability", fontsize=fontSize)
+ax.set_xlabel("Number of nodes", fontsize=fontSize)
 ## Plotting output
 ax.legend(frameon=False, fontsize=fontSize)
 plt.tight_layout()
-#plt.savefig('../../paper/figures/sysAvailability.eps')
+plt.savefig('../../paper/figures/sysAvailability.eps')
 plt.show()
 

@@ -10,7 +10,8 @@ class FileSelector():
         os.chdir(self.path)
         exprs = glob.glob('*') # grap all dirs
         for i, expr in enumerate(exprs):
-            print(i,'-',expr)
+            if "logicdata" not in expr:
+                print(i,'-',expr)
         exp = input('choose experiment')
         os.chdir(self.cwd)
         return exprs[int(exp)]

@@ -51,9 +51,9 @@ def sysAvailable(totTime, timeInterval,nodesIndices, dataHandler):
                 availability[idx].append(collecOnTime / timeInterval)
     return availability
 
-def sysDutyCycle(totTime, timeInterval,nodes, dataHandler):
+def intermittent_nodes_offtimes(totTime, timeInterval,nodes, dataHandler):
     """ 
-        Calculating nodes duty cycles. This function requires the Analyzer class.
+        Calculating nodes off-times. This function requires the Analyzer class.
 
         Parameters:
         ----------
@@ -69,9 +69,42 @@ def sysDutyCycle(totTime, timeInterval,nodes, dataHandler):
         Return
         ------
         sysDCycle: list
-                    A list of nodes duty cycles
+                    A list of nodes off-times 
     """
-    sysDCycle=[ [] for i in nodes]  
+    offTimes=[ [] for i in nodes]  
+    for interval in range(0,totTime, timeInterval):
+        for node in nodes:
+            # System duty cycles
+            data = dataHandler.getData(interval, interval+timeInterval, node)
+            #print(data)
+            #exit()      #### EXIT #-#--#---#----#
+            dataAnalyzer = Analyzer(data)
+            collecOffTime = dataAnalyzer.collectiveOffTime()
+            #print(collecOnTime)
+            offTimes[node] += collecOffTime
+    return offTimes 
+
+def intermittent_nodes_ontimes(totTime, timeInterval,nodes, dataHandler):
+    """ 
+        Calculating nodes on-times. This function requires the Analyzer class.
+
+        Parameters:
+        ----------
+        @totTime      : int 
+                        The total observation time of an experiments.
+        @timeInteravl : int 
+                        The granularity over which an averaged duty cycle is 
+                        calculated.
+        @nodesIndices : list
+                        A list of nodes indices
+        @dataHandler  : instance of LogicAnalyzerData class
+
+        Return
+        ------
+        sysDCycle: list
+                    A list of nodes on-times 
+    """
+    onTimes=[ [] for i in nodes]  
     for interval in range(0,totTime, timeInterval):
         for node in nodes:
             # System duty cycles
@@ -81,8 +114,8 @@ def sysDutyCycle(totTime, timeInterval,nodes, dataHandler):
             dataAnalyzer = Analyzer(data)
             collecOnTime = dataAnalyzer.collectiveOnTime()
             #print(collecOnTime)
-            sysDCycle[node] += collecOnTime
-    return sysDCycle
+            onTimes[node] += collecOnTime
+    return onTimes 
 
 def labelFinder(path, pattern):
     """LabelFinder extracts label from the file name. It looks for the labels
@@ -98,31 +131,37 @@ def labelFinder(path, pattern):
         print("label is not found")
         print()
         print(e)
-    label = label.replace("_", " ")
-    label = label.replace("-", " ")
+        try:
+            label = label.replace("_", " ")
+        except UnboundLocalError:
+            pass
+        try:
+            label = label.replace("-", " ")
+        except UnboundLocalError:
+            pass
+
     return label
 
 def main():
     fs = FileSelector('../data/')
     path = fs.getPath()
-    labelPattern = "(_?[s|S]unny_?|_?[D|d]ay_?|_?[N|n]ight_?|_?cloudy.*?_|[C|c]loudy|[0-9]*lux)"
+    print(path)
+    labelPattern = "(_?[s|S]unny_?|_?[D|d]ay_?|_?[N|n]ight_?|_?cloudy.*?_|[C|c]loudy|[0-9]*-?[0-9]+lux)"
     label = labelFinder(path, labelPattern)
+    print(label)
     capPattern = "220|470|680|1000"
     cap = labelFinder(path, capPattern)
-    #print(cap)
+    print(cap)
         
     dataHandler = LogicAnalyzerData(path)
     numOfNodes =  dataHandler.getNumOfNodes()
     totTime=int(dataHandler.getTotalExperimentTime())+1 # seconds
     timeInterval = totTime # seconds
     timelineInterval = 10
-    maxAvgSpan=[]
     
-
     availability = sysAvailable(totTime, timeInterval,range(numOfNodes), dataHandler)
-    sysDutyCycles = sysDutyCycle(totTime, timeInterval,range(numOfNodes), dataHandler)
-    #print(sysDutyCycles)
-    #exit()      ##### EXIT #-#--#---#----#
+    nodesOnTimes = intermittent_nodes_ontimes(totTime, timeInterval,range(numOfNodes), dataHandler)
+    nodesOffTimes = intermittent_nodes_offtimes(totTime, timeInterval,range(numOfNodes), dataHandler)
 
     # interpolate the data according to the given interval
     dataHandler.intervalDataInterpolation(timelineInterval)
@@ -130,53 +169,16 @@ def main():
 
     jsonObj = json.dumps([label,availability])
     #TODO prevent duplicated entries
-#    with open("processed_data/availability"+cap+".json", "a") as f:
-#        print(jsonObj, file=f)
-
-    jsonObj = json.dumps([label,sysDutyCycles])
-    with open("processed_data/sysDutyCycles"+cap+".json", "a") as f:
+    with open("processed_data/availability"+cap+".json", "a") as f:
         print(jsonObj, file=f)
-#    with open("debugging_data/dutyCycle.txt", "w") as f:
-#        print(np.array(sysDutyCycles), file=f)
 
-    with open("debugging_data/availabilityTimeline.txt", "w") as f:
-        print(availabilityTimeline, file=f)
+    jsonObj = json.dumps([label,nodesOnTimes])
+    with open("processed_data/intermittent_nodes_ontimes"+cap+".json", "a") as f:
+        print(jsonObj, file=f)
 
-#------------------------Plotting------------------------------#
-#    data = dataHandler.getData(0,timeInterval, range(numOfNodes))
-#    plotter = Plotter(data)
-#    plotter.plotClusters()
-#    plotter.plotOnTime()
-
-    plt.figure()
-    plt.title("Nodes Duty Cycles")
-    #print("sysDutyCycles", sysDutyCycles)
-    plt.boxplot(sysDutyCycles)
-#    lst=np.mean(sysDutyCycles, axis=1)
-#    plt.bar(range(len(lst)),lst,)
-
-#    fileName =path.replace('.csv', 'dutyCycle.txt')
-#    #print(fileName)
-#    with open(fileName,'w') as res_file:
-#        for v in lst:
-#            print(v,file=res_file )
-    
-#    for i in range(len(lst)):
-#        maxAvgSpan.append(sum(lst[:i+1]))
-
-    plt.figure()
-    plt.title("system availability")
-    lst=np.mean(np.array(availability), axis=1)
-#    fileName =path.replace('.csv', '.txt')
-#    #print(fileName)
-#    with open(fileName,'w') as res_file:
-#        for v in lst:
-#            print(v,file=res_file )
-
-    plt.plot(range(len(maxAvgSpan)), maxAvgSpan, '-^',label='Max time Span')
-    plt.legend()
-    #plt.plot(range(len(lst)),lst, '-*', label='on-time')
-    #plt.legend()
+    jsonObj = json.dumps([label,nodesOffTimes])
+    with open("processed_data/intermittent_nodes_offtimes"+cap+".json", "a") as f:
+        print(jsonObj, file=f)
 
     plt.figure()
     plt.title("Availability Timeline")
