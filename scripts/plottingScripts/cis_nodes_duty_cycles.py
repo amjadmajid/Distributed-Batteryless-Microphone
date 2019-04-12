@@ -2,7 +2,7 @@ from inspect import currentframe, getframeinfo
 import numpy as np
 import matplotlib.pyplot as plt
 import json
-plt.style.use('seaborn-whitegrid')
+plt.style.use('seaborn-ticks')
 
 # To disable debugging set it to False
 # To print all debugging info set the second entry to 0
@@ -57,8 +57,8 @@ def color_box(box, color):
 
 def main():
     fontSize=16
-    ontime_path = '../processed_data/intermittent_nodes_ontimes470.json'
-    offtime_path = '../processed_data/intermittent_nodes_offtimes470.json'
+    ontime_path = '../processed_data/intermittent_nodes_ontimes680.json'
+    offtime_path = '../processed_data/intermittent_nodes_offtimes680.json'
     
     # Data Layout in a file
     ## ['label', [[1,2],[1,3,4,5,],[]...]]
@@ -129,12 +129,13 @@ def main():
         box = plt.boxplot(cis, showfliers=False)
         color_box(box,color_list[idx])
     
-    plt.ylabel("Nodes duty cycle", fontsize=fontSize)
+    plt.gca().grid(True, axis='y') 
+    plt.ylabel("Nodes duty cycle (%)", fontsize=fontSize)
     plt.xlabel("Nodes ID", fontsize=fontSize)
     plt.yticks(fontsize=fontSize-2)
     plt.xticks(fontsize=fontSize-2)
     plt.tight_layout()
-    plt.savefig('../../paper/figures/nodes_duty_cycles.eps')
+    plt.savefig('../../paper/figures/natural_light_nodes_duty_cycles.eps')
     plt.show()
     
 if __name__=="__main__":

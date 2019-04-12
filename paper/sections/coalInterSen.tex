@@ -35,7 +35,7 @@ An intermittent sensor has a limited energy budget per power cycle. When it is t
 The \sys's on-time is the projection of its underlying intermittent nodes' uptimes on the time axis. The \sys's on-time ranges from minimum (when all nodes on-times cluster together, see the red regions in Figure~\ref{fig:cisOntime}) to the maximum (when the overlapping between its nodes uptimes is zero or when the continuous time is reached). Two broad controlling strategies for minimizing nodes on-times overlapping and maximizing \sys's time span can be imagined: 
 \begin{enumerate}[label=\roman*.]%[wide, labelwidth=!, labelindent=0pt]
 %
-		\item \textit{Explicit on-time division strategy}: Recent advancements in timing intermittent operations enable intermittent nodes to measure their on and off times with the help of an external ultra-low-power timer~\cite{mayfly2017hester}. Similar breakthroughs in passive communication enable ultra-low-power message exchange between batteryless nodes~\cite{marco}. Intermittent nodes can use these recent advancements to apply time division multiplexing strategy to explicitly avoid nodes on-times clustering. For example, a node calculates its average on-time $\overline{t_{on}}$ and off-time $\overline{t_{off}}$ for $N$ power cycles. Then it measures the time difference between its power-up and the intended transmitting time $\Delta\,t$. Then it encodes these information $({\overline{t_{off}}, \overline{t_{on}}, \Delta\,t})$ in a message and broadcasts it. If a node receives this message it will have full information about the transmitting node power cycle. It can then alter its power cycle, relative to the transmitting nodes cycle, by either increasing (or decreasing) its power consumption to shorten (or lengthen) its on-time and shift its power cycle to a different time slot. This approach, obviously, assumes relatively stable nodes power cycles. 
+		\item \textit{Explicit on-time division strategy}: Recent advancements in timing intermittent operations enable intermittent nodes to measure their on and off times with the help of an external ultra-low-power timer~\cite{hester2017timely}. Similar breakthroughs in passive communication enable ultra-low-power message exchange between batteryless nodes~\cite{li2015retro}. Intermittent nodes can use these recent advancements to apply time division multiplexing strategy to explicitly avoid nodes on-times clustering. For example, a node calculates its average on-time $\overline{t_{on}}$ and off-time $\overline{t_{off}}$ for $N$ power cycles. Then it measures the time difference between its power-up and the intended transmitting time $\Delta\,t$. Then it encodes these information $({\overline{t_{off}}, \overline{t_{on}}, \Delta\,t})$ in a message and broadcasts it. If a node receives this message it will have full information about the transmitting node power cycle. It can then alter its power cycle, relative to the transmitting nodes cycle, by either increasing (or decreasing) its power consumption to shorten (or lengthen) its on-time and shift its power cycle to a different time slot. This approach, obviously, assumes relatively stable nodes power cycles. 
 %
 \begin{figure}
 		\centering
@@ -54,7 +54,30 @@ where $t_{on}(N)$ is the on-time of a \sys with $N$ intermittent nodes. Figure~\
 \end{enumerate}
 There is a clear trade-off between the aforementioned methods. While the explicit control method provides fine control over the system distribution, the implicit method does not suffer from control messages exchange overhead. Although the implicit method is relatively simple to implement and explore, the explicit control method is not a far fetched idea considering the recent advancements in passive communication and intermittent timing. However, we opt to explore the implicit distribution control method as the hardware used to demonstrate the feasibility of passive light communication and ambient RF backscattering are not open source and re-making it is beyond the scope of this study.
 
+\begin{figure}[t]
+		\centering
+		\includegraphics[width=\columnwidth]{figures/sysAvailability}
+		\caption{Implicit \fullsys' nodes distribution using solar power harvesting randomization}
+		\label{fig:solarPwrCoIS}
+\end{figure} 
+%
+\begin{figure}[t]
+		\centering
+		\includegraphics[width=\columnwidth]{figures/natural_light_nodes_duty_cycles.eps}
+		\caption{Nodes on-times duty cycles, for different light intensity. In general, we observe that a node duty cycle is relatively stable, however, each node has its a slightly different duty cycle. This causes the nodes to have a constant relative-to-each-other shifts that eventually uniformly distribute the nodes on-time over the \sys power cycle.}
+		\label{fig:sysDutyCycle}
+\end{figure} 
+
+\paragraph{Light-based Implicit Nodes' Distribution}
+As Figure~\ref{fig:solarPwrCoIS} shows light powers tiny sensory nodes intermittently. It also indicates that \sys availability increases as more intermittent nodes added. The dashed line is the simulated time coverage of the system as the intermittent nodes power-ups are uniformly distributed. By comparing the measured \sys's availability line graphs to the simulated one we can conclude that harvesting solar power of artificial light provides sufficient randomness to distribute the coalesced nodes on-times uniformly. Figure~\ref{fig:sysDutyCycle} shades more light on this observation. It show that each node has it own unique duty cycle. The little differences between the duty cycles causes them to have "near" constant shifts relative to each other which in turn causes the \sys nodes' on-times to have near uniform distribution. see Figure~\ref{fig:cisOntime} which explain this phenomena for two nodes.
+
 \subsection{Intermittent Timer}
+\begin{figure}[t]
+		\centering
+% 		\includegraphics[width=\columnwidth]{fff}
+		\caption{\todo{To be done}\todo{Show the correlation, between the off-time and the on-time. Experiment setup: (1) one node, (2) vary light intensity from 300 to 1500 every 10 second}. Conclusion, if you observe an (inverse) correlation between the on-time and the off-time, then we validate the timing algorithm}
+		\label{fig:solarPwrCoIS}
+\end{figure} 
 \label{subsec:interTimer}
 Timing is a key building block for sensing activities. However, it is missing on intermittent nodes, unless additional dedicated timer circuit is added to the intermittent nodes~\cite{hester2017timely}. Here we would like to propose an alternative way the does not require additional timer hardware. Obviously, the on-time of a node can be measured using the build-in timers in the microcontroller. However, the difficulty is \textit{how an intermittent node can time its own off-time?}. Actually, answering this question does not only enable timing on intermittent devices, but it can also be used as a metric to estimate the environment energy richness. \todo{Also, it can be used to estimate how much energy is left in the buffer when power consumption is relatively stable.}
 
@@ -87,6 +110,7 @@ Algorithm~\ref{algo:offTime} shows how a node can estimate its off-time. The hig
 \end{algorithm}
 
 \subsection{Power States}
+\label{sec:power_state}
 A \sys can experience a wide range of ambient power intensity. For example, a solar-powered \sys may harvest no energy at night, modest energy from artificial light, and much more from direct sunlight.  Generally, we can identify four different \sys powering states: 
 \begin{enumerate}
 		\item \textit{Targeted energy conditions}---These are the energy conditions that the \sys designed for. In these energy conditions, the \sys should work intermittently and have sufficient power cycles randomness to uniformly distribute its intermittent nodes on-times and meet the desired availability percentage~\ref{fig:cisModel}. In general, the targeted energy conditions should be near worst energy harvesting conditions to ensure that the system is properly functioning for the majority of the time.
@@ -94,47 +118,40 @@ A \sys can experience a wide range of ambient power intensity. For example, a so
 %
 \begin{figure}
 		\centering
-		\includegraphics[width=\columnwidth]{figures/noRandomization}
-		\caption{\todo{Placeholder} No randomization}
+		\includegraphics[width=\columnwidth]{figures/hibernating_power_state}
+		\caption{\fullsys is in a hibernating power state: when the energy harvesting rate approximates the energy consumption rate at the sleeping (or low power) mode. In this state the \sys loses its natural randomized feature. Thus, all the nodes capture to the first event and power down shortly after. Consequently, the \sys senses intermittently and does not take advantage of its redundant intermittent node to approach continuous sensing.}
 		\label{fig:noRand}
 \end{figure} 
 %
-		\item \label{it:hibernating} \textit{Hibernating energy conditions}---when \sys is tasked with event-based sensing, and the energy conditions are relatively higher than the targeted conditions, then the harvested energy may compensate for the energy consumption of the low-power mode. Thus, the system loses its randomness feature, and all the nodes will react to the first external event and power down shortly after as the energy consumption of sensing and processing is much higher than the energy consumption of the low-power-mode idle listening. If the external events happened to be sporadic, then this is not a big issue. However, for a bursty type of events (i.e. a command of two or three words), this will prevent the \sys from meeting its goal: continuous sensing (Figure~\ref{fig:noRand}). 
+		\item \label{it:hibernating} \textit{Hibernating power state}---when \sys is tasked with event-based sensing, and the energy conditions are relatively higher than the targeted conditions, then the harvested energy may compensate for the energy consumption of the low-power mode. Thus, the system loses its randomness feature, and all the nodes will react to the first external event and power down shortly after as the energy consumption of sensing and processing is much higher than the energy consumption of the low-power-mode idle listening. If the external events happened to be sporadic, then this is not a big issue. However, for a bursty type of events (i.e. a command of two or three words), this will prevent the \sys from meeting its goal: continuous sensing (Figure~\ref{fig:noRand}). 
 		\item \label{it:continuous} \textit{Continuously powered}---Under direct mid-noon sun even a tiny solar panel can continuously power a sensor. In such conditions, the \sys will sense continuously without the need for randomization. Therefore, the job of a single node will be repeated $N$ times, and instead of sending a single message to a battery-powered or tethered sink---to push the data to the internet---$N$ identical messages will be sent which waste a lot of energy. 
 				
 \end{enumerate}
 %
 \begin{figure}
 		\centering
-		\includegraphics[width=\columnwidth]{figures/randomization}
-		\caption{\todo{Placeholder} Randomization}
+		\includegraphics[width=\columnwidth]{figures/randomized_response}
+		\caption{Randomized response helps in mitigating the hibernate-power-state problem. Also, it reduces the number of duplicated captured events when the \sys is overpowered. However, effective randomization strategy must be energy aware.}
 		\label{fig:rand}
 \end{figure} 
-%
-\begin{figure}
-		\centering
-		\includegraphics[width=\columnwidth]{figures/randomizationSideEffect}
-		\caption{\todo{Placeholder} Randomization side effect}
-		\label{fig:randSideEffect}
-\end{figure} 
-%
-The problems mentioned in~(\ref{it:hibernating}) and (\ref{it:continuous}) can be mitigated by enforcing randomization on the response of the intermittent nodes (Figure~\ref{fig:rand}): when a node is wakened up by an external event it responds to that event with a certain probability. However, if the randomized response is enforced all the time, then the \sys will have a lower probability of catching events during the targeted energy conditions (Figure~\ref{fig:randSideEffect}). Therefore, the \sys has to distinguish between the targeted and above-targeted energy conditions and apply response randomization only during the above-targeted energy conditions. Moreover, choosing a fix response probability is an inefficient way of dealing with the over-powering problem. As the number of active intermittent nodes at a given moment in time is a function of the total number of nodes and the power intensity at that time. To this end, an intermittent node has to estimate the number of active nodes at the external event occurrence moment, which is discuss it next.
+% %
+% \begin{figure}
+% 		\centering
+% 		\includegraphics[width=\columnwidth]{figures/randomizationSideEffect}
+% 		\caption{\todo{Placeholder} Randomization side effect}
+% 		\label{fig:randSideEffect}
+% \end{figure} 
+% %
+The problems mentioned in~(\ref{it:hibernating}) and (\ref{it:continuous}) can be mitigated by enforcing randomization on the response of the intermittent nodes (Figure~\ref{fig:rand}): when a node is wakened up by an external event it responds to that event with a certain probability. However, if the randomized response is enforced all the time, then the \sys will have a lower probability of catching events during the targeted energy conditions. Therefore, the \sys has to distinguish between the targeted and above-targeted energy conditions and apply response randomization only during the above-targeted energy conditions. Moreover, choosing a fix response probability is an inefficient way of dealing with the over-powering problem. As the number of active intermittent nodes at a given moment in time is a function of the total number of nodes and the power intensity at that time. To this end, an intermittent node has to estimate the number of active nodes at the external event occurrence moment, which is discuss it next.
 
 \subsection{Nodes overlapping}
 In order for a node to estimate the number of active nodes at a given moment, first, it has to know the total number of nodes ($N$) in its \sys, which we assume to be known to the nodes before deployment. Second, this analysis is built on the observation that a node's on and off times is a good indicator about the on and off times of other nodes in the \sys (Figure~\ref{support this observation}). A node can measure its on-time $t_\text{on}$ and off-time $t_\text{off}$ using  Algorithm~\ref{algo:offTime} (or an external dedicated timer~\cite{hester2017timely}). Then, it can estimate the maximum time span ($t_{max}$) of its \sys, which is the total duration of the nodes' on-times when they are aligned next to each other as follows,
 $$
 t_\text{max} = N\times t_\text{on}
 $$
- and approximate the time of the \sys power cycle to be the sum of its on and off times,
+Then, from equation~\ref{eq:cisModel}, the node calculates the \sys availability percentage or the \sys on-time ($t_\text{sys-on}$). And as we argued in Section~\ref{subSec:availability}, nodes on-times are uniformly distributed over the \sys power cycle. Thus, the overlapping on-time is also uniformly distributed over the \sys on-time. Then, a node can calculate the average number of active intermittent nodes $n_\text{active}$ using the following formula,
 $$
-t_\text{pwr} = t_\text{on} + t_\text{off}.
+n_\text{active} = t_\text{max} \div t_\text{sys-on}.
 $$
-Then, from equation~\ref{eq:cisModel}, the node calculates the \sys availability percentage or the \sys spreading factor ($f_\text{spread}$). After that, the node computes the total overlapping on-time ($t_\text{ovr}$) of the \sys as follows,
-$$
-t_\text{ovr} = (1-f_\text{spread})\times t_\text{max}.
-$$
-As we have argued in Section~\ref{subSec:availability}, nodes on-times are uniformly distributed over the \sys power cycle. Similarly, the $t_\text{ovr}$ is also uniformly distributed over the \sys power cycle. Thus, a node can calculate the average number of active intermittent nodes using the following formula,
-$$
-n_\text{active}=\lceil{t_\text{ovr}\div t_\text{pwr}}\rceil,
-$$
-and make the educated guess for the proper randomization factor. If a second event, however, happens shortly after the first one, a node needs to update $N$ by subtracting $n_\text{active}$ and redo the calculation. 
+
+and make the educated guess for the proper randomization factor. If a second event, however, happens shortly after the first one, a node needs to update $N$ by subtracting $n_\text{active}-1$ and redo the calculation (the $-1$ is because the node itself decided not to react on the first event). 

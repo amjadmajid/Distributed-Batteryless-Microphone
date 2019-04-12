@@ -180,11 +180,11 @@ def main():
     with open("processed_data/intermittent_nodes_offtimes"+cap+".json", "a") as f:
         print(jsonObj, file=f)
 
-#    plt.figure()
-#    plt.title("Availability Timeline")
-#    plt.plot(availabilityTimeline[0], '-*')
-#    plt.plot( [np.mean(availabilityTimeline[0])] * len(availabilityTimeline[0]) )
-#    plt.show()
+    plt.figure()
+    plt.title("Availability Timeline")
+    plt.plot(availabilityTimeline[0], '-*')
+    plt.plot( [np.mean(availabilityTimeline[0])] * len(availabilityTimeline[0]) )
+    plt.show()
 
 if __name__=="__main__":
     main()

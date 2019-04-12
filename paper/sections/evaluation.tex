@@ -1,20 +1,65 @@
+\subsection{Experiment setup}
+\label{sec:experiment_setup}
+% \begin{figure}[t]
+% 		\centering
+% 		\includegraphics[width=\columnwidth]{figures/sysAvailability_artificial-light}
+% 		\caption{\todo{can be removed, or merged with \sys availability figure with solar power or updated it and presented it} Implicit \fullsys' nodes distribution using artificial light power harvesting randomization}
+% 		\label{fig:solarPwrCoIS}
+% \end{figure} 
 \begin{figure}[t]
 		\centering
-		\includegraphics[width=\columnwidth]{figures/sysAvailability}
-		\caption{Implicit \fullsys' nodes distribution using solar power harvesting randomization}
+		\includegraphics[width=\columnwidth]{figures/cis_dutyCycle.eps}
+		\caption{\fullcim availability while being in a sleep mode for different light intensity \todo{re-discuss with Patrick the meaning of this figure}}
+		\label{fig:cis_dutyCycle}
+\end{figure} 
+\begin{figure}[t]
+		\centering
+		\includegraphics[width=\columnwidth]{figures/nodes_duty_cycles.eps}
+		\caption{\fullcim nodes' duty cycles for a artificial light intensity ranges from $\approx 400$ to $\approx \SI{1000}{lux}$}
 		\label{fig:solarPwrCoIS}
 \end{figure} 
-%
+After validating our observation on natural light and office artificial light, we designed a testbed with controllable light intensity for clarity and results reproducible. We blocked uncontrollable light sources with a box of $60 \times 40$\,cm. On one side we fix a light strip of 2.5\,m with 150 LED~\cite{}. On the other side is the \fullcim of 8 intermittent nodes. The light strip can produce 16 difference light intensity. Figure~\cite{fig:cis_dutyCycle} shows the \cim power cycles while being in low-power-mode for a light intensity ranges from a minimum ($\approx 100$\,lux) to a maximum ($\approx 2000$\,lux). 
+
+\subsection{Events detection rate}
+In these experiments we study the reaction behavior to the \sys for bursty and regular events.
+\paragraph{Regular events arrival}
 \begin{figure}[t]
 		\centering
-		\includegraphics[width=\columnwidth]{figures/sysDutyCycles}
-		\caption{\todo{Placeholder} Nodes duty cycles}
-		\label{fig:sysDutyCycle}
+		\includegraphics[width=\columnwidth]{figures/regular_events_capture_rate.eps}
+		\caption{The number of detected events by \fullcim with eight intermittent nodes. The total number of the external events is 240. In general, we see that when the light intensity increases, the number of captured events rises too. But... \todo{add timing, and possibly inject bars with randomization }}
+		\label{fig:events_detection_rate}
+\end{figure}
+
+Figure~\ref{fig:events_detection_rate} shows the rate of unique events detection and the total detection rate, for four different light intensity. We clearly see a positive correlation between light intensity and the number of duplicated events. We also observe that the number of duplicated detected events increases when the arrival time between the events is longer. The reason for this phenomena is that when the inter-events time increases, the intermittent nodes sleeps longer in low-power-mode. This reduces the inherent randomization of the system and leads it to the \textit{hibernating-power-state} problem and eventually to the \textit{overpowering} problem (Section\ref{sec:power_state}).  
+ 
+
+\paragraph{Bursty events arrival}
+\begin{figure}[t]
+		\centering
+		\includegraphics[width=\columnwidth]{figures/events_burst_problem.pdf}
+		\caption{when the system sleeps, randomization is reduced. Thus, the majority of the nodes react to the first event and miss the rest of the burst. Red numbers indicate events index in a burst}
+		\label{fig:events_burst_problem}
+\end{figure} 
+Figure~\ref{fig:events_burst_problem} shows the capturing behavior of \sys of a bursty-type events. A bust of four events with one second between the individual events were fired every 20 seconds. Each burst was repeated 10 times. The nodes sleep in low-power-mode when they finish processing waiting or the next event. In general, we observe that the intermittent nodes react to the first event and power down shortly after missing the rest of the burst. The results validate our theory about the side effect of the \textit{hibernating power state} (Section~\ref{sec:power_state}). Next we will show how randomized response can mitigate this problem. \todo{what is the total captured event numbers? to be compared to the total captured event numbers with randomization}
+
+
+\subsection{Events detection rate with randomization}
+\begin{figure}[t]
+		\centering
+% 		\includegraphics[width=\columnwidth]{figures/events_burst_problem.pdf}
+		\caption{\todo{Figure to show how randomization helps in increasing the uniquely detected events rates}}
+		\label{fig:solarPwrCoIS}
 \end{figure} 
 
-\paragraph{Light-based Implicit Nodes' Uptimes Control}
-As Figure~\ref{fig:solarPwrCoIS} shows light powers tiny sensory nodes intermittently. It also indicates that \sys availability increases as more intermittent nodes added. The dashed line is the simulated time coverage of the system as the intermittent nodes power-ups are uniformly distributed. By comparing the measured \sys's availability line graphs to the simulated one we can conclude that harvesting solar power of artificial light provides sufficient randomness to distribute the coalesced nodes on-times uniformly. Figure~\ref{fig:sysDutyCycle} shades more light on this observation. It show that each node has it own unique duty cycle. The little differences between the duty cycles causes them to have a "near" constant shifts relative to each other which in turn causes the system to nodes' on-times to have near uniform distribution.
 
+\begin{figure}[t]
+		\centering
+% 		\includegraphics[width=\columnwidth]{figures/events_burst_problem.pdf}
+		\caption{\todo{Figure to show how randomization help in mitigating the bust problem}}
+		\label{fig:solarPwrCoIS}
+\end{figure} 
+
+\subsection{\fullcim words detection accuracy}
 \begin{table}[H]
 \centering
 \caption{Testing set}
@@ -27,55 +72,14 @@ go & pause & resume & edit  & quit  \\
 \end{tabular}
 \end{table}
 
-\subsection{Effective recording length}
-\label{subsec:rec_length}
-%
-\begin{figure}
-	\centering
-	\includegraphics[width=\linewidth]{"figures/linear_multi"}
-	\caption{Recognition accuracy versus the recording length (in frames), while using multiple recordings per word for testing. Used feature matching method: linear.}
-	\label{fig:multi}
-\end{figure}
-%
-Since our target hardware has extremely limited resources, the first experiment targets the minimum effective recoding length without significant accuracy loss. 
-
-For this experiment a single microcontroller running on continuous power is used. Each word from Table~\ref{tab:words} was recorded on a PC 20 times. The features---normalized FFT-based values---of the first recording are saved in the microcontroller's persistent memory as a signature to perform the feature matching, during the testing. the rest of the recording are used for conducting the experiment.   
-
-Figure~\ref{fig:multi} shows words recognition accuracy when the 19 recordings of each word are played back from the PC speaker. We can concluded that recording beyond \textit{nine frames} do not increase the recognition accuracy; therefore, nine frames recording length is chosen for the rest of the experiments. 
-
-\subsection{Comparison of feature matching methods}
-%
-\begin{figure}
-\centering
-\includegraphics[width=\linewidth]{figures/DTWvsLDM}
-\caption{Recognition accuracy for linear matching and DTW when using 9 frames as the recording length.}
-\label{fig:DTWvsLDM}
-\end{figure}
-%
-\begin{table}
-	\centering
-	\caption{Profiling of features matching algorithms: Dynamic Time Warping (DTW) and Linear Distance Matching (LDM)}
-	\label{tab:profiling}
-	$
-	\begin{tabular}{lll}\hline
-	Section & Linear (ms) & DTW (ms) \\\hline
-	Recording & 285.9  & 285.9 \\
-	Feature extraction & 501.9 & 501.9 \\
-	Feature matching &  99.4 & 1251 \\\hline
-	Total & 887.2 & \\\hline
-	\end{tabular}
-	$
-\end{table}
-%
-We implemented two algorithms for voice features matching, Dynamic Time Warping (DTW) and Linear Distance Matching (LDM). Due to the microphone wake-on-sound feature and the fixed recording length, DTW did not outperform LDM as Figure~\ref{fig:DTWvsLDM} shows. Moreover, DTW takes more time to process that data as Table~\ref{tab:profiling} shows. Therefore, LDM algorithm is used in future experiments.
 
 \subsection{ Intermittent microphone availability}
 %
-
+\todo{BELOW ID OLD WORK}
 \begin{figure}
 \centering
 \includegraphics[width=\linewidth]{figures/word_freq}
-\caption{The effect of the time between consecutive words on the availability: the percentage of words that is processed by the command recognizer. \todo{Add correct recognition as stacked bar?}}
+\caption{\todo{These are old results} The effect of the time between consecutive words on the availability: the percentage of words that is processed by the command recognizer. \todo{Add correct recognition as stacked bar?}}
 \label{fig:word_freq}
 \end{figure}
 %

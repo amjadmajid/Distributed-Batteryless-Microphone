@@ -36,6 +36,27 @@ Then it computes the mean of the resulting vector. Finally, it subtracts each en
 where $f_i$ is the normalized output for the $i^{\text{\tiny th}}$ spectral band of a feature vector, $\hat{f}_i$ is the energy in the $i^{\text{\tiny th}}$ spectral band of the frame, and $S$ is the number of spectral bands (12 in our case). 
 
 \subsubsection{Feature Matching}
+% %
+% \begin{figure}
+% \centering
+% \includegraphics[width=\linewidth]{figures/DTWvsLDM}
+% \caption{Recognition accuracy for linear matching and DTW when using 9 frames as the recording length.}
+% \label{fig:DTWvsLDM}
+% \end{figure}
+% %
+\begin{table}
+	\centering
+	\caption{Profiling of features matching algorithms: Dynamic Time Warping (DTW) and Linear Distance Matching (LDM)}
+	\label{tab:profiling}
+	\begin{tabular}{lll} \hline
+	Section & LDM (ms) & DTW (ms) \\\hline
+	Recording & 285  & 285 \\
+	Feature extraction & 501 & 501 \\
+	Feature matching &  99 & 1251 \\\hline
+	Total & 885 & 2037 \\\hline
+	\end{tabular}
+\end{table}
+%
 Feature matching is done by computing the distances between the normalized feature vectors of the recorded word and the vectors of the words stored during the training phase. 
 \cim computes the squared Euclidean distance between vectors as follows,
 \begin{equation}
@@ -51,7 +72,7 @@ where $D_k$ is the distance between the $k^{\text{\tiny th}}$ stored word and th
 
 Once the recorded word has been compared to all \cim dictionary words, the word with the smallest distance to the recorded word is considered the correct word. However, if the smallest distance is bigger the garbage threshold \todo{Partick uses confusion matrix for setting this threshold. Maybe I need to consider adding it} which we experimentally set, then the \cim will return "undefined word". 
 
-It should be emphasized that in Linear distance matching (LDM) the feature vectors of two words are compared successively, not accounting for differences in pronunciation speed. This is sufficient for our case as we are targeting isolated words and speaker dependent speech recognition type\footnote{We have also implemented Dynamic Time Warping algorithm which better handles the difference in the speed of speech. However, it is slower than the linear matching algorithm and the detection accuracy were comparable in our case}. 
+It should be emphasized that in Linear distance matching (LDM) the feature vectors of two words are compared successively, not accounting for differences in pronunciation speed. This is sufficient for our case as we are targeting isolated words and speaker dependent speech recognition type. We also implemented Dynamic Time Warping algorithm which better handles the difference in the speed of speech. However, it is slower than the linear matching algorithm  (Table~\ref{tab:profiling}) and the detection accuracy were comparable in our case.% (Figure~\ref{fig:DTWvsLDM}). 
 
 \subsubsection{Power Failure Protection}
 In order to preserve the progress state and to protect \cim data against randomly timed power failures, we manually splitted \cim program into 19 atomic regions. We ensured the each of these regions requires less energy the what the energy buffer can provide with a single charge. The program progress state is saved in the non-volatile memory (FRAM) on the transition between these regions. This prevents the program from falling back to its starting point (\texttt{mian()}) after each power failure. Data in the non-volatile memory with Write-After-Read dependency are double buffered to ensure the data integrity when the power supply is interrupted. 
@@ -89,5 +110,3 @@ The power usage of a node differs according to it's activity. When a node is wai
 	Processing &  282 $\pm$20 & 2.008 $\pm$?& 566 $\pm$40 \\\hline
 	\end{tabular}
 \end{table}
-
-\clearpage

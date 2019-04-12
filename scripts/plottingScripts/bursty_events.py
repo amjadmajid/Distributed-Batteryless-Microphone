@@ -2,14 +2,14 @@ import matplotlib.pyplot as plt
 import numpy as np
 import sys, os, json
 
-plt.style.use('seaborn-whitegrid')
+plt.style.use('seaborn-ticks')
 fontSize=16
 
 files = [
-"2305-2335lux.json",
-"1705-1737lux.json",
+"812-836lux.json",
 "1400-1413lux.json",
-"812-836lux.json"
+"1705-1737lux.json",
+"2305-2335lux.json"
 ]
 
 color_list = ["#66a61e" , '#e7298a', '#7570b3', '#d95f02', '#1b9e77']
@@ -32,11 +32,14 @@ for i in range(len(files)):
     
     bw=0.2
     gap=0.2
-    plt.boxplot(data[::-1], positions=np.arange(4)+i*0.2, widths=0.2, showfliers=False, \
+    plt.boxplot(data, positions=np.arange(4)*0.2+i, widths=0.2, showfliers=False, \
     medianprops=medianprops, boxprops=boxprops, whiskerprops=whiskerprops, capprops=capprops) #, flierprops=flierprops)
+for i in range(3):
+    plt.axvline(x=0.8+i, color='lightgrey')
+
 plt.xlabel("Light intensity (lux)", fontsize = fontSize)
 plt.ylabel("Detection events", fontsize = fontSize)
-plt.xticks(np.arange(4)+0.4,(800,1400,1700,2300),fontsize=fontSize-2)
+plt.xticks(np.arange(4)+0.275,(800,1400,1700,2300),fontsize=fontSize-2)
 plt.yticks(range(0,10,2),range(0,10,2),fontsize=fontSize-2)
 plt.xlim([-0.11,3.71])
 plt.ylim([-0.8,8.2])
