@@ -136,25 +136,108 @@ void desync_init() {
     TA1CTL = TACLR | TASSEL__ACLK | MC__UP;   // ACLK, counting up
 }
 
+int get_random_bit() {
+    int random_bit = (sampled_input[__randSel++] & 0x01);
+    if(__randSel >= SAMPLES) __randSel=0;
+
+    return random_bit;
+}
+
+int get_random_byte() {
+    int i = 0;
+    if (n>16) n=16;
+    random_bits = get_random_bit();
+
+    for (i ; i < 15; i++) {
+        random_bits = (random_bits << 1) | get_random_bit();
+    }
+
+    return random_bits;
+}
+
+void sleep_for_one_word() {
+    // sleep for the time of 1 word
+    mic_power_off();
+    TA1CCR0 = 13000;  // +-700 ms
+    __bis_SR_register(LPM3_bits | GIE);
+
+    mic_wait_for_sound(); // will go into normal mode when wakes up.
+}
+
+
+//void desync() {
+//    /*
+//     * Delay recording for de-synchronization
+//     * To be used in a setup with multiple nodes, to prevent all of them reacting to the same event, and miss the next one because of that.
+//     * The random number is based on LSBs from ADC values. P=50% is used
+//     */
+//
+//    while (1) {
+//
+//    //get 2 random bits
+//    int a = get_random_bit();
+//    int b = get_random_bit();
+//    int c = get_random_bit();
+//    int d = (a << 1) | (b << 2) | c;
+//
+//    if (d < 3) {
+//        return;
+//    }
+//
+////    while (sampled_input[__randSel++] & 0x01) {
+////        if(__randSel >= SAMPLES) __randSel=0;
+//        // sleep for the time of 1 word
+//        mic_power_off();
+//        TA1CCR0 = 13000;  // +-700 ms
+//
+//        P3OUT &= ~BIT0;
+//        __bis_SR_register(LPM3_bits | GIE);
+//        P3OUT |= BIT0;
+//
+//        mic_wait_for_sound(); // will go into normal mode when wakes up.
+//    }
+//}
 
 void desync() {
     /*
      * Delay recording for de-synchronization
      * To be used in a setup with multiple nodes, to prevent all of them reacting to the same event, and miss the next one because of that.
-     * The random number is based on LSBs from ADC values. P=50% is used
+     * The random number is based on LSBs from ADC values. Probability is changed depending on sensed events since last power reset.
      */
-    while (sampled_input[__randSel++] & 0x01) {
-        if(__randSel >= SAMPLES) __randSel=0;
-        // sleep for the time of 1 word
-        mic_power_off();
-        TA1CCR0 = 13000;  // +-700 ms
 
-        P3OUT &= ~BIT0;
-        __bis_SR_register(LPM3_bits | GIE);
-        P3OUT |= BIT0;
+    // get 2 random bits
+    int a = get_random_bit();
+    int b = get_random_bit();
+    int c = (a << 1) | b;
 
-        mic_wait_for_sound(); // will go into normal mode when wakes up.
+    // 1st event with p=25%
+    if (c==0)  {
+        return;
     }
+    sleep_for_one_word();
+
+    // get 2 random bits
+    a = get_random_bit();
+    b = get_random_bit();
+    c = (a << 1) | b;
+
+    // 2nd event with p=25%
+    if (c==0)  {
+        return;
+    }
+    sleep_for_one_word();
+
+    // get 1 random bit
+    c = get_random_bit();
+
+    // 3rd event with p=50%
+    if (c==0)  {
+        return;
+    }
+    sleep_for_one_word();
+
+    // 4th event with p=100%
+
 }
 
 void compare_init() {

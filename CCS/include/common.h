@@ -4,7 +4,7 @@
 #define UART
 #define LOGIC
 //#define SIMULATION
-//#define DESYNC
+#define DESYNC
 
 #define SAMPLERATE  7812
 #define FRAMESIZE   256
