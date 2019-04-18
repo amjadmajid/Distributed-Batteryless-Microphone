@@ -5,10 +5,11 @@ plt.style.use('seaborn-ticks')
 
 fontSize=16
 
-labels = [r"$300\,lux$", "500lux", "800lux", "1400lux"]
+labels = ["300lux", "500lux", "800lux", "1400lux"]
 # color_list = ["#66a61e" , '#e7298a', '#7570b3', '#d95f02', '#1b9e77']
 f = plt.figure(figsize=(8,4))
 
+plt.tick_params(axis='x', pad=10, bottom=False)
 intervals = [1,2,4,6]
 totalDet=[]
 uniqueDet=[]
@@ -41,6 +42,11 @@ for i in range(3):
     plt.axvline(x=0.84+i, color='lightgrey')
 
 plt.axhline(y=100, color='lightgrey', linestyle=":")
+
+for group_idx in range(4):
+
+    for bar_idx in range(4):
+        plt.text( group_idx+bar_idx*bw-0.05 ,-44 , intervals[bar_idx] , color='r' ,fontsize=11, verticalalignment='bottom')
 
 plt.xticks(np.arange(4)+0.45, labels, fontsize=fontSize-2)
 plt.yticks(fontsize=fontSize-2)

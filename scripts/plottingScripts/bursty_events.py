@@ -5,12 +5,24 @@ import sys, os, json
 plt.style.use('seaborn-ticks')
 fontSize=16
 
-files = [
-"812-836lux.json",
-"1400-1413lux.json",
-"1705-1737lux.json",
-"2305-2335lux.json"
-]
+DESYNC =False
+
+if DESYNC:
+    files = [
+    "desync_40_50_70_100/524-541lux.json",
+    "desync_40_50_70_100/812-836lux.json",
+    "desync_40_50_70_100/1400-1413lux.json",
+    "desync_40_50_70_100/1705-1737lux.json",
+    #"desync_40_50_70_100/2305-2335lux.json",
+    ]
+else:
+    files = [
+    "524-541lux.json",
+    "812-836lux.json",
+    "1400-1413lux.json",
+    "1705-1737lux.json",
+    #"2305-2335lux.json"
+    ]
 
 color_list = ["#66a61e" , '#e7298a', '#7570b3', '#d95f02', '#1b9e77']
 f = plt.figure(figsize=(8,4))
@@ -39,7 +51,7 @@ for i in range(3):
 
 plt.xlabel("Light intensity (lux)", fontsize = fontSize)
 plt.ylabel("Detection events", fontsize = fontSize)
-plt.xticks(np.arange(4)+0.275,(800,1400,1700,2300),fontsize=fontSize-2)
+plt.xticks(np.arange(4)+0.275,(500,800,1400,1700,2300),fontsize=fontSize-2)
 plt.yticks(range(0,10,2),range(0,10,2),fontsize=fontSize-2)
 plt.xlim([-0.11,3.71])
 plt.ylim([-0.8,8.2])
@@ -51,5 +63,8 @@ for group_idx in range(4):
 
 
 plt.tight_layout()
-f.savefig("../../paper/figures/events_burst_problem.pdf", bbox_inches='tight')
+if DESYNC:
+    f.savefig("../../paper/figures/events_burst_rand.pdf", bbox_inches='tight')
+else:
+    f.savefig("../../paper/figures/events_burst_problem.pdf", bbox_inches='tight')
 plt.show()

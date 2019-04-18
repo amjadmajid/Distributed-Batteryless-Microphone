@@ -1,13 +1,8 @@
-\textcolor{red}{The vision of ubiquitous sensing runs into the reality of battery technology. Batteries are short-lived, hazardous, bulky, and costly. Battery-less sensors choose an alternative, ambient energy. Ambient power, however, is marginal and unpredictable. Consequently, battery-less sensors operate intermittently. Sporadic sensing does not meet a wide range of real-world applications; therefore, intermittent sensors have not been widely adopted.} 
-%
-The main obstacles to achieve truly ubiquitous sensing are the limitations of battery technology - batteries are short-lived, hazardous, bulky, and costly - and the unpredictability of ambient power. The latter causes sensors to operate intermittently and failing to meet the requirements of real-world applications. In this paper, we
-%
-%We 
-present a \textit{\fullsys} (\sys) an intermittently powered sensor that senses continuously! 
-%
-\textcolor{red}{To design the \sys, we took a deep dive into the behavior of intermittent nodes.}
-%
-To design the \sys, we modeled the behavior of intermittent nodes.
-%
-We modeled their collective on-time (\sys availability) and validated this model on real hardware. We developed an algorithm for intermittent timing that enables intermittent nodes to estimate their  charging time, without requiring additional hardware. Using its on-time as an ambient energy meter, an intermittent node can estimate the number of its active counterparts. This enables \sys to be ambient energy aware and overcome the \textit{hibernating-power-state} and the \textit{overpowering} problems. Finally, we realize the \sys in a prototype of a batteryless voice assistant agent. Despite $x\%$ duty cycle of an intermittent node, the \fullcim recognized $y\%$ commands
-%
+The main obstacles to achieve truly ubiquitous sensing are (i) the limitations of battery technology - batteries are short-lived, hazardous, bulky, and costly - and (ii) the unpredictability of ambient power. The latter causes sensors to operate intermittently, violating the availability requirements of many real-world applications. 
+
+In this paper, we present the \textit{\fullsys} (\sys), an intermittently powered ``sensor'' that senses continuously! The key idea being the use of multiple intermittent nodes to ensure that (at least) one is on at all times, providing a sense of continuous availability.
+To establish the required number of nodes, we modeled -and validated on real hardware- the specific (dis)charge behavior of individual nodes over time, and the emerging collective availability. 
+
+An important finding is that a \sys designed for certain (minimal) energy conditions requires no explicit spreading of awake times due to randomness in the power source and node hardware. However, when the available energy exceeds the design point, nodes employing a sleep mode (to extend their availability) do wake up collectively at the next event. This synchronization leads to problems as multiple responses will be generated, and -worse- subsequent events will be missed as nodes will now recharge at the same time.
+To counter this unwanted behavior we designed an algorithm to estimate the number of sleeping neighbors and respond proportionally to an event. 
+We show that when intermittent nodes randomize their responses to events, in favorable energy conditions, the \sys reduces the duplicated captured events by 50\% and increases the percentage of capturing entire bursts above 90\%. 

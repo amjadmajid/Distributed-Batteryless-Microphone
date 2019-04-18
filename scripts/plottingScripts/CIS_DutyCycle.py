@@ -68,14 +68,14 @@ def addFile(filename):
 
 directory = "../../data/duty_cycle_sleeping/470uf/"
 # csv_files = [f for f in os.listdir(directory) if f.endswith('.csv')]
-csv_files = ['116-120lux.csv', '215-224lux.csv', '320-332lux.csv', '430-442.csv', '524-541lux.csv', '621-641lux.csv', '715-740lux.csv', '812-836lux.csv', '904-932lux.csv', '1009-1032lux.csv', '1096-1126lux.csv', '1185-1220lux.csv', '1280-1321lux.csv', '1400-1436lux.csv', '1705-1737lux.csv', '1947-2012lux.csv']
+csv_files = ['116-120lux.csv', '215-224lux.csv', '320-332lux.csv', '430-442lux.csv', '524-541lux.csv', '621-641lux.csv', '715-740lux.csv', '812-836lux.csv', '904-932lux.csv', '1009-1032lux.csv', '1096-1126lux.csv', '1185-1220lux.csv', '1280-1321lux.csv', '1400-1436lux.csv'] #, '1705-1737lux.csv', '1947-2012lux.csv']
 measurements = []
 for file in csv_files:
     # print file,
     measurements.append(addFile(directory+file))
 
 plot_data = [m.getDutyCycles() for m in measurements]
-light_intensities = [116, 215, 320, 430, 524, 621, 715, 812, 904, 1009, 1096, 1185, 1280, 1400, 1705, 1947]
+light_intensities = [116, 215, 320, 430, 524, 621, 715, 812, 904, 1009, 1096, 1185, 1280, 1400] #, 1705, 1947]
 fontSize=16
 plt.figure(figsize=(8,4))
 plt.boxplot(plot_data, positions=light_intensities, widths=30)
@@ -83,7 +83,7 @@ plt.boxplot(plot_data, positions=light_intensities, widths=30)
 # ylabels = ["{:4d}%".format(x*10) for x in ]
 plt.xticks(rotation=90, fontsize=fontSize-4)
 plt.yticks(fontsize=fontSize-4)
-plt.ylabel("CIS duty cycle (%)", fontsize=fontSize)
+plt.ylabel("Avg. nodes duty cycle (%)", fontsize=fontSize)
 plt.xlabel("Light intensity (lux)", fontsize=fontSize)
 # plt.ylim(0,1.05)
 plt.xlim(0, light_intensities[-1]+50)

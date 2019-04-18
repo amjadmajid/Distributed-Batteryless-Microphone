@@ -74,10 +74,21 @@
 \section{Discussion and Future Work}
 \label{sec:discussion}
 
+\noindent\textbf{Intermittent timing algorithm} when the harvested power is very low the accuracy of inferring the charging time from the discharging degrades. However, for the \fullsys this is not a serious problem as the intermittent nodes need to randomize their response to external events in favorable energy conditions. 
+
+\noindent\textbf{\fullsys availability on a fine scale} Because of the differences in intermittent nodes power cycles, their duty cycles are constantly shifting relative to each other ( Figure~\ref{fig:cisOntime}).  However, this study does zoom in on the \sys availability on short time scale and the effect of length of the differences between the nodes power cycles on the system short term availability.   
+
+\noindent\textbf{\fullsys Speech recognition on intermittent devices} In this paper, we have shown the feasibility of speech recognition on intermittent power. We also demonstrated the possibility of recognizing burst of events (in our case four words). However, the type of speech we targeted is the simplest, isolated words. Next, we may attempt recognizing a more complicated type of speech and for a larger number of words than the number chosen for this study.
+
+Additionally the command recognition rate could further be improved by using an estimation of the energy left in the energy buffer, to start recharging early. This will prevent a detection when there is not enough harvested energy to record for a long enough time, letting a node recharge earlier and coming back with sufficient energy.
+
 \section{Conclusion}
 \input{sections/conclusion}
-%comment it out before submitting
-\newpage
+We presented the \textit{\fullsys} (\sys), an intermittently powered ``sensor'' that senses continuously! \sys is built around the observation that multiple intermittent nodes distribute themselves uniformly in time. This observation enables us to accurately model, and validate on real hardware, the \sys availability---the collective on-time of its intermittent nodes. 
+
+An important finding is that favorable energy conditions may cause sleeping intermittent nodes to synchronize their power cycles on the arrival of the first event. Consequently, they react to the same event, start recharging at the same time, and missing the next event. To counter this unwanted behavior we designed an algorithm to estimate the number of sleeping neighbors and respond proportionally to an event. We show that the \fullsys is able to distribute bursts of events on its nodes "evenly" and capture the entire burst with above $\approx$90\% detection accuracy.
+ 
+Additionally, we prototype a battery-less \fullcim and show that it can successfully capture events of multiple words. 
 
 \bibliographystyle{ACM-Reference-Format}
 \bibliography{references}

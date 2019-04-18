@@ -1,3 +1,4 @@
+To evaluate the performance of the \fullsys, we conducted several experiments in different energy conditions and with different types of events. 
 \subsection{Experiment setup}
 \label{sec:experiment_setup}
 % \begin{figure}[t]
@@ -6,60 +7,82 @@
 % 		\caption{\todo{can be removed, or merged with \sys availability figure with solar power or updated it and presented it} Implicit \fullsys' nodes distribution using artificial light power harvesting randomization}
 % 		\label{fig:solarPwrCoIS}
 % \end{figure} 
-\begin{figure}[t]
-		\centering
-		\includegraphics[width=\columnwidth]{figures/cis_dutyCycle.eps}
-		\caption{\fullcim availability while being in a sleep mode for different light intensity \todo{re-discuss with Patrick the meaning of this figure}}
-		\label{fig:cis_dutyCycle}
-\end{figure} 
-\begin{figure}[t]
-		\centering
-		\includegraphics[width=\columnwidth]{figures/nodes_duty_cycles.eps}
-		\caption{\fullcim nodes' duty cycles for a artificial light intensity ranges from $\approx 400$ to $\approx \SI{1000}{lux}$}
-		\label{fig:solarPwrCoIS}
-\end{figure} 
-After validating our observation on natural light and office artificial light, we designed a testbed with controllable light intensity for clarity and results reproducible. We blocked uncontrollable light sources with a box of $60 \times 40$\,cm. On one side we fix a light strip of 2.5\,m with 150 LED~\cite{}. On the other side is the \fullcim of 8 intermittent nodes. The light strip can produce 16 difference light intensity. Figure~\cite{fig:cis_dutyCycle} shows the \cim power cycles while being in low-power-mode for a light intensity ranges from a minimum ($\approx 100$\,lux) to a maximum ($\approx 2000$\,lux). 
+
+% \begin{figure}[t]
+% 		\centering
+% 		\includegraphics[width=\columnwidth]{figures/nodes_duty_cycles.eps}
+% 		\caption{\fullcim nodes' duty cycles for a artificial light intensity ranges from $\approx 400$ to $\approx \SI{1000}{lux}$}
+% 		\label{fig:solarPwrCoIS}
+% \end{figure} 
+%
+
+%
+After validating our observation on natural light and office artificial light, we designed a testbed with controllable light intensity for clarity and results reproducible. To this end, we blocked uncontrollable light sources with a box of $60 \times 40$\,cm. On the ceiling of the box, we attached a light strip of 2.5\,m with 150 LEDs that can produce 15 different light intensities. On the bottom of the box, we placed a \fullcim of 8 intermittent nodes (the hardware is described in Section~\ref{sec:hardware}).
+
+The events in our experiments are spoken words (Table~\ref{tab:words}). We recorded different patterns of isolated words to emulate the arrival of bursts or individual events with varying inter-event and inter-bust timing. We used a Bluetooth speaker~\cite{jbl} to replay a certain record. The data were collected using logic anaylyzer~\cite{saleae} and processed on a laptop running Ubuntu 16.04 LTS. 
+
 
 \subsection{Events detection rate}
-In these experiments we study the reaction behavior to the \sys for bursty and regular events.
-\paragraph{Regular events arrival}
+%
 \begin{figure}[t]
 		\centering
-		\includegraphics[width=\columnwidth]{figures/regular_events_capture_rate.eps}
-		\caption{The number of detected events by \fullcim with eight intermittent nodes. The total number of the external events is 240. In general, we see that when the light intensity increases, the number of captured events rises too. But... \todo{add timing, and possibly inject bars with randomization }}
-		\label{fig:events_detection_rate}
+	    \includegraphics[width=\columnwidth]{figures/regular_events_capture_rate.eps}
+    	\caption{The number of detected events by \fullcim with eight intermittent nodes. The total number of external events is 240. In general, we see that when the light intensity increases, the number of captured events rises too. Red numbers indicate events arrival interval.}
+    	\label{fig:events_detection_rate}
+\end{figure} 
+These experiments show the total number of detected events and the number of uniquely detected ones with and without randomization. They also were conducted for a different type of events. 
+%
+\begin{figure}[t]
+    \includegraphics[width=\columnwidth]{figures/events_burst_problem.pdf}
+	\caption{When capturing a burst of events without randomized response, the majority of the nodes react to the first event of a burst and power down, missing the rest of the burst. Red numbers indicate events index in a burst.}
+    \label{fig:events_burst_problem}
 \end{figure}
 
-Figure~\ref{fig:events_detection_rate} shows the rate of unique events detection and the total detection rate, for four different light intensity. We clearly see a positive correlation between light intensity and the number of duplicated events. We also observe that the number of duplicated detected events increases when the arrival time between the events is longer. The reason for this phenomena is that when the inter-events time increases, the intermittent nodes sleeps longer in low-power-mode. This reduces the inherent randomization of the system and leads it to the \textit{hibernating-power-state} problem and eventually to the \textit{overpowering} problem (Section\ref{sec:power_state}).  
- 
+
+\paragraph{Regular events arrival}
+\begin{figure}[t]
+	\centering
+     \includegraphics[width=\columnwidth]{figures/events_burst_rand}
+    \caption{Response randomization enables a \sys to capture the entire burst of events with high capturing rates. It also reduces the number of duplicated events. Red numbers indicate events index in a burst.}
+    \label{fig:events_burst_rand}
+\end{figure}
+
+Figure~\ref{fig:events_detection_rate} shows the percentage of the total captured events and the uniquely captured ones. In this experiment we vary the light intensity from $\SI{300}{lux}$ to $\SI{1400}{lux}$ and the inter-event time from $\SI{1}{sec}$ to $\SI{6}{sec}$. 
+
+We clearly see a positive correlation between light intensity and the number of detected events. In particular, we see that the number of duplicated detected events rises dramatically when light intensity increases, demonstrating the overpowering problem. Moreover, increasing the inter-event arrival time also surges the number of duplicated events. The reason for this phenomenon is that when the time between events increases, the intermittent nodes sleep longer in low-power mode, and this reduces the inherent randomization of the intermittent nodes and leads them to the \textit{hibernating power state} (Section~\ref{sec:power_state}).  
+
+These results also show how a \sys can achieve a much higher duty cycle than its individual intermittent nodes---Figure~\ref{fig:cis_nodes_dutyCycle} shows that with a light intensity of $\SI{800}{lux}$ an intermittent node is active with a duty cycle of 30\% while Figure~\ref{fig:events_detection_rate} shows that a \sys of 8 nodes  captures  100\% of the unique events when the time between them is \SI{6}{s}. 
 
 \paragraph{Bursty events arrival}
-\begin{figure}[t]
-		\centering
-		\includegraphics[width=\columnwidth]{figures/events_burst_problem.pdf}
-		\caption{when the system sleeps, randomization is reduced. Thus, the majority of the nodes react to the first event and miss the rest of the burst. Red numbers indicate events index in a burst}
-		\label{fig:events_burst_problem}
-\end{figure} 
-Figure~\ref{fig:events_burst_problem} shows the capturing behavior of \sys of a bursty-type events. A bust of four events with one second between the individual events were fired every 20 seconds. Each burst was repeated 10 times. The nodes sleep in low-power-mode when they finish processing waiting or the next event. In general, we observe that the intermittent nodes react to the first event and power down shortly after missing the rest of the burst. The results validate our theory about the side effect of the \textit{hibernating power state} (Section~\ref{sec:power_state}). Next we will show how randomized response can mitigate this problem. \todo{what is the total captured event numbers? to be compared to the total captured event numbers with randomization}
+Figure~\ref{fig:events_burst_problem} shows the capturing behavior of a \sys when the events arrive in a burst. A burst of four events with one second between the individual events was fired every 20 seconds. Each burst was repeated 10 times and for four different light intensities. The nodes sleep in low-power mode when they finish processing, waiting or the next event. 
 
+In general, we observe that the intermittent nodes react to the first event of a burst and power down shortly after missing other events in the burst. This results validate our theory about the side effect of the \textit{hibernating power state} (Section~\ref{sec:power_state}). These results also demonstrate the hibernating power problem on a wide range of power intensities, showing the significance of this problem. Next, we will show how randomized response can mitigate these problems. 
 
 \subsection{Events detection rate with randomization}
-\begin{figure}[t]
-		\centering
-% 		\includegraphics[width=\columnwidth]{figures/events_burst_problem.pdf}
-		\caption{\todo{Figure to show how randomization helps in increasing the uniquely detected events rates}}
-		\label{fig:solarPwrCoIS}
-\end{figure} 
+\begin{table}
+	\centering
+    $
+    \begin{array}{llll}\hline
+     (lux,sec) & (800,6) & (1400,4) &(1400,6)\\\hline
+    \text{randomization} &  205/432 & 236/675 & 223/493 \\
+    \text{no randomization} & 240/831 &  240/938 & 240/1802 \\\hline
+    \end{array}
+    $
+    \caption{Randomized response reduces the number of duplicated detected events,  when the \sys is overpowered, by 50\% while losing only 7\% of the unique events. The results are presented in the following format \textit{unique/total} detected events.}
+    \label{tab:regular_rand}
+\end{table}
+%
+\paragraph{Regular events} Table~\ref{tab:regular_rand} shows the number of detected events for three different scenarios. We see that randomized response reduces duplicated events by an average of $\approx$50\%, while only marginally lowers the number of the uniquely detected events. The intermittent nodes were responding to events with a probability of 66\% for the scenario of \SI{800}{lux} and \SI{6}{seconds} arrival time and the scenario of \SI{1400}{lux} and \SI{4}{seconds} arrival time. However, for the highest energy level and the longest inter-event arrival time a responding probability of 29\% was used.
+
+\paragraph{Bursty events}
+Figure~\ref{fig:events_burst_rand} shows that a \sys with randomized response spreads its resources--as compared to Figure~\ref{fig:events_burst_problem}--and captures the entire burst with high probability of $\approx$95\%. We also observe a positive impact of randomized response when the system is under-powered ($\SI{500}{lux}$).
+
+To randomize during bursty events (which number is known in advance), a node reacts with a certain probability on a event. This probability is different for each event since the node become active after the last recharge. In order to spread the nodes over the events, the probabilities need to increase for subsequent events, since some nodes have reacted already on previous events, and therefore the number of nodes still available is smaller after each event.
+A node reacts with a probability of 40\% on the first event, with 50\% on the second event, 70\% on the third event and 100\% on the fourth event.
+%40 50 70 100
 
 
-\begin{figure}[t]
-		\centering
-% 		\includegraphics[width=\columnwidth]{figures/events_burst_problem.pdf}
-		\caption{\todo{Figure to show how randomization help in mitigating the bust problem}}
-		\label{fig:solarPwrCoIS}
-\end{figure} 
-
-\subsection{\fullcim words detection accuracy}
+\subsection{Coalesced intermittent command recognizer word detection accuracy}
 \begin{table}[H]
 \centering
 \caption{Testing set}
@@ -67,43 +90,26 @@ Figure~\ref{fig:events_burst_problem} shows the capturing behavior of \sys of a 
 \begin{tabular}{lllll}
 \hline
 on    & off  & stop & clear & load   \\
-go & pause & resume & edit  & quit  \\  
+go & pause & resume & edit  & cancel  \\  
 \hline  
 \end{tabular}
 \end{table}
 
+For evaluating the \fullcim accuracy, we used the word set in Table~\ref{tab:words}.
+Each word was pronounced by a single speaker 20 times and recorded on a PC. From this 20 recordings, one was stored as a template on the \cim, while the 19 remaining recordings were played back through a Bluetooth speaker~\cite{microphone} for testing.
 
-\subsection{ Intermittent microphone availability}
+The ratio between detected events and successfully recognized events per node is shown in Figure~\ref{fig:word_freq} and it averages out at  76.7\%. The difference between detection and capture is primarily caused by nodes that have insufficient buffered energy to finish recording.  
+
 %
-\todo{BELOW ID OLD WORK}
 \begin{figure}
 \centering
-\includegraphics[width=\linewidth]{figures/word_freq}
-\caption{\todo{These are old results} The effect of the time between consecutive words on the availability: the percentage of words that is processed by the command recognizer. \todo{Add correct recognition as stacked bar?}}
+\includegraphics[width=\linewidth]{figures/detection_vs_recognition}
+\caption{
+% The percentage of successfully recognized words as compared to the detected ones.
+Average number of successfully recognized words per node and average number of detected words per node, as percentages of the total number of played words. Words are relatively long events and therefore some of their recordings do not complete due to insufficient harvested energy.}
 \label{fig:word_freq}
 \end{figure}
-%
-\begin{table}
-	\centering
-	\caption{The mean and standard deviation of the parameters that were used to simulate intermittent execution. Here $t_{on}$ is the time the device is on while recording or processing, $t_{off}$ is the time the device is charging and $t_{sleep}$ is the time the device is sleeping while waiting on sound input.}
-	\label{tab:simparams}
-$
-\begin{array}{lll}\hline
-\text{Parameter} & \mu \text{ (ms)} & \sigma \text{ (ms)} \\\hline
-%t_{rec} & 295 & 0 \\
-t_{on} &  590 & 17.7 \\
-t_{off} & 5310 & 154 \\
-t_{sleep} &  22420 & 652 \\\hline
-\end{array}
-$
-\end{table}
-%
-This experiment shows the effect of intermittent power supply on a microphone availability \todo{and recognition accuracy} for different command (or word) repetition speed. Each word (from Table~\ref{tab:words}) was played back 20 times with intra-words-playing time ranges from 1 to 10 seconds. 
 
-For the experiment we chose to simulate the intermittent power supply, based on a real measurement, to ensure environment consistency across different words.
-In particular, we measured the $t_{on}$; used an on/off ratio of $10\%$ to simulate harsh harvesting conditions~\cite{mementos, bhatti2017harvos,lucia}; and calculated the $t_{sleep}$ based on the micro controller specification~\cite{datasheet} (Table~\ref{tab:simparams}).     
-
-The obvious observation from Figure~\ref{fig:word_freq} is that intermittency has a great impact on the command recognizer availability. However, a less obvious, but important, observation is that the correlation between the on/off cycle and the command repetition speed has also great impact as the bars labeled with 5 and 6 from Figure~\ref{fig:word_freq} indicate. 
 
 
 
