@@ -14,7 +14,7 @@
 		\label{fig:cisPwrCycle}
 \end{figure} 
 %
-The \fullsys (\sys) is the abstraction of a group of battery-less intermittent sensor nodes seeking to provide continuous availability to the user. The key to success is to exploit the properties (i.e.\ randomness) of the ambient energy source to arrive at a uniform spreading of the awake times of the individual senor nodes to achieve the maximum coalesced availability. To this end we will first analyze the energy-consumption life cycle of an intermittently-power node, as well as the joined availability of multiple nodes. Then we will point out a practical aspect that is often overlooked; when intermittent nodes operate in favorable ambient conditions, their uncorrelated behavior changes due to the extra energy leading to synchronized patterns that need to be scrambled by introducing artificial, controlled randomization.
+The \fullsys (\sys) is the abstraction of a group of battery-less intermittent sensor nodes seeking to provide continuous availability to the user. The key to success is to exploit the properties (i.e.\ randomness) of the ambient energy source to arrive at a uniform spreading of the awake times of the individual senor nodes to achieve the maximum coalesced availability. To this end we will first analyze the energy-consumption life cycle of an intermittently-power node, as well as the joined availability of multiple nodes. Then we will point out a practical aspect that is often overlooked; when intermittent nodes operate in favourable ambient conditions, their uncorrelated behaviour changes due to the extra energy leading to synchronized patterns that need to be scrambled by introducing artificial, controlled randomization.
 
 
 %\sys seeks to offer continuous sensing despite relying on ambient energy: an unpredictable and marginal power source. 
@@ -24,7 +24,6 @@ The \fullsys (\sys) is the abstraction of a group of battery-less intermittent s
 
 \subsection{Energy consumption}
 %
-\todo{reevaluate the importance of this paragraph and its location accordingly}
 An intermittent sensor has a limited energy budget per power cycle. When it is tasked with a polling-based sensing activity, its energy consumption, generally, switches between two levels: zero when charging and maximum when it activates its microcontroller for data acquisition and processing, see Figure~\ref{fig:pollingBasedSensing}. (Note that we assume that the microcontroller is the dominant energy consumer module of a node.) However, in event-based sensing, a node puts its microcontroller into low-power mode and waits (or listens) for an external event to wake up the microcontroller. In case of the command recognizer we exploit the microphone's wake-on-sound feature to send an interrupt to the microcontroller, which will then start recording the sound samples from the microphone. This hardware approach is most energy efficient, but can be mimicked in software by periodic polling (i.e.\ acquiring 1 sound sample and checking if it exceeds the acoustic noise floor). This wake-on-event style of operation is important as the minimal energy consumption during sleep significantly prolongs the period during which an event can be handled, see Figure~\ref{fig:eventBasedSensing}. Although in reality the sleep and active phases draw quite different levels of power (128 vs. 849~$\mu$W on our hardware, see Table~\ref{tab:power_usage}) we will model the life cycle of a sensor node simply as an on-period followed by an off-period (in which the node recharges its energy buffer) as that suffices to analyze the collective availability of a \sys.
 %The idle listening mode, which is important for successful sensing, complicates the design of the \sys.
 
@@ -38,8 +37,6 @@ An intermittent sensor has a limited energy budget per power cycle. When it is t
 		\label{fig:cisOntime}
 \end{figure} 
 %
-\todo{Additional parameter: minimum time is needed to successfully capture an event. Nodes are uniformly distributed, and thus its overlapping intervals are also uniformly distributed. As such, for successful capturing, the overlapping interval must exceed the minimum time required for capturing an event. Another approach is to monitor the voltage level on the cost of additional hardware, complexity }
-
 The \sys's on-time is the projection of its underlying intermittent nodes' on-times on the time axis. The \sys's on-time ranges from minimum (when all nodes on-times cluster together, see the red regions in Figure~\ref{fig:cisOntime}) to the maximum (when the overlapping between its nodes on-times is zero or when continuous availability is reached, highlighted with a green color in Figure~\ref{fig:cisOntime}). Two broad strategies for minimizing overlapping, hence, maximizing \sys availability, can be imagined: 
 \begin{enumerate}[label=\roman*.]%[wide, labelwidth=!, labelindent=0pt]
 %
@@ -63,7 +60,7 @@ where $N \in \mathbb{N}$ and  $t_\text{on}(N)$ is the on-time of a \sys with $N$
 In addition to characterizing the availability of a \sys, equation~\ref{eq:cisModel} also states that the benefit of adding a node to the \sys is proportional to the \sys's off-time. In Figure~\ref{fig:cisModel} \sys availability percentage for different duty cycles and different number of intermittent nodes are shown.
 \end{enumerate}
 %s
-\todo{this paragraph disconnect the paragraph below it from the one above it} There is a clear trade-off between the aforementioned methods. While the explicit control method provides fine control over the system 
+There is a clear trade-off between the aforementioned methods. While the explicit control method provides fine control over the system 
 distribution and therefore requires less number of nodes than the implicit control method, the implicit control method does not depend on the ability to communicate between the nodes and therefore it is simpler and more energy efficient. Since inter-node communication is beyond the capabilities of most of today's intermittent nodes, we focus on the implicit approach.
  
 %Although the implicit method is relatively simple to implement and explore, the explicit control method is not a far-fetched idea considering the recent advancements in passive communication and intermittent timing. However, we opt to explore the implicit distribution control method as the hardware used to demonstrate the feasibility of passive light communication and ambient RF backscattering are not open source and re-making it is beyond the scope of this study.
@@ -124,16 +121,8 @@ Choosing a fix response probability is an inefficient way of dealing with the ov
 
 
 \subsection{Intermittent Timing}
-\label{subsec:interTimer}
-%
-\begin{figure}[t]
-		\centering
-		\includegraphics[width=\columnwidth]{figures/softwareClock}
-		\caption{....}
-		\label{fig:softwareClock}
-\end{figure} 
-%
 
+\label{subsec:interTimer}
 Timing is a key building block of sensing systems. However, it is missing on intermittent nodes unless an additional dedicated timer circuit is added to them~\cite{hester2017timely}. Here we would like to propose an alternative way that does not require additional timer hardware. Obviously, the on-time of an intermittent node can be measured using the microcontroller's built-in timers. However, the difficulty is \textit{how an intermittent node can time its own off-time?}. Actually, answering this question does not only enable timing on intermittent devices but also enables them to estimate the richness of the ambient energy. 
 
 \paragraph{Timing the death} 

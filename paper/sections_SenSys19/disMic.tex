@@ -79,7 +79,6 @@ Once the recorded word has been compared to all \cim template words, the templat
 It should be emphasized that in the linear distance matching algorithm (LDM) the feature vectors of two words are compared successively, not accounting for differences in pronunciation speed. This is sufficient for our case as we are targeting isolated words and speaker dependent speech recognition type. We also implemented the Dynamic Time Warping algorithm which better handles the difference in the speed of speech. However, it is slower than the linear matching algorithm  (Table~\ref{tab:profiling}) and the detection accuracy was comparable in our case. Therefore, we default our implementation to LDM. 
 
 \subsubsection{Power Failure Protection}
-\todo{consider adding Coala}
 In order to preserve the progress state and to protect \cim data against randomly timed power failures, we manually split \cim program into 19 atomic regions. We ensured the each of these regions requires less energy than what the energy buffer can provide with a single charge. The program progress state is saved in the non-volatile memory (FRAM) on the transition between these regions. This prevents the program from falling back to its starting point (\texttt{main()}) after each power failure. Data in the non-volatile memory with Write-After-Read dependency is double buffered to ensure data integrity when the power supply is interrupted. 
 
 \subsection{Code profiling}
