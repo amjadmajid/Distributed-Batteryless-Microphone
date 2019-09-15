@@ -11,7 +11,7 @@ For example, \cite{lucia2017intermittent,mementos,dino,colin2016chain,balsamo201
 and \citet{yildirim2018ink} introduced event-driven execution for the intermittent domain, which deals with input and output operations under arbitrarily-timed power loss.
 
 Despite these notable advances, intermittently-powered sensors inherent a new fundamental shortcoming: \textit{the intermittent availability of the system}. Being frequently off charging compromises the value of these devices. For example, a monitoring sensor that has a low probability to be available when an external event occurs has no commercial value. 
-Overcoming the intermittent availability challenge without changing the size of the device or including batteries requires a new novel approach that explores new design dimensions. 
+Overcoming the intermittent availability challenge without changing the size of the device or re-including batteries requires a new novel approach that explores new design dimensions. 
 
 % These are notable advances in developing intermittent systems but have a fundamental short-coming. All intermittent systems implicitly accept that once a node hardware design is fixed the intermittent availability is only environment-depended 
 
@@ -28,7 +28,7 @@ Overcoming the intermittent availability challenge without changing the size of 
 \begin{figure}[b]
 	\centering
 		\includegraphics[width=\columnwidth]{figures/intermittent_operation}
-		\caption{Ambient power is weak therefore it is usually buffered. The buffered energy is then consumed to operate the device. The operation period is often short as power consumption is higher than the energy harvesting rate.
+		\caption{Ambient power is weak; therefore, it is usually buffered. The buffered energy is then consumed to operate the device. The operation period is often short as power consumption is much higher than the energy harvesting rate.
 		% The device first has to accumulate sufficient energy to operate. When the operations are triggered, they consume the buffered energy as their energy demand is usually higher than the energy harvesting rate.
 		}
 		\label{fig:intermittent_opertaion}
@@ -52,7 +52,7 @@ Sensors with such characteristics would allow us to add a cheap and maintenance-
 For example, one can imagine developing smart wallpaper that users can interact with. 
 Smart wallpaper with embedded microphones can enable direct in-building human-to-object communication (Figure~\ref{fig:smart_fabric}). Such a permanently operating sensor can be deployed, for example, in kids' playgrounds to monitor their occupancy. These battery-less sensors can enable
 % Smart wallpaper with occupancy sensors can timely control room lights and air conditioning. 
- interactive and safe-to-dispose sports rugs (that counts how many times a person has jumped on them) or play rugs for kids.
+ interactive and safe-to-dispose sports rugs (that count how many times a person has jumped on them) or play rugs for kids.
 In short, we would like to develop small sensors with permanent and continuous sensing capabilities.  
 
 
@@ -67,12 +67,13 @@ In short, we would like to develop small sensors with permanent and continuous s
 \subsection{Research Challenges}
 
 Many sensing applications require the sensor to be available when there is a change in the monitored environment.
-Energy-harvesting sensors can provide cheap and maintenance-free sensing, but the do not the availability requirements of many real-world applications. 
+Energy-harvesting sensors can provide cheap and maintenance-free sensing, but the do not meet the availability requirements of many real-world applications. 
 
 \noindent\textbf{C1-Approach continuous availability on intermittent power}: 
 An energy-harvesting battery-less sensor is frequently off, spending most of the time charging. 
-One way to increase the system availability is by using more than one node, hoping that at least one is on at all times. However, only increasing the number of the sensors is an insufficient condition to increase their collective availability as their on/off cycles may become correlated---after all, they draw power from the same energy source and have the same characteristics---, and therefore, they turn on and off at approximately the same time, compromising the overall availability of the system. 
-\textit{Given a certain number of battery-less energy-harvesting sensors with certain duty cycles, how to achieve a maximum wake-times separation?}
+One way to increase the system availability is by using more than one node, hoping that at least one is on at all times. However, only increasing the number of the sensors is an insufficient condition to increase their collective availability as their on/off cycles may become correlated---after all, they draw power from the same energy source and have the same characteristics---, and therefore, they will turn on and off at approximately the same time, compromising the overall availability of the system. 
+As such, \textit{the challenge to approach continuous availability given a certain number of intermittent devices with certain duty cycles is to break any emerging correlation between nodes' power cycles.}
+%\textit{Given a certain number of battery-less energy-harvesting sensors with certain duty cycles, how to achieve a maximum wake-times separation (or maximum availability)?}
 Answering this question would also allow us to specify the minimum number of nodes needed to achieve a certain collective duty cycle required by an application. 
 
 % Assuming that energy-harvesting battery-less sensors do not exchange messages for coordination, how for a group of them to approximate the maximum awake times separation with minimum number of them
@@ -87,19 +88,18 @@ Answering this question would also allow us to specify the minimum number of nod
 \noindent\textbf{C2-Continuous sensing on intermittently powered sensors:}  
 Even when the collective availability of intermittent sensors approaches 100\%, the emerging overall sensing behavior may still be intermittent. 
 % Even if the continuous availability is achieved, using plenty of intermittent sensors, these sensors may sense in an intermittent fashion. 
-In event-based sensing applications, sensor nodes employ sleeping mode to efficiently consume their buffered energy. In favorable energy conditions, the energy harvesting rates of these sensors may equal (or approximate) their power consumption rates of the sleeping mode, making the nodes available for an extended period of time. 
+In event-based sensing applications, sensor nodes sleep in low-power mode to consume their buffered energy efficiently. In favorable energy conditions, the energy harvesting rates of these sensors may equal (or approximate) their power consumption rates at the sleeping mode, making the nodes available for an extended period of time. 
 In such conditions, nodes do wake up collectively at the incoming external event and consequently exhaust their energy at roughly the same time. 
 %
-This unwanted synchronization compromises the overall availability of the system, as nodes will respond to the same events and (what is even worse) miss subsequent ones. This is particularly a significant problem when events arrive in a bursty fashion (e.g., a command of a few words).
+This unwanted synchronization compromises the overall availability of the system, as nodes will respond to the same events and (what is even worse) miss subsequent ones. In particular, this is a significant problem when events arrive in a bursty fashion (e.g., a command of a few words).
  % missing other sensing opportunities.   
 % Event-based sensing applications may induce implicit synchronization (multiple nodes detecting the same command) that compromises the availability required by the application (all node recharge after the first word, missing any subsequent word). 
 
 % \textit{Given abundant ambient energy conditions and sensor nodes sleeping in low-power mode waiting an external event, how to prevent synchronized responses?} \\
 
 \noindent\textbf{C3-Efficient sensing on intermittent sensors:} 
-One of the main factors that determine the intermittency pattern of an energy-harvesting battery-less sensor is the richness of ambient energy. For example, at mid-noon under direct sunlight even a small solar panel can power a sensor node continuously. 
-In such energy conditions (favorable energy conditions), using plenty of intermittent sensors would only result in duplicated work that leads to duplicated messages when these nodes communicate the processed data to a sink node: normally, a battery-powered node acts as a gateway for such sensors to communicate with other layers of the Internet of Things. These duplicated messages cause the sink node to consume power that we wanted to save in the first place (
-if we assume that the battery of the sink node needs to be replaced every $y$ months when capturing an event generates a single message. And,  there is a system that generates $x$ messages for each captured event. Then, the time to replace the battery of the sink will be reduced to  $\frac{y}{x}$ months).
+One of the main factors that determine the intermittency pattern of an energy-harvesting battery-less sensor is the richness of ambient energy. For example, at mid-noon under direct sunlight, even a small solar panel can power a sensor node continuously. 
+In such energy conditions (favorable energy conditions), using plenty of intermittent sensors would only result in duplicated work that leads to duplicated messages when these nodes communicate the processed data to a sink node: normally, a battery-powered node acts as a gateway for such sensors to communicate with other layers of the Internet of Things. These duplicated messages cause the sink node to consume power that we wanted to save in the first place (if we assume that the battery of the sink node needs to be replaced every $y$ months when capturing an event generates a single message. And,  there is a system that generates $x$ messages for each captured event. Then, the time to replace the battery of the sink will be reduced to  $\frac{y}{x}$ months).
 % if each messages is sent $X$ times, then the rate at which the battery of the sink node need to be replaced would be its). 
 
 % Figure~\ref{fig:powerCycle} illustrates the \sys concept for our prototype implementation of a command recognizer; a number of solar-powered nodes equipped with a microphone recording voice commands in a smart home setting. Recording and processing a word depletes the super capacitor powering a node, ``silencing'' it until the subsequent recharging completes. Multiple nodes with (partially overlapping) on/off cycles spread in time can provide continuous service despite the inherent intermittency.
@@ -110,9 +110,9 @@ if we assume that the battery of the sink node needs to be replaced every $y$ mo
 
 \subsection{Contributions}
 %
-This paper tackles the paradox of continuous sensing on intermittently-powered sensors. 
-It studies the inter-relationship between the power cycles of energy-harvesting battery-less devices, 
-the emerging collective behavior, and the effect of changes in ambient energy levels on the sensors collective behavior. 
+In this paper, we tackle the paradox of continuous sensing on intermittently-powered sensors. 
+We studied the inter-relationship between the power cycles of energy-harvesting battery-less devices, 
+the emerging collective behavior, and the effect of changes in ambient energy levels on the sensors collective emerging behavior. 
 
 
  % It studies the power cycle of energy-harvesting platforms and makes a key observation about the inter-relationship between these platforms. Sensors driven by the same ambient energy source (e.g., light or RF) do {\em not} show correlated on/off (sense/charge) cycles. Building on top of this observation, the paper introduces a new type of sensor that we call \textit{\fullsys} (\sys). The \sys is defined as the abstraction of a group of energy-aware intermittent nodes providing the collective sense of being always on. 
@@ -127,7 +127,7 @@ In particular, this paper makes the following key contributions:
 \begin{itemize}
 		%
 		\item We show how continuous availability of a group of intermittently-powered devices can be approached for different scenarios, i.e., explicit and implicit control of nodes' awake time. 
-		We \textbf{modeled} the collective emerging on-time (system availability) of these sensors and \textbf{validate} our model on real hardware and against different energy sources. 
+		We \textbf{modeled} the collective emerging on-time (system availability) of intermittently-powered sensors and \textbf{validate} our model on real hardware and against different energy sources. 
 		% \item We observed and analyzed the relationship between the power cycles of a group of energy-harvesting devices. We show that even when these sensors are powered by the same energy source and running the same application their power cycles are uncorrelated. We \textbf{modeled} the collective emerging on-time of these sensors and \textbf{validate} on real hardware and against different energy sources. 
 		%
 		% \item We model the (\sys) availability of energy-harvesting nodes and validate it against in-the-wild measured data and under controllable energy conditions. 
