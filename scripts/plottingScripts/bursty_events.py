@@ -5,7 +5,7 @@ import sys, os, json
 plt.style.use('seaborn-ticks')
 fontSize=16
 
-DESYNC =False
+DESYNC =True
 
 if DESYNC:
     files = [
@@ -24,7 +24,7 @@ else:
     #"2305-2335lux.json"
     ]
 
-color_list = ["#66a61e" , '#e7298a', '#7570b3', '#d95f02', '#1b9e77']
+color_list = ["#a8ddb5" , '#7bccc4', '#43a2ca', '#0868ac', '#eff3ff']
 f = plt.figure(figsize=(8,4))
 
 # plt.tick_params(axis='x', pad=15, bottom=False)
@@ -36,10 +36,10 @@ for i in range(len(files)):
     with open(file, "r") as read_file:
         data = json.load(read_file)
 
-    medianprops = {'color':color_list[i], 'linewidth': 2}
-    boxprops = {'color': color_list[i], 'linestyle': '-'}
-    whiskerprops = {'color': color_list[i], 'linestyle': '-'}
-    capprops = {'color': color_list[i], 'linestyle': '-'}
+    medianprops = {'color':color_list[3], 'linewidth': 2}
+    boxprops = {'color': color_list[3], 'linestyle': '-'}
+    whiskerprops = {'color': color_list[3], 'linestyle': '-'}
+    capprops = {'color': color_list[3], 'linestyle': '-'}
     # flierprops = {'color': color_list[i], 'marker': 'x'}
     
     bw=0.2
@@ -47,7 +47,7 @@ for i in range(len(files)):
     plt.boxplot(data, positions=np.arange(4)*0.2+i, widths=0.2, showfliers=False, \
     medianprops=medianprops, boxprops=boxprops, whiskerprops=whiskerprops, capprops=capprops) #, flierprops=flierprops)
 for i in range(3):
-    plt.axvline(x=0.8+i, color='lightgrey')
+    plt.axvline(x=0.8+i, color='r', linestyle="dashed")
 
 plt.xlabel("Light intensity (lux)", fontsize = fontSize)
 plt.ylabel("Detection events", fontsize = fontSize)

@@ -57,8 +57,8 @@ def color_box(box, color):
 
 def main():
     fontSize=16
-    ontime_path = '../processed_data/intermittent_nodes_ontimes680.json'
-    offtime_path = '../processed_data/intermittent_nodes_offtimes680.json'
+    ontime_path = '../processed_data/paper_intermittent_nodes_ontimes680.json'
+    offtime_path = '../processed_data/paper_intermittent_nodes_offtimes680.json'
     
     # Data Layout in a file
     ## ['label', [[1,2],[1,3,4,5,],[]...]]

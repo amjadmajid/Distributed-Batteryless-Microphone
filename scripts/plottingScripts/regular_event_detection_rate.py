@@ -35,13 +35,13 @@ print(totalDet)
 print(uniqueDet)
 
 for i in range(4):
-    plt.bar(np.arange(4)*bw+i, totalDet[i], width=bw-0.01, color='#d95f02')
-    plt.bar(np.arange(4)*bw+i, uniqueDet[i], width=bw-0.01, color='#66a61e')
+    orange_bar = plt.bar(np.arange(4)*bw+i, totalDet[i], width=bw-0.01, color='#9ecae1',  hatch="o")
+    green_bar = plt.bar(np.arange(4)*bw+i, uniqueDet[i], width=bw-0.01, color='#08519c', hatch="+")
 
 for i in range(3):
     plt.axvline(x=0.84+i, color='lightgrey')
 
-plt.axhline(y=100, color='lightgrey', linestyle=":")
+plt.axhline(y=100, color="r", linestyle="dashed")
 
 for group_idx in range(4):
 
@@ -53,5 +53,8 @@ plt.yticks(fontsize=fontSize-2)
 plt.ylabel("Percent of events (%)", fontsize=fontSize-2)
 plt.xlim([-0.12,3.812])
 plt.tight_layout()
+orange_bar.set_label('detected events')
+green_bar.set_label('captured events')
+plt.legend(fontsize=fontSize)
 plt.savefig('../../paper/figures/regular_events_capture_rate.eps')
 plt.show()

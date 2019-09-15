@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import sys, os
 
-plt.style.use('seaborn-whitegrid')
+plt.style.use('seaborn-ticks')
 
 class Measurement():
     def __init__(self):
@@ -29,6 +29,11 @@ class Node():
         off_total = sum(self.off_times)
         duty_cycle = 100* float(on_total)/float(on_total+off_total)
         return duty_cycle
+
+def color_box(box, color):
+    for _, line_list in box.items():
+        for line in line_list:
+            line.set_color(color)
 
 
 def addFile(filename):
@@ -78,9 +83,11 @@ plot_data = [m.getDutyCycles() for m in measurements]
 light_intensities = [116, 215, 320, 430, 524, 621, 715, 812, 904, 1009, 1096, 1185, 1280, 1400] #, 1705, 1947]
 fontSize=16
 plt.figure(figsize=(8,4))
-plt.boxplot(plot_data, positions=light_intensities, widths=30)
+box = plt.boxplot(plot_data, positions=light_intensities, widths=30, showfliers=False)
+color_box(box, '#0868ac')
 
 # ylabels = ["{:4d}%".format(x*10) for x in ]
+plt.gca().grid(True) 
 plt.xticks(rotation=90, fontsize=fontSize-4)
 plt.yticks(fontsize=fontSize-4)
 plt.ylabel("Avg. nodes duty cycle (%)", fontsize=fontSize)

@@ -111,6 +111,9 @@ class LogicAnalyzerData:
         #return timestamps, states
 
                 
+    def getClusters(self):
+        #print(self.states)
+        return np.array(self.timestamps), np.sum(self.states, axis=1)
 
 
 

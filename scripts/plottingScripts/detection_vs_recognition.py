@@ -44,8 +44,8 @@ for i in range(len(files)):
 # for i in range(4):
 print(detected)
 print(captured)
-plt.bar(np.arange(4)+bw, 100*np.array(detected)/np.max(detected), width=bw-0.01, color='#d95f02', label="detected")
-plt.bar(np.arange(4), 100*np.array(captured)/np.max(detected), width=bw-0.01, color='#66a61e', label='recognized')
+plt.bar(np.arange(4)+bw, 100*np.array(detected)/np.max(detected), width=bw-0.01, color='#9ecae1', label="detected")
+plt.bar(np.arange(4), 100*np.array(captured)/np.max(detected), width=bw-0.01, color='#08519c', label='recognized')
 
 # for i in range(3):
 #     plt.axvline(x=0.84+i, color='lightgrey')

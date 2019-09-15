@@ -8,7 +8,7 @@ def funcFormatter(val, idx):
     return "{:4d}%".format(int(val*100))
 
 # for the simulated system availability
-ndc=0.15 
+ndc=0.10 
 
 # the average benefit of adding an INode is tot = (1-tot) * ndc +tot
 def tot(n,ndc):
@@ -21,7 +21,7 @@ def tot(n,ndc):
     return np.array(coverage)
 
 # Load Data 
-path = '../processed_data/paper_availability680.json'
+path = '../processed_data/availabilityRF.json'
 data=[]
 with open(path) as f:
     for l in f:
@@ -35,7 +35,7 @@ ax = plt.axes()
 ax.grid(linestyle=":")
 
 ## Plotting parameters 
-plotPatterns = ['-*', '-^', '-+','-o', '-d']
+plotPatterns = ['-*', '-^', '-+','-o', '-d','-8', '-p', '->']
 fontSize = 16 
 #colors=['r','b','k']
 dataIndices = np.arange(len(data[0][1]))+1 
@@ -60,5 +60,6 @@ ax.set_xlabel("Number of nodes", fontsize=fontSize)
 ## Plotting output
 ax.legend(frameon=False, fontsize=fontSize)
 plt.tight_layout()
-plt.savefig('../../paper/figures/sysAvailability.eps')
+plt.savefig('../../paper/figures/rf_sysAvailability.eps')
 plt.show()
+

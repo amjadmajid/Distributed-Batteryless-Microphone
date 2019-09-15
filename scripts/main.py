@@ -146,15 +146,22 @@ def main():
     fs = FileSelector('../data/')
     path = fs.getPath()
     print(path)
-    labelPattern = "(_?[s|S]unny_?|_?[D|d]ay_?|_?[N|n]ight_?|_?cloudy.*?_|[C|c]loudy|[0-9]*-?[0-9]+lux)"
+    labelPattern = "(_?[s|S]unny_?|_?[D|d]ay_?|_?[N|n]ight_?|_?cloudy.*?_|[C|c]loudy|[0-9]*-?[0-9]+(lux|cm))"
     label = labelFinder(path, labelPattern)
     print(label)
-    capPattern = "220|470|680|1000"
+    capPattern = "220|470|680|1000|RF"
     cap = labelFinder(path, capPattern)
     print(cap)
         
     dataHandler = LogicAnalyzerData(path)
     numOfNodes =  dataHandler.getNumOfNodes()
+
+    clus_tim, clus = dataHandler.getClusters()
+    jsonObj = json.dumps([label,clus.tolist()])
+    with open("processed_data/clusters_rf.json", "a") as f:
+        print(jsonObj, file=f)
+    exit()
+
     totTime=int(dataHandler.getTotalExperimentTime())+1 # seconds
     timeInterval = totTime # seconds
     timelineInterval = 10
@@ -162,7 +169,6 @@ def main():
     availability = sysAvailable(totTime, timeInterval,range(numOfNodes), dataHandler)
     nodesOnTimes = intermittent_nodes_ontimes(totTime, timeInterval,range(numOfNodes), dataHandler)
     nodesOffTimes = intermittent_nodes_offtimes(totTime, timeInterval,range(numOfNodes), dataHandler)
-
     # interpolate the data according to the given interval
     dataHandler.intervalDataInterpolation(timelineInterval)
     availabilityTimeline = sysAvailable(totTime, timelineInterval,[numOfNodes-1], dataHandler)
@@ -178,6 +184,10 @@ def main():
 
     jsonObj = json.dumps([label,nodesOffTimes])
     with open("processed_data/intermittent_nodes_offtimes"+cap+".json", "a") as f:
+        print(jsonObj, file=f)
+
+    jsonObj = json.dumps([label,availabilityTimeline])
+    with open("processed_data/availabilityTimeline"+cap+".json", "a") as f:
         print(jsonObj, file=f)
 
     plt.figure()
