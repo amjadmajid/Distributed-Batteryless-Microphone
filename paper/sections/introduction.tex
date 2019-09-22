@@ -1,17 +1,17 @@
-Batteries may compromise the viability of sensor nodes in various ways. Batteries can be bulky, short-lived, hazardous, and expensive. To ameliorate the battery problem, researchers have been investigating different alternatives to extend sensors’ lifetimes and reduce their costs and form factors.  
-The reduction in power consumption of recent microcontrollers and the advances in energy-harvesting circuitry have enabled the emergence of an alternative: battery-free energy-harvesting sensors. 
-These sensors elide the constraints of batteries and extract power from ambient energy sources (e.g., sunlight, and RF emissions) to operate. 
+Batteries may compromise the viability of sensor nodes in various ways. Batteries are bulky, short-lived, hazardous, and expensive. To ameliorate the battery problem, researchers have been investigating different alternatives to extend lifetime and reduce costs and form factor.  
+The reduction in power consumption of recent microcontrollers and the advances in energy-harvesting circuitry have enabled the emergence of battery-free energy-harvesting sensors. 
+These sensors elide the constraints of batteries and extract power from ambient energy sources such as sunlight and RF emissions. 
 
-Ambient energy sources provide perpetual power. But, ambient power is usually too weak to directly power a sensor node~\cite{liu2013ambient}.  Therefore, an energy-harvesting sensor node first buffers the harvested energy until usable amount is accumulated, then it operates, for a short period of time, until the buffered energy has been exhausted~\cite{lucia2017intermittent}.  Consequently, battery-less energy-harvest sensors operate intermittently (Figure~\ref{fig:intermittent_opertaion}).
+Ambient energy sources provide perpetual power. However, ambient power is usually too weak to directly power a sensor node~\cite{liu2013ambient}.  Therefore, an energy-harvesting  node first buffers the harvested energy until a usable amount has been accumulated; then it operates, for a short period of time, until the buffered energy has been exhausted~\cite{lucia2017intermittent}.  Consequently, battery-less energy-harvest sensors operate intermittently (Figure~\ref{fig:intermittent_opertaion}).
 
-Intermittent power supply introduces a set of new challenges that are under ongoing investigation~\cite{lucia2017intermittent}.
+Intermittent power introduces a set of new challenges that are under ongoing investigation.
  % Intermittent power supply introduces many challenges which researcher continue to investigate~\cite{lucia2017intermittent}: 
-For example, \cite{lucia2017intermittent,mementos,dino,colin2016chain,balsamo2015hibernus} studied the intermittent computation problem, which is concerned with the preservation of applications progress and data consistency under frequent power failures; \citet{hester2017timely} investigated the timely operation challenge, which is concerned with data freshness after a power interrupt; 
+For example, \cite{lucia2017intermittent,mementos,dino,colin2016chain,balsamo2015hibernus} studied the intermittent computation problem, which is concerned with the preservation of application progress and data consistency under frequent power failures; \citet{hester2017timely} investigated the timely operation challenge, which is concerned with data freshness after a power interrupt; 
 % and \citet{samoyed_pldi_2019} introduced a system design for peripherals states preservation for intermittently powered sensors;
 and \citet{yildirim2018ink} introduced event-driven execution for the intermittent domain, which deals with input and output operations under arbitrarily-timed power loss.
 
-Despite these notable advances, intermittently-powered sensors inherent a new fundamental shortcoming: \textit{the intermittent availability of the system}. Being frequently off charging compromises the value of these devices. For example, a monitoring sensor that has a low probability to be available when an external event occurs has no commercial value. 
-Overcoming the intermittent availability challenge without changing the size of the device or re-including batteries requires a new novel approach that explores new design dimensions. 
+Despite these notable advances, intermittently-powered sensors suffer from a new fundamental shortcoming: \textit{the intermittent availability of the system}. Being frequently off charging compromises the value of these devices. For example, a sensor that has a low probability (e.g., 10\%~\cite{coala}) to be available (on) when an event of interest occurs has no value. 
+Overcoming the intermittent availability challenge without changing the size of the device or re-including batteries requires a novel approach that explores new design dimensions. 
 
 % These are notable advances in developing intermittent systems but have a fundamental short-coming. All intermittent systems implicitly accept that once a node hardware design is fixed the intermittent availability is only environment-depended 
 

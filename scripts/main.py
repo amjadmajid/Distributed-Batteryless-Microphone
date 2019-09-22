@@ -156,11 +156,11 @@ def main():
     dataHandler = LogicAnalyzerData(path)
     numOfNodes =  dataHandler.getNumOfNodes()
 
-    clus_tim, clus = dataHandler.getClusters()
-    jsonObj = json.dumps([label,clus.tolist()])
-    with open("processed_data/clusters_rf.json", "a") as f:
-        print(jsonObj, file=f)
-    exit()
+    # clus_tim, clus = dataHandler.getClusters()
+    # jsonObj = json.dumps([label,clus.tolist()])
+    # with open("processed_data/clusters_rf.json", "a") as f:
+    #     print(jsonObj, file=f)
+    # exit()
 
     totTime=int(dataHandler.getTotalExperimentTime())+1 # seconds
     timeInterval = totTime # seconds

@@ -17,7 +17,33 @@ To evaluate the performance of the \fullsys, we conducted several experiments in
 %
 
 %
-\subsection{availability on a fine scale}
+\subsection{system availability}
+\begin{figure*}[t]
+        \begin{subfigure}{.66\columnwidth}
+            \includegraphics[width=\textwidth]{figures/sysAvailability}
+                \caption{The system is powered by uncontrollable light sources---artificial light during the night, and sunlight during the day.}
+            \label{fig:solarPwrCIS}
+        \end{subfigure}\hfill
+        \begin{subfigure}{.66\columnwidth}
+            \includegraphics[width=\textwidth]{figures/wisp_sysAvailability}
+                \caption{The system is powered by radio frequency waves (RF). The RF source is located 30-70\,cm aware from the RF tags (WISPs).}
+            \label{fig:rfPwrCIS}
+        \end{subfigure}\hfill
+        \begin{subfigure}{.66\columnwidth}
+            \includegraphics[width=\textwidth]{figures/sysAvailability_artificial-light}
+                \caption{The system is powered by radio frequency waves (RF). The RF source is located 30-70\,cm aware from the RF tags (WISPs).}
+            \label{fig:rfPwrCIS}
+        \end{subfigure}
+        \caption{Measuring \fullsys availability for a differed number of intermittent nodes. Generally, adding a node increases the system availability. This increment, however, is proportional to the \sys off-time.}
+        \label{fig:pwrCIS}
+\end{figure*} 
+
+Figure~\ref{fig:pwrCIS} shows the availability of \sys{}s when they are powered by different energy source and for a different number of intermittent nodes. We see that (i) the energy sources (sunlight, artificial light, and RF) power the \sys intermittently, (ii) the \sys availability increases with number of nodes, and (iii) this addition is proportional to the \sys off-time. 
+
+The dashed lines represent Equation~\ref{eq:cisModel} expectation about the \sys availability for certain power cycles (10\% for the RF powered system, and 15\% for the light powered one). By comparing these lines to the measured ones we can conclude that these energy sources provide sufficient randomness to cause each node to have a slightly different power cycle which, in turn, causes their uptimes to be uniformly distributed in time.  
+
+
+\paragraph{availability on a fine scale}
  \todo{Because of the differences in intermittent nodes power cycles, their duty cycles are constantly shifting relative to each other ( Figure~\ref{fig:cisOntime}).  However, this study does zoom in on the \sys availability on short time scale and the effect of length of the differences between the nodes power cycles on the system short term availability. } 
 
 After validating our observation on natural light and office artificial light, we designed a testbed with controllable light intensity for clarity and results reproducible. To this end, we blocked uncontrollable light sources with a box of $60 \times 40$\,cm. On the ceiling of the box, we attached a light strip of 2.5\,m with 150 LEDs that can produce 15 different light intensities. On the bottom of the box, we placed a \fullcim of 8 intermittent nodes (the hardware is described in Section~\ref{sec:hardware}).
