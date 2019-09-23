@@ -31,7 +31,11 @@ The design of \sys needs to consider three main aspects: (i) how the nodes' awak
 		\label{fig:cisOntime}
 \end{figure} 
 %
-\subsection{Coalesced availability}
+\subsection{Sensing}
+
+The ability of \sys to sense depends on the availability of its intermittent nodes and on the characteristics of the event of interest. 
+
+\subsubsection{Coalesced availability}
 \label{subSec:availability}
 %
 The \sys's on-time (availability) is the projection of its underlying intermittent nodes' on-times on the time axis. Thus, it can anywhere between a minimum (when all nodes' on-times cluster together) and a maximum (when the overlapping between on-times cannot be any smaller), depending on the nodes spreading strategy being employed.
@@ -88,16 +92,11 @@ Following the time axis from the left to the right, we can see that the position
 		\label{eq:cisModel}
 \end{equation}
 where $N \in \mathbb{N}$ and  $t_\text{on}(N)$ is the on-time of a \sys with $N$ intermittent nodes. For the initial case where $N=1$ we define $t_\text{on}(0)\coloneqq 0$ and $t_\text{off}(0) \coloneqq 1$. We further show in Figure~\ref{fig:cisModel} the \sys's availability for different duty cycles and different number of intermittent nodes.
-%
-%
-%
-% Continue from here
-%
 % In addition to characterizing the availability of a \sys, equation~\ref{eq:cisModel} also states that the benefit of adding a node to the \sys is proportional to the \sys's off-time.
 % In Figure~\ref{fig:cisModel} \sys availability percentage for different duty cycles and different number of intermittent nodes are shown.
-
 \noindent\textit{Natural power cycles.}
-In reality, intermittent nodes power cycles are different, and they are not constant (Figure~\ref{fig:power_cycles}). However, differences between the power cycles and their embedded randomness are sufficient conditions to force their on-times to be in constant shift relative to each other and approach uniform distribution (Figure~\ref{eq:cisModel}). 
+In reality, intermittent nodes power cycles are different, and they are not constant (Figure~\ref{fig:power_cycles}). However, differences between the power cycles and their embedded randomness are sufficient conditions to force their on-times to be in constant shift relative to each other and approach uniform distribution (Figure~\ref{eq:cisModel})
+\todo{support this claim using simulation}. 
 
 There is a clear trade-off between the aforementioned methods. While the explicit control method provides fine control over the system 
 distribution and therefore requires less number of nodes than the implicit control method, the implicit control method does not depend on the ability to communicate between the nodes and therefore it is simpler and more energy efficient. Since inter-node communication is beyond the capabilities of most of today's intermittent nodes, \textbf{the rest of the paper considers only the implicit approach}.
@@ -105,16 +104,16 @@ distribution and therefore requires less number of nodes than the implicit contr
 %Although the implicit method is relatively simple to implement and explore, the explicit control method is not a far-fetched idea considering the recent advancements in passive communication and intermittent timing. However, we opt to explore the implicit distribution control method as the hardware used to demonstrate the feasibility of passive light communication and ambient RF backscattering are not open source and re-making it is beyond the scope of this study.
 
 \begin{figure}[t]
-		\begin{subfigure}{.49\columnwidth}
-			\centering
-			\includegraphics[width=\textwidth]{figures/light_on_time}
-			\caption{light}
-		\end{subfigure} \hfill
-		\begin{subfigure}{.49\columnwidth}
-			\centering
-			\includegraphics[width=\textwidth]{figures/rf_on_time}
-				\caption{RF}
-		\end{subfigure}\hfill
+		% \begin{subfigure}{.49\columnwidth}
+		% 	\centering
+		% 	\includegraphics[width=\textwidth]{figures/light_on_time}
+		% 	\caption{light}
+		% \end{subfigure} \hfill
+		% \begin{subfigure}{.49\columnwidth}
+		% 	\centering
+		% 	\includegraphics[width=\textwidth]{figures/rf_on_time}
+		% 		\caption{RF}
+		% \end{subfigure}\hfill
 		%
 		
 		\begin{subfigure}{.49\columnwidth}
@@ -132,55 +131,79 @@ distribution and therefore requires less number of nodes than the implicit contr
 \end{figure} 
 
 
-\subsection{Events classification}
-\todo{improve}
+\subsubsection{Events classification}
+\label{sec:event_classification}
 Given the unique characteristics of \sys, it is important to classify the events, identifying the categories that \sys can monitor. Form \sys's perspective, we can classify the events into three categories:
 \begin{itemize}
 %
 \item \textit{Short events}: are events that can be captured using single intermittent node. 
 For example, a spoken word can be seen as a short event if the energy needed to recorded is less than what the energy buffer, i.e., the capacitor, of the intermittent sensor can store.
-%
 \item \textit{Long events}: are events that need more energy to be completely captured than what the energy buffer can store. Long events can be subdivided into two types: 
-\begin{itemize}
-	\item \textit{complex}: is a long event and capturing part is insufficient to extract the embedded information.  For example, a spoken word can be seen as a long complex event if its recording requires more energy than what the energy buffer can store.
+	\begin{itemize}
+		\item \textit{complex}: is a long event and capturing part is insufficient to extract the embedded information.  For example, a spoken word can be seen as a long complex event if its recording requires more energy than what the energy buffer can store.
 
-	\item \textit{simple} is a long event and capturing part of it is sufficient to extract the embedded information. For example, a rotating part of an engine that produce a particular sound. 
-\end{itemize}
-%
-
+		\item \textit{simple} is a long event and capturing part of it is sufficient to extract the embedded information. For example, a rotating part of an engine that produce a particular sound. 
+	\end{itemize}
 \end{itemize}
 
-
-\subsection{Energy consumption}
-\todo{consider remove Figure~\ref{fig:cisPwrCycle}}
-\begin{figure}[t]
-	\centering
-		\begin{subfigure}{\columnwidth}
-			\includegraphics[width=\columnwidth]{figures/PowerCycleIntermittentSystem}
-			\caption{When \sys does polling-based sensing, its energy consumption profile has, generally, two distinct rates: zero when it is charging, and a maximum when it is sensing.}
-			\label{fig:pollingBasedSensing}
-	\end{subfigure}
-	\begin{subfigure}{\columnwidth}
-		\includegraphics[width=\columnwidth]{figures/PowerCycleIntermittentSensor}
-		\caption{When \sys does event-based sensing, it stays in low-power mode waiting for an external event to wake up the node. Consequently,  it has three distinct energy consumption rates: zero when it is charging, a maximum when it is sensing, and an in-between when it is sleeping. In favorable energy conditions, the sleeping mode may cause intermittent nodes to synchronize their power cycles on external events and miss the next ones.}
-		\label{fig:eventBasedSensing}
-\end{subfigure}
-		\caption{\fullsys (\sys) energy profile for different sensing strategies. Green bars highlight successful sensing operations  while the red bar shows a failed sensing attempt due to insufficient buffered energy.}
-		\label{fig:cisPwrCycle}
-\end{figure} 
+\subsubsection{Effective Availability}
 %
-An intermittent sensor has a limited energy budget per power cycle. When it is tasked with a polling-based sensing activity, its energy consumption, generally, switches between two levels: zero when charging and maximum when it activates its microcontroller for data acquisition and processing, see Figure~\ref{fig:pollingBasedSensing}. (Note that we assume that the microcontroller is the dominant energy consumer module of a node.) However, in event-based sensing, a node puts its microcontroller into low-power mode and waits (or listens) for an external event to wake up the microcontroller. For example, in our prototype, the command recognizer, we exploit the microphone's wake-on-sound feature to send an interrupt to the microcontroller, which will then start recording the sound samples from the microphone. 
+\todo{incomplete and needs to be rechecked}
+%
+Approaching continuous availability does not mean that \sys can successfully capture all events.
+It can happen that an event is being only partially captured by one or more nodes, which may lead to unsuccessful event detection. Therefore, it is important to specify the probability of successfully capturing  events give particular \sys characteristics.  
+%
+First, let us start with a simple case, a \sys of a single node and a single event. 
+Let us assume that a node has a power cycle has these characteristics ($t_\text{p}$, $t_\text{on}$). Thus, the percentage of the time the node is on is $\frac{t_\text{on}}{t_\text{p}}$.
+Further, we do not assume any prior knowledge about the event arrival time.
+Therefore, the probability of the event arriving at any moment in time is the same 
+(mathematically, the event arrival time is a random variable drawn from uniform distribution).
+Let us say the event is a short event (Section~\ref{sec:event_classification}) with a duration of $t_\text{e}$ unit of time, and it is given that it will happen in this power cycles
+\footnote{Note that, an intermittent node's power cycle is repeating indefinitely; thus, when an event happens it will at least partially be within one  power cycle. We are focusing on this power cycle.}.
+Consequently, we can compute the probability of successful event capturing as follows:
+
+\todo{check the following equation}
+\begin{equation}
+	t_\text{s}(N) = t_\text{on}(N-1) + \frac{t_\text{off}(N-1)}{t_\text{off}(N-1)+t_\text{on}(N-1)} \times t_\text{on}(1) - t_\text{e},
+		\label{eq:cisSenseModel}
+\end{equation}
+
+\subsubsection{Event-driven Sensing}
+% \begin{figure}[t]
+% 	\centering
+% 		\begin{subfigure}{\columnwidth}
+% 			\includegraphics[width=\columnwidth]{figures/PowerCycleIntermittentSystem}
+% 			\caption{When \sys does polling-based sensing, its energy consumption profile has, generally, two distinct rates: zero when it is charging, and a maximum when it is sensing.}
+% 			\label{fig:pollingBasedSensing}
+% 	\end{subfigure}
+% 	\begin{subfigure}{\columnwidth}
+% 		\includegraphics[width=\columnwidth]{figures/PowerCycleIntermittentSensor}
+% 		\caption{When \sys does event-based sensing, it stays in low-power mode waiting for an external event to wake up the node. Consequently,  it has three distinct energy consumption rates: zero when it is charging, a maximum when it is sensing, and an in-between when it is sleeping. In favorable energy conditions, the sleeping mode may cause intermittent nodes to synchronize their power cycles on external events and miss the next ones.}
+% 		\label{fig:eventBasedSensing}
+% \end{subfigure}
+% 		\caption{\fullsys (\sys) energy profile for different sensing strategies. Green bars highlight successful sensing operations  while the red bar shows a failed sensing attempt due to insufficient buffered energy.}
+% 		\label{fig:cisPwrCycle}
+% \end{figure} 
+%
+An intermittent sensor has a limited energy budget per power cycle. When it is tasked with a polling-based sensing activity, its energy consumption, generally, switches between two levels: zero when charging and maximum when it activates its microcontroller for data acquisition and processing. 
+% see Figure~\ref{fig:pollingBasedSensing}. 
+(Note that we assume that the microcontroller is the dominant energy consumer module of a node.) However, in event-based sensing, a node puts its microcontroller into low-power mode and waits (or listens) for an external event to wake up the microcontroller. For example, in our prototype, the command recognizer, we exploit the microphone's wake-on-sound feature to send an interrupt to the microcontroller, which will then start recording the sound samples from the microphone. 
 %
 %This hardware approach is most energy efficient, but can be mimicked in software by periodic polling (i.e.\ acquiring 1 sound sample and checking if it exceeds the acoustic noise floor). 
 %
-This wake-on-event style of operation is important as the minimal energy consumption during sleep significantly prolongs the period during which an event can be handled (for example, our prototype consumes 7 times less energy at sleep mode as compared to its active mode power consumption), see Figure~\ref{fig:eventBasedSensing}.
+This wake-on-event style of operation is important as the minimal energy consumption during sleep significantly prolongs the period during which an event can be handled (for example, our prototype consumes 7 times less energy at sleep mode as compared to its active mode power consumption).
+% , see Figure~\ref{fig:eventBasedSensing}.
 This distinction between the energy consumption pattern of event-based and polling-based sensing will have an important consequence on how we model the probability of successful event capturing in these two different sensing strategy. 
 % Although in reality the sleep and active phases draw quite different levels of power (128 vs. 849~$\mu$W on our hardware, see Table~\ref{tab:power_usage})
 %
 % we will model the life cycle of a sensor node simply as an on-period followed by an off-period (in which the node recharges its energy buffer) as that suffices to analyze the collective availability of a \sys.
 %The idle listening mode, which is important for successful sensing, complicates the design of the \sys.
 
-\subsection{Power States}
+
+\subsection{Environment}
+
+
+\subsubsection{Power States}
 \label{sec:power_state}
 A \sys can experience a wide range of ambient power intensities. For example, a solar-powered \sys may harvest no energy at night, modest energy from artificial light, and abundant energy from direct sunlight.  Generally, we can identify four different \sys powering states: 
 \begin{itemize}
@@ -199,20 +222,22 @@ A \sys can experience a wide range of ambient power intensities. For example, a 
 				
 \end{itemize}
 %
-\begin{figure}
-		\centering
-		\includegraphics[width=\columnwidth]{figures/randomized_response}
-		\caption{Randomized response helps in mitigating the hibernate-power-state problem. Also, it reduces the number of duplicated captured events when the \sys is overpowered. However, effective randomization strategy must be energy aware.}
-		\label{fig:rand}
-\end{figure} 
+% \begin{figure}
+% 		\centering
+% 		\includegraphics[width=\columnwidth]{figures/randomized_response}
+% 		\caption{Randomized response helps in mitigating the hibernate-power-state problem. Also, it reduces the number of duplicated captured events when the \sys is overpowered. However, effective randomization strategy must be energy aware.}
+% 		\label{fig:rand}
+% \end{figure} 
 
-The inefficiencies highlighted in the hibernating and continuous power states can be mitigated by enforcing randomization on the response of intermittent nodes (Figure~\ref{fig:rand}): when a node is woken up by an external event it responds to that event with a certain probability. However, if the randomized response is enforced all the time, then the \sys will have a lower probability of catching events during the targeted energy conditions. Therefore, the \sys has to distinguish between the targeted and above-targeted energy conditions and randomize its response only during the hibernating and continuous power states. 
+The inefficiencies highlighted in the hibernating and continuous power states can be mitigated by enforcing randomization on the response of intermittent nodes 
+% (Figure~\ref{fig:rand})
+: when a node is woken up by an external event it responds to that event with a certain probability. However, if the randomized response is enforced all the time, then the \sys will have a lower probability of catching events during the targeted energy conditions. Therefore, the \sys has to distinguish between the targeted and above-targeted energy conditions and randomize its response only during the hibernating and continuous power states. 
 
 
 Choosing a fix response probability is an inefficient way of dealing with the over-powering problem as the number of active intermittent nodes at a given moment is a function of the total number of intermittent nodes and the power intensity at that time. Therefore, efficient randomization requires intermittent nodes to estimate the number of active nodes at the moment of an external event arrival (which is discuss it next) and respond proportionally.
 
 
-\subsection{Intermittent Timing}
+\subsubsection{Intermittent Timing}
 \label{subsec:interTimer}
 %
 \begin{figure}[t]
@@ -224,7 +249,7 @@ Choosing a fix response probability is an inefficient way of dealing with the ov
 %
 
 Timing is a key building block of sensing systems. However, it is missing on intermittent nodes unless an additional dedicated timer circuit is added to them~\cite{hester2017timely}. Here we would like to propose an alternative way that does not require additional timer hardware. Obviously, the on-time of an intermittent node can be measured using the microcontroller's built-in timers. However, the difficulty is \textit{how an intermittent node can time its own off-time?}. Actually, answering this question does not only enable timing on intermittent devices but also enables them to estimate the richness of the ambient energy. 
-
+%
 \paragraph{Timing the death} 
 Algorithm~\ref{algo:offTime} shows how a node can estimate its off-time. The basic idea is that a node measures its on-time while harvesting (Line~\ref{lin:ontime}) and compares it to the time required to drain the super capacitor without charging. The additional on-time $\Delta{t}$ is the result of the energy accumulated while executing. (Line~\ref{lin:deltat}). By assuming a relatively stable charging rate, a node can calculate how long it will be off charging (Line~\ref{lin:ehar}-\ref{lin:offtime}). Obviously, in order for the time estimation to be correct, the reference time and the on-time measurement must be done with same load ($a$). %\textcolor{red}{\bf Stephan: not sure what is meant here with "with same load"??/}
 % off-time estimation 
@@ -253,7 +278,7 @@ Algorithm~\ref{algo:offTime} shows how a node can estimate its off-time. The bas
 	\end{algorithmic}
 \end{algorithm}
 
-\subsection{Nodes overlapping}
+\subsubsection{Nodes overlapping}
 \begin{figure}[t]
 		\centering
 		\includegraphics[width=\columnwidth]{figures/cis_dutyCycle.eps}
@@ -297,28 +322,6 @@ the $-1$ is because the node itself decided not to react on the first event.
 Table~\ref{tab:clusters} shows the average number of overlaps of an 8-nodes \sys for different light intensities. These measurements validate that nodes overlapping time is uniformly distributed over the \sys on-time. For example, at $\SI{1200}{lux}$ an individual node of our \sys has a duty cycle of $\approx$\,62\%. If we multiply it by the number of nodes (Equation~\ref{eq:max_time}) we get about 500\%. Figure~\ref{fig:cisModel} indicates that a \sys with eight nodes of duty cycles above 50\% has near 100\% availability. From equation~\ref{eq:active}, we find that the expected number of clustered nodes is 5 which is what Table~\ref{tab:clusters} also shows. 
 
 
-
-\subsection{Successful Detection Probability}
-%
-Approaching continuous availability does not mean that \sys can successfully capture all events.
-It can happen that an event is being only partially captured by one or more nodes. 
-This may lead to unsuccessful event detection. The important question is what is the probability of successfully 
-capture an event give particular \sys characteristics.  
-%
-First, let us start with the simple case, a single intermittent node and a single event. 
-Let us assume that a node has a power cycle that spans $t_\text{p}$ unit of time, and the node is on for $t_\text{on}$ unit of time. 
-Thus, the percentage of the time the node is on is $\frac{t_\text{on}}{t_\text{p}}$
-Further, we do not assume any prior knowledge about the event arrival time.
-Therefore, the probability of the event arrives at any moment in time is the same 
-(mathematically, the event arrival time is a random variable drawn from uniform distribution).
-Let us say the event duration is $t_\text{e}$, and it is given that it will happen in this power cycles
-\footnote{Note that, an intermittent node's power cycle is repeating indefinitely; thus, when an event happens it will at least partially be within one  power cycle. We are focusing on this power cycle}
-Consequently, we can compute the probability of successful event capturing as follows:
-$$
-P_c =  \frac{t_\text{on}}{t_\text{p}} \times \frac{t_\text{e}}{t_\text{p}} \times \frac{t_\text{on}}{t_\text{e}}
-$$
-
-Since the intermittent nodes are 
 
 
 

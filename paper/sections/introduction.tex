@@ -113,8 +113,6 @@ In such energy conditions (favorable energy conditions), using plenty of intermi
 In this paper, we tackle the paradox of continuous sensing on intermittently-powered sensors. 
 We studied the inter-relationship between the power cycles of energy-harvesting battery-less devices, 
 the emerging collective behavior, and the effect of changes in ambient energy levels on the sensors collective emerging behavior. 
-
-
  % It studies the power cycle of energy-harvesting platforms and makes a key observation about the inter-relationship between these platforms. Sensors driven by the same ambient energy source (e.g., light or RF) do {\em not} show correlated on/off (sense/charge) cycles. Building on top of this observation, the paper introduces a new type of sensor that we call \textit{\fullsys} (\sys). The \sys is defined as the abstraction of a group of energy-aware intermittent nodes providing the collective sense of being always on. 
 % ---
 % To approach continuous sensing, the sensor nodes may need to randomize their responses. 
@@ -122,24 +120,23 @@ the emerging collective behavior, and the effect of changes in ambient energy le
 
 % This paper provides an estimator based on local measurements of a node's duty cycle that has been used effectively on our prototype command recognizer enabling it to detect commands of four words with above 90\% detection accuracy. 
 % ---
-
 In particular, this paper makes the following key contributions:
-\begin{itemize}
-		%
-		\item We show how continuous availability of a group of intermittently-powered devices can be approached for different scenarios, i.e., explicit and implicit control of nodes' awake time. 
-		We \textbf{modeled} the collective emerging on-time (system availability) of intermittently-powered sensors and \textbf{validate} our model on real hardware and against different energy sources. 
-		% \item We observed and analyzed the relationship between the power cycles of a group of energy-harvesting devices. We show that even when these sensors are powered by the same energy source and running the same application their power cycles are uncorrelated. We \textbf{modeled} the collective emerging on-time of these sensors and \textbf{validate} on real hardware and against different energy sources. 
-		%
-		% \item We model the (\sys) availability of energy-harvesting nodes and validate it against in-the-wild measured data and under controllable energy conditions. 
-		\item We introduce a new type of virtual sensor, showing its capabilities and limitations. The \textbf{\fullsys (\sys)} is the abstraction of a group of intermittently-powered sensors that achieves maximum statistical availability by exploiting (inherent) randomization to spread nodes' awake times uniformly.
-		% 
-		\item Contrary to common sense, we show how favorable energy conditions can deteriorate the performance of a \sys. We, therefore, equipped the \sys with \textbf{an new algorithm} that makes it ambient energy aware.
-		This algorithm enables the nodes to determine their own duty cycles (without requiring additional hardware),
-		and the average number of alive nodes (without requiring communication). This information can effectively be used by the nodes to decide when to back off to avoid duplicate event detection and availability interruptions (implicit synchronization in favorable harvesting conditions).
+\begin{itemize}[noitemsep,topsep=10pt]
+%
+\item We show how continuous availability of a group of intermittently-powered devices can be approached for different scenarios, i.e., explicit and implicit control of nodes' awake time. 
+We \textbf{modeled} the collective emerging on-time (system availability) of intermittently-powered sensors and \textbf{validate} our model on real hardware and against different energy sources. 
+% \item We observed and analyzed the relationship between the power cycles of a group of energy-harvesting devices. We show that even when these sensors are powered by the same energy source and running the same application their power cycles are uncorrelated. We \textbf{modeled} the collective emerging on-time of these sensors and \textbf{validate} on real hardware and against different energy sources. 
+%
+% \item We model the (\sys) availability of energy-harvesting nodes and validate it against in-the-wild measured data and under controllable energy conditions. 
+\item We introduce a new type of virtual sensor, showing its capabilities and limitations. The \textbf{\fullsys (\sys)} is the abstraction of a group of intermittently-powered sensors that achieves maximum statistical availability by exploiting (inherent) randomization to spread nodes' awake times uniformly.
+% 
+\item Contrary to common sense, we show how favorable energy conditions can deteriorate the performance of a \sys. We, therefore, equipped the \sys with \textbf{an new algorithm} that makes it ambient energy aware.
+This algorithm enables the nodes to determine their own duty cycles (without requiring additional hardware),
+and the average number of alive nodes (without requiring communication). This information can effectively be used by the nodes to decide when to back off to avoid duplicate event detection and availability interruptions (implicit synchronization in favorable harvesting conditions).
 
-		% \item We introduce an algorithm for a node to determine its own duty cycle, which depends on the ambient power source. That duty cycle can effectively be used to estimate the number of active neighbors, which in turn decides if a node should back off to avoid duplicate event detection and availability interruptions (implicit synchronization in favorable harvesting conditions).
-		%
-		\item We prototype, evaluate, and demonstrate the feasibility of the \fullsys concept in the form of voice-control application recognizing individual words on solar-powered nodes equipped with a microphone.
+% \item We introduce an algorithm for a node to determine its own duty cycle, which depends on the ambient power source. That duty cycle can effectively be used to estimate the number of active neighbors, which in turn decides if a node should back off to avoid duplicate event detection and availability interruptions (implicit synchronization in favorable harvesting conditions).
+%
+\item We prototype, evaluate, and demonstrate the feasibility of the \fullsys concept in the form of voice-control application recognizing individual words on solar-powered nodes equipped with a microphone.
 \end{itemize}
 
 
