@@ -1,0 +1,35 @@
+\documentclass{article}
+\usepackage{xspace}
+\usepackage{amsmath} % need for example to use \text in a math environment 
+\usepackage{mathtools} % to use coloneqq (:=)
+
+\newcommand{\sys}{CIS\xspace}
+\newcommand{\fullsys}{Coalesced Intermittent Sensor\xspace}
+
+\title{CIS}
+\begin{document}
+
+\maketitle
+
+\noindent\textbf{Implicit on-time division strategy}: 
+With no information being exchanged between intermittent nodes, the best \sys can do is to uniformly distribute its node's on-times and maintaining this distribution over time. 
+%
+The key to success is to exploit the properties (i.e.\ randomness) of the ambient energy source to arrive at a uniform spreading of the awake times of the individual senor nodes to achieve the maximum coalesced availability. 
+%
+%The key observation to uniformly distribute the nodes' on-times is to ensure that their power cycles are different.
+%
+This can be achieved by forcing intermittent nodes to go into low-power mode upon power-ups. The length of this mode is randomly chosen for each node. This will change the length of the nodes on-times and, consequently, alter their power cycles. Figure~\ref{fig:cisOntime} shows the scenario of two intermittent nodes with different power cycles. Node 1 has a power cycle of 6 units of time and an on/off cycle of $\frac{1}{3}$. Node 2 has a power cycle of 5 units of time and an on/off cycle of $\frac{1}{5}$. Following the time axis from the left, we can see that the position of the on-time of Node 2 is shifted by 1 unit of time after each power cycle of Node 2. This implies that the on-times of the two nodes are $\frac{1}{3}$ of the time cluster together and $\frac{2}{3}$ of the time they are apart. If we extend the previous scenario to three or more nodes then the on-time of the resulting \sys can be described with the following formula,
+				
+\begin{equation}
+	t_\text{on}(N) = t_\text{on}(N-1) + \frac{t_\text{off}(N-1)}{t_\text{off}(N-1)+t_\text{on}(N-1)} \times t_\text{on}(1),
+		\label{eq:cisModel}
+\end{equation}
+where $N \in \mathbb{N}$ and  $t_\text{on}(N)$ is the on-time of a \sys with $N$ intermittent nodes. For the initial case where $N=1$ we define $t_\text{on}(0)\coloneqq 0$ and $t_\text{off}(0) \coloneqq 1$.
+				
+In addition to characterizing the availability of a \sys, equation~\ref{eq:cisModel} also states that the benefit of adding a node to the \sys is proportional to the \sys's off-time. In Figure~\ref{fig:cisModel} \sys availability percentage for different duty cycles and different number of intermittent nodes are shown.
+
+%s
+There is a clear trade-off between the aforementioned methods. While the explicit control method provides fine control over the system 
+distribution and therefore requires less number of nodes than the implicit control method, the implicit control method does not depend on the ability to communicate between the nodes and therefore it is simpler and more energy efficient. Since inter-node communication is beyond the capabilities of most of today's intermittent nodes, we focus on the implicit approach.
+
+\end{document}
