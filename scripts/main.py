@@ -175,19 +175,19 @@ def main():
 
     jsonObj = json.dumps([label,availability])
     #TODO prevent duplicated entries
-    with open("processed_data/availability"+cap+".json", "a") as f:
+    with open("processed_data/new/availability"+cap+".json", "a") as f:
         print(jsonObj, file=f)
 
     jsonObj = json.dumps([label,nodesOnTimes])
-    with open("processed_data/intermittent_nodes_ontimes"+cap+".json", "a") as f:
+    with open("processed_data/new/intermittent_nodes_ontimes"+cap+".json", "a") as f:
         print(jsonObj, file=f)
 
     jsonObj = json.dumps([label,nodesOffTimes])
-    with open("processed_data/intermittent_nodes_offtimes"+cap+".json", "a") as f:
+    with open("processed_data/new/intermittent_nodes_offtimes"+cap+".json", "a") as f:
         print(jsonObj, file=f)
 
     jsonObj = json.dumps([label,availabilityTimeline])
-    with open("processed_data/availabilityTimeline"+cap+".json", "a") as f:
+    with open("processed_data/new/availabilityTimeline"+cap+".json", "a") as f:
         print(jsonObj, file=f)
 
     plt.figure()

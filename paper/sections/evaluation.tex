@@ -1,5 +1,37 @@
-To evaluate the performance of the \fullsys, we conducted several experiments in different energy conditions and with different types of events. 
-\subsection{Experiment setup}
+To evaluate the performance of the \fullsys, we conducted several experiments in different energy conditions and with different event arrivals patterns. 
+%
+\subsection{Availability}
+\begin{figure*}[t]
+        \begin{subfigure}{.66\columnwidth}
+            \includegraphics[width=\textwidth]{figures/sysAvailability}
+                \caption{The \sys is powered by uncontrollable light sources---artificial light (night) and sunlight (day).}
+            \label{fig:solarPwrCIS}
+        \end{subfigure}\hfill
+        \begin{subfigure}{.66\columnwidth}
+            \includegraphics[width=\textwidth]{figures/rf_sysAvailability}
+                \caption{The \sys is powered by an RF reader~\cite{r420_website} located 30-70\,cm aware from the RF tags (WISPs~\cite{smith_ubicomp_2006}).}
+            \label{fig:rfPwrCIS}
+        \end{subfigure}\hfill
+        \begin{subfigure}{.66\columnwidth}
+            \includegraphics[width=\textwidth]{figures/sysAvailability_artificial-light}
+                \caption{The \sys is powered by a controllable array of LEDs in a dark room. \vspace{1em}}
+            \label{fig:rfPwrCIS}
+        \end{subfigure}
+        \caption{Measuring \fullsys availability for a differed number of intermittent nodes. Generally, adding a node increases the system availability. This increment, however, is proportional to the \sys off-time.}
+        \label{fig:pwrCIS}
+\end{figure*} 
+%
+In Figure~\ref{fig:power_cycles} we showed that the power cycles of an RF- and solar-powered \sys are different, and therefore, we expected their on-times to be uniformly distributed, as modeled in Equation~\ref{eq:cisModel}. Here, we challenge our model and expection. 
+
+Figure~\ref{fig:pwrCIS} shows the availability of three \sys{}s when they are powered by different energy sources (sunlight, artificial light, and RF) and for a different number of intermittent nodes.
+The results clearly confim our expectation: when the power cycles are slightly different, the on-times are uniformly distributed. And they validate our model (the dashed lines represent the modeled availability when the nodes duty cycle is 15\%).
+
+% We see that (i) the energy sources (sunlight, artificial light, and RF) power the \sys{}s intermittently, (ii) the \sys availability increases with number of nodes, and (iii) this addition is proportional to the \sys off-time. 
+%
+% The dashed lines represent Equation~\ref{eq:cisModel} expectation about the \sys availability for certain power cycles (10\% for the RF powered system, and 15\% for the light powered one). By comparing these lines to the measured ones we can conclude that these energy sources provide sufficient randomness to cause each node to have a slightly different power cycle which, in turn, causes their uptimes to be uniformly distributed in time.  
+
+\subsection{Sensing}
+\subsubsection{Experiment setup}
 \label{sec:experiment_setup}
 % \begin{figure}[t]
 % 		\centering
@@ -17,41 +49,17 @@ To evaluate the performance of the \fullsys, we conducted several experiments in
 %
 
 %
-\subsection{system availability}
-\begin{figure*}[t]
-        \begin{subfigure}{.66\columnwidth}
-            \includegraphics[width=\textwidth]{figures/sysAvailability}
-                \caption{The system is powered by uncontrollable light sources---artificial light during the night, and sunlight during the day.}
-            \label{fig:solarPwrCIS}
-        \end{subfigure}\hfill
-        \begin{subfigure}{.66\columnwidth}
-            \includegraphics[width=\textwidth]{figures/wisp_sysAvailability}
-                \caption{The system is powered by radio frequency waves (RF). The RF source is located 30-70\,cm aware from the RF tags (WISPs).}
-            \label{fig:rfPwrCIS}
-        \end{subfigure}\hfill
-        \begin{subfigure}{.66\columnwidth}
-            \includegraphics[width=\textwidth]{figures/sysAvailability_artificial-light}
-                \caption{The system is powered by radio frequency waves (RF). The RF source is located 30-70\,cm aware from the RF tags (WISPs).}
-            \label{fig:rfPwrCIS}
-        \end{subfigure}
-        \caption{Measuring \fullsys availability for a differed number of intermittent nodes. Generally, adding a node increases the system availability. This increment, however, is proportional to the \sys off-time.}
-        \label{fig:pwrCIS}
-\end{figure*} 
-
-Figure~\ref{fig:pwrCIS} shows the availability of \sys{}s when they are powered by different energy source and for a different number of intermittent nodes. We see that (i) the energy sources (sunlight, artificial light, and RF) power the \sys intermittently, (ii) the \sys availability increases with number of nodes, and (iii) this addition is proportional to the \sys off-time. 
-
-The dashed lines represent Equation~\ref{eq:cisModel} expectation about the \sys availability for certain power cycles (10\% for the RF powered system, and 15\% for the light powered one). By comparing these lines to the measured ones we can conclude that these energy sources provide sufficient randomness to cause each node to have a slightly different power cycle which, in turn, causes their uptimes to be uniformly distributed in time.  
 
 
-\paragraph{availability on a fine scale}
- \todo{Because of the differences in intermittent nodes power cycles, their duty cycles are constantly shifting relative to each other ( Figure~\ref{fig:cisOntime}).  However, this study does zoom in on the \sys availability on short time scale and the effect of length of the differences between the nodes power cycles on the system short term availability. } 
+% \paragraph{availability on a fine scale}
+ % \todo{Because of the differences in intermittent nodes power cycles, their duty cycles are constantly shifting relative to each other ( Figure~\ref{fig:cisOntime}).  However, this study does zoom in on the \sys availability on short time scale and the effect of length of the differences between the nodes power cycles on the system short term availability. } 
 
 After validating our observation on natural light and office artificial light, we designed a testbed with controllable light intensity for clarity and results reproducible. To this end, we blocked uncontrollable light sources with a box of $60 \times 40$\,cm. On the ceiling of the box, we attached a light strip of 2.5\,m with 150 LEDs that can produce 15 different light intensities. On the bottom of the box, we placed a \fullcim of 8 intermittent nodes (the hardware is described in Section~\ref{sec:hardware}).
 
 The events in our experiments are spoken words (Table~\ref{tab:words}). We recorded different patterns of isolated words to emulate the arrival of bursts or individual events with varying inter-event and inter-bust timing. We used a Bluetooth speaker~\cite{jbl} to replay a certain record. The data were collected using logic anaylyzer~\cite{saleae} and processed on a laptop running Ubuntu 16.04 LTS. 
 
 
-\subsection{Events detection rate}
+\subsubsection{Events detection rate}
 %
 \begin{figure}[t]
 		\centering
@@ -80,14 +88,14 @@ Figure~\ref{fig:events_detection_rate} shows the percentage of the total capture
 
 We clearly see a positive correlation between light intensity and the number of detected events. In particular, we see that the number of duplicated detected events rises dramatically when light intensity increases, demonstrating the overpowering problem. Moreover, increasing the inter-event arrival time also surges the number of duplicated events. The reason for this phenomenon is that when the time between events increases, the intermittent nodes sleep longer in low-power mode, and this reduces the inherent randomization of the intermittent nodes and leads them to the \textit{hibernating power state} (Section~\ref{sec:power_state}).  
 
-Indirectly, these results show how a \sys can achieve a much higher duty cycle than its individual intermittent nodes---Figure~\ref{fig:cis_nodes_dutyCycle} shows that with a light intensity of $\SI{800}{lux}$ an intermittent node is active with a duty cycle of 30\% while Figure~\ref{fig:events_detection_rate} shows that a \sys of 8 nodes captures 100\% of the unique events when the time between them is \SI{6}{s}. 
+Indirectly, these results show how a \sys can achieve a much higher duty cycle than its individual intermittent nodes: Figure~\ref{fig:cis_nodes_dutyCycle} shows that with a light intensity of $\SI{800}{lux}$ an intermittent node is active with a duty cycle of 30\% while Figure~\ref{fig:events_detection_rate} shows that a \sys of 8 nodes captures 100\% of the unique events when the time between them is \SI{6}{s}. 
 
 \paragraph{Bursty events}
 Figure~\ref{fig:events_burst_problem} shows the capturing behavior of a \sys when the events arrive in bursts. A burst of four events with one second between the individual events was fired every 20 seconds. Each burst was repeated 10 times and for four different light intensities. The nodes sleep in low-power mode when they finish processing, waiting for the next event. 
 
 In general, we observe that the intermittent nodes react to the first event of a burst and power down shortly after missing other events in the burst. This results validate our theory about the side effect of the \textit{hibernating power state} (Section~\ref{sec:power_state}). These results also demonstrate the hibernating power problem on a wide range of power intensities, showing the significance of this problem. Next, we will show how randomized response can mitigate these problems. 
 
-\subsection{Events detection rate with randomization}
+\subsubsection{Events detection rate with randomization}
 \begin{table}
 	\centering
     $

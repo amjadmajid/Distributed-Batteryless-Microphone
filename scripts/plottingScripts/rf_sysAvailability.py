@@ -2,13 +2,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 import json
 
-plt.style.use('seaborn-whitegrid')
+plt.style.use('seaborn-ticks')
 
 def funcFormatter(val, idx):
     return "{:4d}%".format(int(val*100))
 
 # for the simulated system availability
-ndc=0.10 
+ndc=0.15 
 
 # the average benefit of adding an INode is tot = (1-tot) * ndc +tot
 def tot(n,ndc):
@@ -47,7 +47,7 @@ for idx, d in enumerate(data):
     ax.plot(dataIndices, np.array(d[1])*10,plotPatterns[idx], label=d[0] ) #, color=colors[idx]) 
 
 # Plotting the simulated system availability 
-ax.plot(range(1,n+1), tot(n,ndc)* 10, '--', label="{:0.0f}%".format(100*ndc))
+ax.plot(range(1,n+1), tot(n,ndc)* 10, '--', label="{:0.0f}%".format(100*ndc), lw=2)
 
 ## axes formatting 
 ylabels = ["{:4d}%".format(x*10) for x in dataIndices-1]

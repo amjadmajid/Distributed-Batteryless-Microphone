@@ -14,7 +14,7 @@ plt.style.use('seaborn-ticks')
 #     # #           ####  #    #    ####### #  ####  #    #   #   
 # ----------------------------------------------------------------
 # Run for RF data
-rf_flag = True
+rf_flag = False
 
 # To disable debugging set it to False
 # To print all debugging info set the second entry to 0
@@ -106,10 +106,10 @@ def main():
 
     
     plt.gca().grid(True, axis='y') 
-    plt.ylabel("Power Cycle Length (sec)", fontsize=fontSize)
-    plt.xlabel("Nodes ID", fontsize=fontSize)
-    plt.yticks(fontsize=fontSize-2)
-    plt.xticks(fontsize=fontSize-2)
+    plt.ylabel("Power Cycle Length (sec)", fontsize=fontSize+2)
+    plt.xlabel("Nodes ID", fontsize=fontSize+2)
+    plt.yticks(fontsize=fontSize+2)
+    plt.xticks(fontsize=fontSize+2)
     plt.tight_layout()
     if rf_flag:
         plt.savefig('../../paper/figures/rf_power_cycles_len.eps')

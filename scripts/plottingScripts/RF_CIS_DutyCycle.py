@@ -27,9 +27,8 @@ class Node():
     def getAverageDutyCycle(self):
         on_total = sum(self.on_times)
         off_total = sum(self.off_times)
-        print("on_total", on_total)
-        print("off_total", off_total)
         duty_cycle = 100* float(on_total)/float(on_total+off_total)
+        print("Duty Cycle", duty_cycle)
         return duty_cycle
 
 def boxplot_color_fontsize(box, color, fs):
@@ -38,13 +37,12 @@ def boxplot_color_fontsize(box, color, fs):
             line.set_color(color)
             line.set_linewidth(fs)
 
-
 def addFile(filename):
     m = Measurement()
     data = LogicAnalyzerData(filename)
     timestamps = data.timestamps
-
     for nodeNum in range(data.getNumOfNodes()):
+        # compute a single node on-time an off-time
         states = data.statesSelector([nodeNum], data.states)
         on_time_flag =  False
         off_time_flag =  False
@@ -78,16 +76,18 @@ def addFile(filename):
     return m
 
 
-directory = "../../data/duty_cycle_sleeping/470uf/"
+directory = "../../data/RF/"
 # csv_files = [f for f in os.listdir(directory) if f.endswith('.csv')]
-csv_files = ['215-224lux.csv', '430-442lux.csv', '621-641lux.csv', '812-836lux.csv', '1009-1032lux.csv', '1280-1321lux.csv'] #, '1705-1737lux.csv', '1947-2012lux.csv']
+csv_files = ['30cm.csv', '40cm.csv', '50cm.csv', '60cm.csv', '70cm.csv', '80cm.csv'] #, '1705-1737lux.csv', '1947-2012lux.csv']
+# csv_files = ['40cm.csv'] 
+
 measurements = []
 for file in csv_files:
     # print file,
     measurements.append(addFile(directory+file))
 
 plot_data = [m.getDutyCycles() for m in measurements]
-light_intensities = [ 200, 400, 600, 800, 1000, 1200] #, 1705, 1947]
+distances = [30, 40, 50, 60, 70, 80] #, 1705, 1947]
 fontSize=16
 plt.figure(figsize=(8,4))
 box = plt.boxplot(plot_data, showfliers=False)
@@ -95,12 +95,10 @@ boxplot_color_fontsize(box, '#0868ac', 1.5)
 
 # ylabels = ["{:4d}%".format(x*10) for x in ]
 plt.gca().grid(True) 
-plt.xticks(range(1,len(light_intensities)+1),light_intensities, fontsize=fontSize+2)
+plt.xticks(range(1, len(distances)+1),distances, fontsize=fontSize+2)
 plt.yticks(fontsize=fontSize+2)
 plt.ylabel("Avg. nodes duty cycle (%)", fontsize=fontSize+2)
-plt.xlabel("Light intensity (lux)", fontsize=fontSize+2)
-# plt.ylim(0,1.05)
-# plt.xlim(0, light_intensities[-1]+50)
+plt.xlabel("Distance from the RF source", fontsize=fontSize+2)
 plt.tight_layout()
-plt.savefig('../../paper/figures/cis_dutyCycle.eps')
+plt.savefig('../../paper/figures/rf_cis_dutyCycle.eps')
 plt.show()

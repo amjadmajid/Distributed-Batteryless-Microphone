@@ -5,9 +5,9 @@
 	\label{fig:cis}
 \end{figure}
 
-We have developed a prototype of a \fullcim (\cim): an instant of a \fullsys. The \cim consists of eight batteryless intermittent nodes. Each node is capable of performing isolated words recognition. 
+We have developed a prototype of a \fullcim (\cim): an instant of a \fullsys. The \cim consists of eight battery-less intermittent nodes. Each node is capable of performing isolated words recognition. 
 
-The reason behind developing a \cim is threefold: (i) voice is a natural and convenient way for human to interact with miniaturized devices; (ii) demonstrating \textit{the world's first} batteryless intermittently-powered command recognizer, which shades light on the potential of batteryless intermittent systems; and (iii) facilitating testing with different sensing strategies and different type of external events arrival (i.e., regular  or burst). 
+The reason behind developing a \cim is threefold: (i) voice is a natural and convenient way for human to interact with miniaturized devices; (ii) demonstrating \textit{the world's first} battery-less intermittently-powered command recognizer, which shades light on the potential of battery-less intermittent systems; and (iii) facilitating testing with different sensing strategies and different type of external events arrival (i.e., regular  or burst). 
 
 
 % Moreover, we believe that a \cim can facilitate direct human-to-human or human-to-objects communication. Imagine that a \cim based system is deployed in a play ground, embedded in ground and other objects. You want to call your child, and a \cim based system is embedded in your shirt and his shirt. You say his name and the \cim picks up the word and scatter it over light---\cite{marco}  demonstrates the feasibility of scattering sunlight to communicate between two nodes that are up to 60\,m apart. The scattered signal will be relied on other \cim nodes until the receiving node on his shirt receives the message and notify him, daddy is calling. 
@@ -48,7 +48,7 @@ where $f_i$ is the normalized output for the $i^{\text{\tiny th}}$ spectral band
 % \label{fig:DTWvsLDM}
 % \end{figure}
 % %
-\begin{table}
+\begin{table}[t]
 	\centering
 	\caption{Profiling of features matching algorithms: Dynamic Time Warping (DTW) and Linear Distance Matching (LDM).}
 	\label{tab:profiling}
@@ -58,6 +58,19 @@ where $f_i$ is the normalized output for the $i^{\text{\tiny th}}$ spectral band
 	Feature extraction & 501 & 501 \\
 	Feature matching &  99 & 1251 \\\hline
 	Total & 885 & 2037 \\\hline
+	\end{tabular}
+\end{table}
+%
+\begin{table}[t]
+	\centering
+	\caption{Power usage}
+	\label{tab:power_usage}
+	%Compiled without optimization flags:
+	\begin{tabular}{lrrr}\hline
+	Section & Current (\si{\micro A}) & Voltage (V) &  Power (\si{\micro W}) \\\hline
+	Sleeping & 64 $\pm$20 & 2.008 & 128 $\pm$40 \\
+	Recording & 423 $\pm$20  & 2.008 &  849 $\pm$40\\
+	Processing &  282 $\pm$20 & 2.008& 566 $\pm$40 \\\hline
 	\end{tabular}
 \end{table}
 %
@@ -79,39 +92,25 @@ Once the recorded word has been compared to all \cim template words, the templat
 It should be emphasized that in the linear distance matching algorithm (LDM) the feature vectors of two words are compared successively, not accounting for differences in pronunciation speed. This is sufficient for our case as we are targeting isolated words and speaker dependent speech recognition type. We also implemented the Dynamic Time Warping algorithm which better handles the difference in the speed of speech. However, it is slower than the linear matching algorithm  (Table~\ref{tab:profiling}) and the detection accuracy was comparable in our case. Therefore, we default our implementation to LDM. 
 
 \subsubsection{Power Failure Protection}
-\todo{consider adding Coala}
 In order to preserve the progress state and to protect \cim data against randomly timed power failures, we manually split \cim program into 19 atomic regions. We ensured the each of these regions requires less energy than what the energy buffer can provide with a single charge. The program progress state is saved in the non-volatile memory (FRAM) on the transition between these regions. This prevents the program from falling back to its starting point (\texttt{main()}) after each power failure. Data in the non-volatile memory with Write-After-Read dependency is double buffered to ensure data integrity when the power supply is interrupted. 
 
 \subsection{Code profiling}
-The entire command recognition software was written in the {\tt C} programming language. The total program consists of 973 lines of code, excluding the FFT function from the Texas Instrument DSP library. See Table~\ref{tab:code_stats} for more information.
+The entire command recognition software was written in the {\tt C} programming language. The total program consists of 973 lines of code, excluding the FFT function from the Texas Instrument DSP library.
 
 The memory footprint on the microcontroller is 20,064 bytes of FRAM and 1,134 bytes of SRAM. Execution times are shown in Table~\ref{tab:profiling}.
 
 The power usage of a node differs according to it's activity. When a node is waiting for a voice event, it is in low-power mode. When data needs to be processed or recorded it is in active mode. When recording, the microphone and ADC consume additional power. The power consumption rates are determined by measuring the current with a Monsoon power monitor~\cite{monsoon} and shown in Table~\ref{tab:power_usage}.
 
 
-\begin{table}
-	\centering
-	\caption{Code statistics: lines of code}
-	\label{tab:code_stats}
-	%Compiled without optimization flags:
-	\begin{tabular}{lrrrr} \hline
-		Language & Files & Blank & Comment & Code \\\hline
-		C & 7 & 264 & 173 & 736 \\
-		C/C++ Header & 8 & 62 & 40 & 237 \\\hline
-		Total &  15 & 326 & 213 & 973 \\\hline
-	\end{tabular}
-\end{table}
-
-\begin{table}
-	\centering
-	\caption{Power usage}
-	\label{tab:power_usage}
-	%Compiled without optimization flags:
-	\begin{tabular}{lrrr}\hline
-	Section & Current (\si{\micro A}) & Voltage (V) &  Power (\si{\micro W}) \\\hline
-	Sleeping & 64 $\pm$20 & 2.008 & 128 $\pm$40 \\
-	Recording & 423 $\pm$20  & 2.008 &  849 $\pm$40\\
-	Processing &  282 $\pm$20 & 2.008& 566 $\pm$40 \\\hline
-	\end{tabular}
-\end{table}
+% \begin{table}
+% 	\centering
+% 	\caption{Code statistics: lines of code}
+% 	\label{tab:code_stats}
+% 	%Compiled without optimization flags:
+% 	\begin{tabular}{lrrrr} \hline
+% 		Language & Files & Blank & Comment & Code \\\hline
+% 		C & 7 & 264 & 173 & 736 \\
+% 		C/C++ Header & 8 & 62 & 40 & 237 \\\hline
+% 		Total &  15 & 326 & 213 & 973 \\\hline
+% 	\end{tabular}
+% \end{table}
