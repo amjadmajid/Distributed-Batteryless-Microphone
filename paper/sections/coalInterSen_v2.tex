@@ -45,16 +45,19 @@ To extend the availability of this \sys, one of the node should
 shift its on-time away from the other. If one of the nodes sleeps for $t$\,units of time, then the on-time of this power cycle will be $t_\text{on}+\Delta t$. Consequently, the length of the power cycle itself will be $t_\text{p} + \Delta t $, delaying the next awake time by $\Delta t$.
 If the node sleeps only once, then availability of the \sys will equal $\min \left(2\times t_\text{on}| t_\text{on}+\Delta t\right)$
 
-However, if the initial conditions are unknown, then shifting a node's on-time a constant number of times may cause the initially desynchronized nodes to become synchronized, collapsing the \sys's availability instead of extending it. Therefore, a safer option is to \emph{constantly} shift the awake time of the node. In this case, the on-time will shift over the entire power cycle of the other node, spending $\frac{ t_\text{off} }{t_\text{p}}$ and $\frac{ t_\text{on} }{t_\text{p}}$ of the time overlapping with its off-time and on-time, respectively. This behavior is illustrated in Figure~\ref{fig:cisOntime}, where node 1 and node 2 have power cycles of (2,6) and (1,5). Following the time axis from the left to the right, we can observe that the position of the on-time of node 2 is shifted by -1 unit of time relative to the on-time of node 1 after each power cycle of node 1. This implies that the on-times of the two nodes are $\frac{1}{3}$ of the time cluster together and $\frac{2}{3}$ of the time they are apart (from an external event standpoint, the on-times are uniformly distributed over the longest power cycle, as they have the same probability to be anywhere when the event arrives). 
+However, if the initial conditions are unknown, then shifting a node's on-time a constant number of times may cause the initially desynchronized nodes to become synchronized, collapsing the \sys's availability instead of extending it. Therefore, a safer option is to \emph{constantly} shift the awake time of the node. In this case, the on-time will shift over the entire power cycle of the other node, spending $\frac{ t_\text{off} }{t_\text{p}}$ and $\frac{ t_\text{on} }{t_\text{p}}$ of the time overlapping with its off-time and on-time, respectively. This behavior is illustrated in Figure~\ref{fig:cisOntime}, where node 1 and node 2 have power cycles of (2,6) and (1,5). Following the time axis from the left to the right, we can observe that the position of the on-time of node 2 is shifted by -1 unit of time relative to the on-time of node 1 after each power cycle of node 1. This implies that the on-times of the two nodes are $\frac{1}{3}$ of the time cluster together and $\frac{2}{3}$ of the time they are apart (from an external event standpoint, the on-times are uniformly distributed over the longest power cycle, as they have the same probability to be anywhere when the event arrives). To model the availability of a \sys of $N$ nodes, we first model the nodes' on-times and power cycles.
 %
-If we extend the previous scenario to a \sys of $N$ nodes such that nodes' on-time $t_\text{on}^i \in \{ t_\text{on}^1,t_\text{on}^2,... t_\text{on}^N \}$ and their power cycles $t_\text{p}^i \in \{ t_\text{p}^1,t_\text{p}^2,\text{...} t_\text{p}^N \}$, then we can model the \sys availability as,
+If we represent the on-time of a node with a random variable $R_\text{n}$ and find its expected value $E(R_\text{n})$ then we can approximate \emph{any} \sys node's on-time with mean of the expected values of the nodes' on-times, i.e., $t_\text{on} = \frac{1}{N} \times \sum_{i=1}^{N} E(R_\text{n})^i$ (intuitively, since we are assume \sys's nodes have the same energy buffer, then, their expected on-times should be the same). Using a similar anology, we can define the mean of the expected values of the power cycles lengths as $t_\text{p} = \frac{1}{N} \times \sum_{i=1}^{N} E(R_\text{p})^i$. Now, we can model the availability of a \sys of $N$ nodes as:
+%
+% If we extend the previous scenario to a \sys of $N$ nodes such that nodes' on-time $t_\text{on}$ is approximated with the mean of the expected values of
+% \in \{ t_\text{on}^1,t_\text{on}^2,... t_\text{on}^N \}$ and their power cycles $t_\text{p}^i \in \{ t_\text{p}^1,t_\text{p}^2,\text{...} t_\text{p}^N \}$, then we can model the \sys availability as,
 %	
 \begin{equation}
-	A_\text{v}(N) = A_\text{v}(N-1) + \left(1-A_\text{v}(N-1)\right) \times \frac{t_\text{on}^i}{t_\text{p}^\text{max}},
+	A_\text{v}(N) = A_\text{v}(N-1) + \left(1-A_\text{v}(N-1)\right) \times \frac{t_\text{on}}{t_\text{p}},
 		\label{eq:cisModel}
 \end{equation}
-
-where $N \in \mathbb{N}$ and $t_\text{p}^\text{max} = \max\left({ t_\text{p}^1,t_\text{p}^2,\text{...} t_\text{p}^N } \right)$; for the initial case where $N=1$ we define $A_\text{v}(0)\coloneqq 0$. Figure~\ref{fig:cisModel} shows the availability of \sys when $N\in\{1,2,..,20\}$ and nodes' duty cycles $\frac{t_\text{on}}{t_\text{p}}\in\{10\%,20\%,..,50\%\}$.
+%
+for the initial case where $N=1$ we define $A_\text{v}(0)\coloneqq 0$. Figure~\ref{fig:cisModel} shows the availability of \sys when $N\in\{1,2,..,20\}$ and nodes' duty cycles $\frac{t_\text{on}}{t_\text{p}}\in\{10\%,20\%,..,50\%\}$.
 %
 We can conclude from the above discussion that to approach uniform distribution of nodes on-times, the lengths of the power cycles need to be randomized~\footnote{Note that, having power cycles of lengths that are multiples of each other is a very unlikely as nodes' energy buffers are assumed to be of the same size.}. 
 
@@ -85,7 +88,7 @@ The availability of a \sys is not a single stretched interval: it is a chain of 
 	\begin{itemize}
 		\item \textit{Simple}: is a long event that can be captured using single intermittent node---capturing part of it is sufficient to obtain all the information of interest---such as the sound produced by the friction between two moving parts of an engine. 
 		\item \textit{Burst}: is a group of short events that requires multiple intermittent nodes to be captured such as a command of a few words (e.g., room temperature up).
-		\item \textit{Complex}: is a long event that must be fully captured to be recognized. For example, sampling a gyroscope attached to a moving device (e.g., a teeth brush).
+		\item \textit{Complex}: is a long event that must be fully captured to be recognized. For example, sampling a gyroscope attached to a moving device (e.g., a toothbrush).
 
 	\end{itemize}
 \end{itemize}
@@ -109,7 +112,7 @@ Let us assume that we have a \sys of a single intermittent node monitors a short
 Therefore, the effective availability of a \sys of $N$ nodes is the joined effective on-times of the underlying intermittent nodes, which can be modeled as,
 %
 \begin{equation}
-		A_\text{v}(N) = A_\text{v}(N-1) + \left(1-A_\text{v}(N-1)\right) \times \frac{t_\text{on}^i - t_\text{e}}{t_\text{p}^\text{max}},
+		A_\text{v}(N) = A_\text{v}(N-1) + \left(1-A_\text{v}(N-1)\right) \times \frac{t_\text{on} - t_\text{e}}{t_\text{p}},
 		\label{eq:cisSenseModel}
 \end{equation} 
 %
@@ -119,15 +122,15 @@ An intermittent sensor has a limited energy budget per power cycle. When it is t
 This wake-on-event style of operation is important as the minimal energy consumption during sleep significantly prolongs the period during which an event can be handled (for example, our prototype consumes 7 times less energy during sleep compared to being active).
 To model the effective \sys availability when it is tasked with event-based sensing the change in energy consumption between the sleep and active mode must be taken into account. Since the event itself times when the node changes its energy consumption, we can model the effective availability as,
 \begin{equation}
-		A_\text{v}(N) = A_\text{v}(N-1) + \left(1-A_\text{v}(N-1)\right) \times \frac{t_\text{on}^i - (t_\text{e} \times\frac{e_\text{a}}{e_\text{s}}) }{t_\text{p}^\text{max}},
+		A_\text{v}(N) = A_\text{v}(N-1) + \left(1-A_\text{v}(N-1)\right) \times \frac{t_\text{s} - (t_\text{e} \times\frac{e_\text{a}}{e_\text{s}}) }{t_\text{p}},\footnote{Notice that, there is a subtle point about equation~\ref{eq:cisEventSenseModel} as when an event arrives the node wakes up, consuming more energy. Therefore, its uptime shirnks. We, for similicity, modeled this effect by extending the events time with same factor. This is sufficient to say if the event will be fully captured or not (effective availability). However, if too many events arrives then the nodes will spend significant time in the active mode which changes the total availability of the system.}
 		\label{eq:cisEventSenseModel}
 \end{equation}
 
-where $e_\text{a} and e_\text{s}$ are the energy consumption at active and sleeping modes, respectively.
+where $t_\text{s}$ is the expected sleep time of the \sys's nodes and $e_\text{a} and e_\text{s}$ are the energy consumption at active and sleeping modes, respectively.
 %
 \subsubsection{Simulation}
 To do a first sanity check on our models, we simulated $10^5$ power cycles of a \sys of 10 nodes (Figure~\ref{fig:cis_simulation}). The duty cycles of the nodes range from $10\%$ to $50\%$, while the event length is fixed at $3\%$ of the power cycle length, $t_\text{p}$. The on-times and events arrivals were uniformly distributed over the power cycles. 
-The results clearly confirm our models and support our argument about the distinction \sys's availability and effective availability. The importance of this distinction is a function of the value $\frac{t_\text{e}}{t_\text{on}}$; observe the difference between availability and effective availability when nodes' duty cycle is $10\%$ and $50\%$.
+The results clearly confirm our models and support our argument about the distinction between \sys's availability and effective availability. The importance of this distinction is a function of the value $\frac{t_\text{e}}{t_\text{on}}$; observe the difference between availability and effective availability when nodes' duty cycle is $10\%$ (large effect) and $50\%$ (negligable effect).
 %
 %
 \subsection{Environment}
@@ -159,7 +162,7 @@ The inefficiencies highlighted in the hibernating and continuous power states ca
 % (Figure~\ref{fig:rand})
 : when a node is woken up by an external event it responds to that event with a certain probability. However, if the randomized response is enforced all the time, then the \sys will have a lower probability of catching events during the targeted energy conditions state. Therefore, the \sys has to distinguish between the targeted and above-targeted energy conditions and randomize its response only during the hibernating and continuous power states. 
 
-Choosing a fix response probability is an inefficient way of dealing with the over-powering problem as the number of active intermittent nodes at a given moment is a function of the total number of intermittent nodes and the power intensity at that time. Therefore, efficient randomization requires intermittent nodes to estimate the number of active nodes at the event arrival moment (which is discuss it next) and respond proportionally.
+Choosing a fixed response probability is an inefficient way of dealing with the over-powering problem as the number of active intermittent nodes at a given moment is a function of the total number of intermittent nodes and the power intensity at that time. Therefore, efficient randomization requires intermittent nodes to estimate the number of active nodes and respond proportionally. Our proposed algorithm for estimating the number of active nodes depends on the nodes ability of measuring their on-times and off-times.
 
 \subsubsection{Intermittent Timing}
 \label{subsec:interTimer}
@@ -175,20 +178,21 @@ Choosing a fix response probability is an inefficient way of dealing with the ov
     \label{algo:offTime}
     \small
     \begin{algorithmic}[1]
-		\State \Call{$f_\text{reboot}$}{$u$} $= u{+}{+}$ \Comment{power reboot counter}
-			\State $i \leftarrow $ \Call{$f_\text{reboot}$}{$i$} \Comment{$i$ is a persistent variable} \label{lin:i}
+		\State $R_\text{cntr}\text{++}$   \Comment{a persistent reboot counter} \label{lin:i}
+			% \State $i \leftarrow $ \Call{$f_\text{reboot}$}{$i$} \Comment{$i$ is a persistent variable} \label{lin:i}
 		\State $E_\text{buf}$ \Comment{Size of energy buffer}
-			\State $t_a$ \Comment{time of discharging $E_\text{buf}$ at load $a$, no harvesting}\label{lin:ta}
-		\State$ t_{i} \leftarrow x $ \Comment{timing every $x$ power cycles}
-		%
-		\If{$(i\mod t_{i})=0$}
-		    \State $i=0$
+		\State $t_\text{a}$ \Comment{time of discharging $E_\text{buf}$ at load $a$, no harvesting}\label{lin:ta}
+		\State$ X_\text{cy} $ \Comment{time every $X$ power cycles} 
+		\LeftComment{\colorbox{lightgray}{Code executed on each $X$ power cycles \hspace{3cm} }}
+		\If{$(R_\text{cntr} == X_\text{cy})$}
+		    \State $R_\text{cntr}=-1$
 			\State \Call{$f_\text{load}$}{$a$} \Comment{set node load to $a$ } \label{lin:fixedLoad}
-			\State \label{lin:ontime} $t_\text{on} \leftarrow$ \Call{$t_\text{pers}$}{\null} \Comment{persistent infinite loop}\label{lin:ton}
+			\State $t_\text{on} \leftarrow$ \Call{time}{\null} \Comment{measure time until power down}\label{lin:ton}
 		\EndIf
-		\If{$i=1$}
-			\State \label{lin:deltat}$\Delta{t} = t_\text{on}-t_a$  \Comment{time difference due to charging} \label{lin:td}
-			\State \label{lin:ehar}$E_\text{har} \leftarrow (E_\text{buf}\div t_a)\times\Delta{t}$ \Comment{harvested energy}
+		\LeftComment{\colorbox{lightgray}{Code executed on each $X+1$ power cycles \hspace{2.5cm}}}
+		\If{$(R_\text{cntr} == 0)$}
+			\State \label{lin:deltat}$\Delta{t} = t_\text{on}-t_\text{a}$  \Comment{time difference due to charging} \label{lin:td}
+			\State \label{lin:ehar}$E_\text{har} \leftarrow E_\text{buf}\times \frac{t_\text{a}}{\Delta{t}}$ \Comment{harvested energy}
 			\State $P_\text{in} \leftarrow E_\text{har}\div{t_\text{on}}$ \Comment{incoming power} \label{lin:pin}
 			\State \label{lin:offtime}$t_\text{off} \leftarrow E_\text{buf}\div P_\text{in}$ 
 		\EndIf
@@ -202,7 +206,7 @@ Intermittent nodes fail abruptly; therefore, a persistent timer is needed. A sim
 The node measures its on-time while harvesting, see $t_\text{on}$ in Figure~\ref{fig:softwareClock}, and compares it to the time required to drain the energy buffer \emph{without} charging, see $t_\text{a}$ in Figure~\ref{fig:softwareClock}. The additional on-time, $\Delta t$, is the result of the energy accumulated while executing. 
 %
 If $t_\text{on}$ and $t_\text{a}$ are measured on the same load---thus, they have the same power consumption---then the amount of the energy harvested while the device is on can be calculated as in Line~\ref{lin:ehar}, Algorithm~\ref{algo:offTime}. And, the average input power can be found as in Line~\ref{lin:pin} that, in turn, enables the node to estimate its own $t_\text{off}$ (Line~\ref{lin:offtime}).
-Since calculating the off-time requires constant load, the sensor cannot run arbitrary code during time measurement. Therefore, the sensor needs to sacrifice a certain percentage of its power cycles for time measurement, Line~\ref{lin:i}-\ref{lin:ton}. Once the on-time and off-time are found the node's power cycle is determined.
+Since calculating the off-time requires constant load, the sensor cannot run arbitrary code during time measurement. Therefore, the sensor needs to sacrifice a certain percentage of its power cycles for time measurement, Line~\ref{lin:i}-\ref{lin:ton}. Once the on-time and off-time are found the node's power cycle for load $a$ is determined.
 
 \subsubsection{Nodes overlapping}
 \begin{figure}[t]
@@ -226,7 +230,7 @@ Since calculating the off-time requires constant load, the sensor cannot run arb
 		\caption{Measuring intermittent nodes overlapping of a \sys of 8 intermittent nodes for different light intensities.}
 		\begin{tabular}{lll}
 				\hline
-				light (lux) & $N_\text{active}$ & std    \\
+				\textbf{light (lux)} & \textbf{$N_\text{active}$} & \textbf{std}   \\
 				\hline
 				300	                  & 1.01 & 0.85   \\
 				500                   & 1.63 & 0.98   \\
@@ -257,7 +261,7 @@ Now, a node can estimate the maximum time span ($t_\text{max}$) of its \sys, whi
 t_\text{max} = N\times t_\text{on}.
 		\label{eq:max_time}
 \end{equation}
-Then, from Equation~\ref{eq:cisModel}, the node calculates the \sys availability ($t_\text{on}(N)$). As we argued in Section~\ref{subSec:availability}, nodes on-times are uniformly distributed over the longest power cycle, $t_\text{p}^\text{max}$. Thus, the overlapping on-time is also uniformly distributed. Then, the node can calculate the average number of active intermittent nodes $N_\text{active}$ using the following formula,
+Then, from Equation~\ref{eq:cisModel}, the node calculates the \sys availability ($A_\text{v}(N)$). As we argued in Section~\ref{subSec:availability}, nodes on-times are uniformly distributed over the longest power cycle, $t_\text{p}^\text{max}$. Thus, the overlapping on-time is also uniformly distributed. Then, the node can calculate the average number of active intermittent nodes $N_\text{active}$ using the following formula,
 \begin{equation}
 	N_\text{active} = \frac{t_\text{max}}{t_\text{p}^\text{max}\times A_\text{v}(N)}.
 	\label{eq:active}
@@ -269,7 +273,6 @@ $$
 the $-1$ is because the node itself decided not to react on the first event. 
 
 Table~\ref{tab:clusters} shows the average number of overlaps of an 8-nodes \sys for different light intensities. These measurements validate that nodes overlapping time is uniformly distributed over the \sys on-time. For example, at $\SI{1200}{lux}$ an individual node of our \sys has a duty cycle of $\approx$\,62\%. If we multiply it by the number of nodes (Equation~\ref{eq:max_time}) we get about 500\%. Figure~\ref{fig:cisModel} indicates that a \sys with eight nodes of duty cycles above 50\% has near 100\% availability. From equation~\ref{eq:active}, we find that the expected number of clustered nodes is 5 which is what Table~\ref{tab:clusters} also shows. 
-
 
 
 

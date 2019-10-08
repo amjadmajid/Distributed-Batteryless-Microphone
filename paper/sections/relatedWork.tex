@@ -1,22 +1,27 @@
-Recent advances in ultra-low-power microcontrollers along with the development of energy harvesters have enabled the creation of stand-alone battery-free sensors. Ambient energy that powers these sensors is volatile. Thus, these sensors operate intermittently. 
+Recent advances in ultra-low-power microcontrollers along with the development of energy harvesters have enabled the creation of stand-alone battery-free sensors. These sensors operate intermittently as their energy sources are weak and volatile.
+% Ambient energy that powers these sensors is volatile. Thus, these sensors operate intermittently. 
+%
 \subsection{Energy-harvesting systems}
-Ideally, energy harvesters power devices indefinitely as they collect energy from perpetual energy sources. Sunlight, vibration, and radio frequency (RF) waves are examples of such energy sources. The power harvested from these sources vary wildly, for example, RF harvestable power ranges from
+Energy harvesters have the potential to power devices indefinitely as they collect energy from perpetual energy sources. Sunlight, vibration, and radio frequency (RF) waves are examples of such energy sources. The power harvested from these sources vary wildly, for example, RF harvestable power ranges from
 \si{\nano\watt}-scale when harvested from ambient signals to \si{\uW}-scale when collected form a dedicated RF signal emitter, and solar power varies from tens of \si{\uW} to tens of \si{\mW} when it is harvested by a solar panels of a few \si{\cm^2} illumination surface~\cite{lucia2017intermittent,rao2017ambient}.
 
-Many battery-less energy-harvesting platforms have been proposed. Some of them rely on dedicated external energy sources such as WISP -and its variants-, a general wireless sensing and identification platform~\cite{smith_ubicomp_2006,zhao2015nfc,moo}; WISPcam,  an RF powered camera~\cite{naderiparizi_rfid_2015} and, the battery-free cellphone~\cite{talla2017battery}. Others, harvest from ambient sources such as the ambient backscatter tag~\cite{liu2013ambient}, and the solar-powered tag~\cite{majid2019multi}. Other platforms that facilitate the development of batteryless energy-harvesting systems have also been proposed. For instance, Fliker~\cite{flickersensys2017}, a prototyping platform for batteryless devices; EDB~\cite{colin2016energy} an energy-interference-free debugger for intermittent devices;  and Capybara~\cite{colin2018reconfigurable}, a re-configurable energy storage architecture for energy-harvesting devices.
+Many battery-less energy-harvesting platforms have been proposed. Some of them rely on dedicated external energy sources such as WISP -and its variants-, a general wireless sensing and identification platform~\cite{smith_ubicomp_2006,zhao2015nfc,moo}; WISPcam,  an RF powered camera~\cite{naderiparizi_rfid_2015} and, the battery-free cellphone~\cite{talla2017battery}. Others, harvest from ambient sources such as the ambient backscatter tag~\cite{liu2013ambient}, and the solar-powered tag~\cite{majid2019multi}. Platforms that facilitate the development of batteryless energy-harvesting systems have also been proposed. For instance, Fliker~\cite{flickersensys2017}, a prototyping platform for batteryless devices; EDB~\cite{colin2016energy} an energy-interference-free debugger for intermittent devices;  and Capybara~\cite{colin2018reconfigurable}, a re-configurable energy storage architecture for energy-harvesting devices.
 
-However, there is no energy-harvesting platform that considers the abstraction of many intermittent sensors (or nodes) and exploits the statistical energy harvesting differences between them to provide reliable sensing.
+However, \emph{there is no energy-harvesting platform that considers the abstraction of many intermittent sensors (or nodes) and exploits the statistical energy harvesting differences between them to provide reliable sensing}.
+% The paper is the first that considers the abstraction of a group of intermittent nodes and investigates the emerging collective duty cycle of the system. 
 %experience. 
 
 \subsection{Intermittent execution}
 % What is the problem that requires intermittent execution
-Intermittent execution models enable applications to progress despite frequent power failure~\cite{van2016intermittent,colin2016chain,lucia2015simpler,bhatti2017harvos,gobieski2019intelligence}. To this end, they decompose an application into several small pieces and save the state of the computation progress on the transitions between these code segments. Therefore, intermittent applications do not return to the same execution point (e.g., \texttt{main()}) after each power failure---in contrast to the applications that assume continuous power supply---instead they resume from the last successfully saved state of execution.   
+Intermittent execution models enable applications to progress despite frequent power failure~\cite{van2016intermittent,colin2016chain,lucia2015simpler,bhatti2017harvos,gobieski2019intelligence}. To this end, they decompose an application into several small pieces and save the state of the computation progress on the transitions between these code segments. Therefore, intermittent applications do not return to the same execution point (e.g., \texttt{main()}) after each power failure---in contrast to the applications that assume continuous power supply---instead they resume execution from the last successfully saved state of execution.   
 
 % Sleep not to die 
-Intermittent systems are regarded as the successor of energy-aware systems. Dewdrop~\cite{buettner2011dewdrop} is an energy-aware runtime for (Computational) RFIDs such as WISP. Before executing a task, it goes into low-power mode until sufficient energy is accumulated. QuarkOS~\cite{zhang2013quarkos} divides the given task (i.e., sending a message) into small segments and sleeps after finishing a segment for charging energy. However, these systems are not power disruption tolerant. In other words, if a system could not sustain the energy consumption of low-power-mode and powers down, then all the computation progress will be lost. 
+Intermittent systems are regarded as the successor of energy-aware systems. Dewdrop~\cite{buettner2011dewdrop} is an energy-aware runtime for (Computational) RFIDs such as WISP. Before executing a task, it goes into low-power mode until sufficient energy is accumulated. QuarkOS~\cite{zhang2013quarkos} divides the given task (i.e., sending a message) into small segments and sleeps after finishing a segment for energy recharge. However, these systems are not power disruption tolerant. In other words, if a system could not sustain the energy consumption of low-power mode and powers down, then all the computation progress will be lost. 
 
 % checkpointing 
-Mementos~\cite{mementos} proposed a volatile memory checkpointing-based approach to enable long-running applications on intermittently powered devices. DINO~\cite{dino} enables safe non-volatile memory access despite power failures. Chain~\cite{colin2016chain} minimizes the amount of data need to be protected by introducing the concepts of atomic tasks and data-channels. Hibernus~\cite{balsamo2015hibernus,balsamo2016hibernus++} measures the voltage level in the energy buffer to reduce the number of checkpoints. Ratchet~\cite{woude2016ratchet} uses compiler analysis to eliminate the need for programmer intervention or hardware support. HarvOS~\cite{bhatti2017harvos} uses both compiler and hardware support to optimize checkpoint placement and energy consumption. Mayfly~\cite{hester2017timely} enables time-aware intermittent computing. InK~\cite{yildirim2018ink} introduces event-driven intermittent execution. All the aforementioned studies focus their development on a single intermittent node. The paper is the first that considers the abstraction of a group of intermittent nodes and investigates the emerging collective duty cycle of the system. 
+Mementos~\cite{mementos} proposed a volatile memory \emph{checkpointing-based} approach to enable long-running applications on intermittently powered devices. DINO~\cite{dino} enables safe non-volatile memory access despite power failures. Chain~\cite{colin2016chain} minimizes the amount of data need to be protected by introducing the concepts of \emph{atomic tasks and data-channels}. Hibernus~\cite{balsamo2015hibernus,balsamo2016hibernus++} measures the voltage level in the energy buffer to reduce the number of checkpoints. Ratchet~\cite{woude2016ratchet} uses compiler analysis to eliminate the need for programmer intervention or hardware support. HarvOS~\cite{bhatti2017harvos} uses both compiler and hardware support to optimize checkpoint placement and energy consumption. Mayfly~\cite{hester2017timely} enables time-aware intermittent computing. InK~\cite{yildirim2018ink} introduces event-driven intermittent execution. All the aforementioned studies focus their development on a single intermittent node. 
+\emph{Our system adopts a checkpoint-based approach to protect the computation progress from power failures.}
+
 
 \subsection{Speech recognition}
  Speech recognition consists of several steps. The basic steps are:
@@ -29,5 +34,24 @@ Speech recognition algorithms can be classified based on the type of speech that
 Systems with \textit{continuous} or \textit{spontaneous speech} recognition are the closest to natural speech, but are the most difficult to create because they need special methods to detect words boundaries~\cite{gaikwad2010review}. This is less the case for the \textit{connected word} type, where a minimum pause between the words is required.
  The type with the least complexity is the \textit{isolated word} type. It requires a period of silence on both sides of a spoken word and accepts only single words. 
  
-Voice is a natural way for the human to interact with small devices. However,
-implementing speech recognition on resources---memory, computation power, and energy---limited platforms is challenging, to say the least. Therefore, we attempt to recognize, with our command recognizer prototype, the simplest type of speech, isolated words. 
+Voice is a natural way for the human to interact with small devices. However, speech recognition on resources---memory, computation power, and energy---limited platforms is challenging, to say the least. 
+Therefore, \emph{Our command recognizer targets isolated words type of speech}. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

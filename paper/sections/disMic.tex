@@ -9,7 +9,6 @@ We have developed a prototype of a \fullcim (\cim): an instant of a \fullsys. Th
 
 The reason behind developing a \cim is threefold: (i) voice is a natural and convenient way for human to interact with miniaturized devices; (ii) demonstrating \textit{the world's first} battery-less intermittently-powered command recognizer, which shades light on the potential of battery-less intermittent systems; and (iii) facilitating testing with different sensing strategies and different type of external events arrival (i.e., regular  or burst). 
 
-
 % Moreover, we believe that a \cim can facilitate direct human-to-human or human-to-objects communication. Imagine that a \cim based system is deployed in a play ground, embedded in ground and other objects. You want to call your child, and a \cim based system is embedded in your shirt and his shirt. You say his name and the \cim picks up the word and scatter it over light---\cite{marco}  demonstrates the feasibility of scattering sunlight to communicate between two nodes that are up to 60\,m apart. The scattered signal will be relied on other \cim nodes until the receiving node on his shirt receives the message and notify him, daddy is calling. 
 
 \subsection{Hardware}
@@ -22,9 +21,10 @@ The \cim has a power interrupts immune command recognizer. The recognizer is cap
 The main parts of the recognizer are illustrated in Figure~\ref{fig:cis} and explained below:
 
 \subsubsection{Data acquisition}
-The \textit{Wake-on-Sound} feature of the microphone triggers the data acquisition process once the energy level in the sound signal crosses a certain level. The ADC, then, samples the output of the microphone at 8\,kHz. This sampling rate is sufficient to cover most of the frequency range of the human voice. To determine the end of the recording we relied on the characteristics of the targeted vocabulary. In particular, we identified experimentally the minimum effective recording length, which is 
-%happened be 
-285\,ms for the chosen set of words. By exploiting the Wake-on-Sound feature and using the minimum effective recording length, we eliminate the need for an endpoint detection algorithm, greatly improving the processing time and system efficiency from the energy perspective.
+The \textit{Wake-on-Sound} feature of the microphone triggers the data acquisition process once the energy level in the sound signal crosses a certain level. The ADC, then, samples the output of the microphone at 8\,kHz. This sampling rate is sufficient to cover most of the frequency range of the human voice. The recording length was set to be 285\,ms, which suffices to get all the acostic features needed to recognize the words.
+% To determine the end of the recording we relied on the characteristics of the targeted vocabulary. In particular, we identified experimentally the minimum effective recording length, which is 
+% 285\,ms for the chosen set of words. 
+By exploiting the Wake-on-Sound feature and using the minimum effective recording length, we eliminate the need for an endpoint detection algorithm, greatly improving the processing time and system efficiency from the energy perspective.
 
 
 \subsubsection{Feature Extraction}
@@ -53,11 +53,11 @@ where $f_i$ is the normalized output for the $i^{\text{\tiny th}}$ spectral band
 	\caption{Profiling of features matching algorithms: Dynamic Time Warping (DTW) and Linear Distance Matching (LDM).}
 	\label{tab:profiling}
 	\begin{tabular}{lll} \hline
-	Section & LDM (ms) & DTW (ms) \\\hline
-	Recording & 285  & 285 \\
-	Feature extraction & 501 & 501 \\
-	Feature matching &  99 & 1251 \\\hline
-	Total & 885 & 2037 \\\hline
+	\textbf{Section} & \textbf{LDM (ms)} & \textbf{DTW (ms)} \\\hline
+	\textit{Recording} & 285  & 285 \\
+	\textit{Feature extraction} & 501 & 501 \\
+	\textit{Feature matching} &  99 & 1251 \\\hline
+	\textit{Total} & 885 & 2037 \\\hline
 	\end{tabular}
 \end{table}
 %
@@ -67,10 +67,10 @@ where $f_i$ is the normalized output for the $i^{\text{\tiny th}}$ spectral band
 	\label{tab:power_usage}
 	%Compiled without optimization flags:
 	\begin{tabular}{lrrr}\hline
-	Section & Current (\si{\micro A}) & Voltage (V) &  Power (\si{\micro W}) \\\hline
-	Sleeping & 64 $\pm$20 & 2.008 & 128 $\pm$40 \\
-	Recording & 423 $\pm$20  & 2.008 &  849 $\pm$40\\
-	Processing &  282 $\pm$20 & 2.008& 566 $\pm$40 \\\hline
+	\textbf{Section} & \textbf{Current (\si{\micro A})} & \textbf{Voltage (V)} &  \textbf{Power (\si{\micro W})} \\\hline
+	\textit{Sleeping} & 64 $\pm$20 & 2.008 & 128 $\pm$40 \\
+	\textit{Recording} & 423 $\pm$20  & 2.008 &  849 $\pm$40\\
+	\textit{Processing} &  282 $\pm$20 & 2.008& 566 $\pm$40 \\\hline
 	\end{tabular}
 \end{table}
 %
@@ -80,7 +80,9 @@ Feature matching is achieved by computing the distances between the normalized f
 	 	d_j = \sum\limits^S_{i=1} (f_{s,i} - f_{r,i})^2,
     \label{eq:frame_dist}
 \end{equation}
-where $d_j$ is the distance between the $j^{\text{\tiny th}}$ stored and recorded vectors. $f_{s,i}$ is the normalized output of the $i^{\text{\tiny th}}$ spectral band of a stored vector, $f_{r,i}$ is the normalized output of the $i^{\text{\tiny th}}$ spectral band of a recorded vector. 
+where $d_j$ is the distance between the $j^{\text{\tiny th}}$ stored and recorded vectors. 
+$f_{s,i}$ and $f_{r,i}$ are the normalized output of the $i^{\text{\tiny th}}$ spectral band of a stored and recorded vector, respectively.  
+% $f_{s,i}$ is the normalized output of the $i^{\text{\tiny th}}$ spectral band of a stored vector, $f_{r,i}$ is the normalized output of the $i^{\text{\tiny th}}$ spectral band of a recorded vector. 
 The total distance between two words is calculated as follows:
 \begin{equation}
 		D_k = \sum\limits^{l}_{j=1} d(j)
@@ -96,7 +98,7 @@ In order to preserve the progress state and to protect \cim data against randoml
 
 \subsection{Code profiling}
 The entire command recognition software was written in the {\tt C} programming language. The total program consists of 973 lines of code, excluding the FFT function from the Texas Instrument DSP library.
-
+%
 The memory footprint on the microcontroller is 20,064 bytes of FRAM and 1,134 bytes of SRAM. Execution times are shown in Table~\ref{tab:profiling}.
 
 The power usage of a node differs according to it's activity. When a node is waiting for a voice event, it is in low-power mode. When data needs to be processed or recorded it is in active mode. When recording, the microphone and ADC consume additional power. The power consumption rates are determined by measuring the current with a Monsoon power monitor~\cite{monsoon} and shown in Table~\ref{tab:power_usage}.
