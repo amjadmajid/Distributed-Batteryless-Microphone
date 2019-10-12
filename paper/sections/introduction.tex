@@ -2,35 +2,19 @@ Batteries may compromise the viability of sensor nodes in various ways. Batterie
 The reduction in power consumption of recent microcontrollers and the advances in energy-harvesting circuitry have enabled the emergence of battery-free energy-harvesting sensors. 
 These sensors elide the constraints of batteries and extract power from ambient energy sources such as sunlight and RF emissions. 
 
-Ambient energy sources provide perpetual power. However, ambient power is usually too weak to directly power a sensor node~\cite{liu2013ambient}.  Therefore, an energy-harvesting  node first buffers the harvested energy until a usable amount has been accumulated; then it operates, for a short period of time, until the buffered energy has been exhausted~\cite{lucia2017intermittent}.  Consequently, battery-less energy-harvest sensors operate intermittently (Figure~\ref{fig:intermittent_opertaion}).
+Ambient energy sources provide perpetual power. However, ambient power is usually too weak to directly power a sensor node~\cite{liu2013ambient}.  Therefore, an energy-harvesting  node first buffers the harvested energy until a usable amount has been accumulated; then it operates, for a short period of time, until the buffered energy has been exhausted~\cite{lucia2017intermittent}.  Consequently, battery-less energy-harvesting sensors operate intermittently (Figure~\ref{fig:intermittent_opertaion}).
 
 Intermittent power introduces a set of new challenges that are under ongoing investigation.
- % Intermittent power supply introduces many challenges which researcher continue to investigate~\cite{lucia2017intermittent}: 
-For example, \cite{lucia2017intermittent,mementos,dino,colin2016chain,balsamo2015hibernus} studied the intermittent computation problem, which is concerned with the preservation of application progress and data consistency under frequent power failures; \citet{hester2017timely} investigated the timely operation challenge, which is concerned with data freshness after a power interrupt; 
-% and \citet{samoyed_pldi_2019} introduced a system design for peripherals states preservation for intermittently powered sensors;
+For example, \cite{lucia2017intermittent,ransford2011mementos,dino,colin2016chain,balsamo2014hibernus} studied the intermittent computation problem, which is concerned with the preservation of application progress and data consistency under frequent power failures; \citet{hester2017timely} investigated the timely operation challenge, which is concerned with data freshness after a power interrupt; 
 and \citet{yildirim2018ink} introduced event-driven execution for the intermittent domain, which deals with input and output operations under arbitrarily-timed power loss.
 
 Despite these notable advances, intermittently-powered sensors suffer from a new fundamental shortcoming: \textit{the intermittent availability of the system}. Being frequently off charging compromises the value of these devices. For example, a sensor that has a low probability (e.g., 10\%~\cite{coala}) to be available (on) when an event of interest occurs has no value. 
 Overcoming the intermittent availability challenge without changing the size of the device or re-including batteries requires a novel approach that explores new design dimensions. 
 
-% These are notable advances in developing intermittent systems but have a fundamental short-coming. All intermittent systems implicitly accept that once a node hardware design is fixed the intermittent availability is only environment-depended 
-
-% However, despite significant progress achieved in the intermittent domain, \textit{the system availability problem} has not been addressed. 
-
-
-% Intermittent power supply introduces many challenges~\cite{lucia2017intermittent}: for example, preserving computation progress under frequent power interrupts, enabling timely operations with indeterminate power-down duration, and the fact that nodes operate intermittently. 
-
-% Researchers continue to investigate these challenges. For example, \cite{lucia2017intermittent,mementos,dino,colin2016chain,balsamo2015hibernus} studied the intermittent computation problem, which is concerned with the preservation of an application progress and data consistency under frequent power failures; \cite{hester2017timely} investigated the timely operation challenge, which is concerned with data freshness after a power interrupt; \cite{samoyed_pldi_2019} introduced a system design for peripherals states preservation for intermittently powered sensors;  and \cite{yildirim2018ink} introduced event-driven execution for the intermittent domain, which deals with input and output operations under arbitrarily-timed power loss.
-
-% Despite significant progress achieved in the intermittent domain, \textit{the system availability problem} has not been addressed.
-% A monitoring sensor that has a very low probability to be available when an external event occurs is not worth deploying. A sensor that is capable of capturing only very short events has a limited number of potential applications. 
-% For example, a voice-controlled light-switch capable of only accepting short (single-word) commands has its limitations. Using "on" to turn on the lights might turn on other devices as well. Using "lights" does not allow the specification of "on" or "off". Consequently, intermittent sensors have not gained widespread adoption.
 \begin{figure}[b]
 	\centering
 		\includegraphics[width=\columnwidth]{figures/intermittent_operation}
-		\caption{Harvested-energy profile. Ambient power is weak; therefore, it is usually buffered. The buffered energy is then consumed to operate the device. The operation period is often short as power consumption is much higher than the energy harvesting rate.
-		% The device first has to accumulate sufficient energy to operate. When the operations are triggered, they consume the buffered energy as their energy demand is usually higher than the energy harvesting rate.
-		}
+		\caption{Harvested-energy profile. Ambient power is weak; therefore, it is usually buffered. The buffered energy is then consumed to operate the device. The operation period is often short as power consumption is much higher than the energy harvesting rate.}
 		\label{fig:intermittent_opertaion}
 \end{figure} 
 %
@@ -39,13 +23,12 @@ Overcoming the intermittent availability challenge without changing the size of 
 \begin{figure}[t]
 	\centering
 	\includegraphics[width=\columnwidth]{figures/smart_fabric}
-	\caption{A \fullsys (\sys) is a group of intermittently-powered nodes that sense continuously despite the intermittent power supply. \sys exploits the inherent randomization of energy harvesting systems, if available, and introduces artificial randomization, when needed, to preserve continuous sensing.
-	}
+	\caption{A \fullcis (\cis) is a group of intermittently-powered nodes that sense continuously despite the intermittent power supply. \cis exploits the inherent randomization of energy harvesting systems, if available, and introduces artificial randomization, when needed, to preserve continuous sensing.}
 	\label{fig:smart_fabric}
 \end{figure}
 %
-Battery-powered sensors are reliable, but they are short-lived; energy-harvesting are long-lived, but they operate intermittently. Our goal is to combine the desirable features of these two types of sensors to 
-create a new "sensor" that operates permanently (no batteries) and reliably (continuously available)---the \fullsys (\sys).
+Battery-powered sensors are reliable, but they are short-lived; energy-harvesting sensors are long-lived, but they operate intermittently. Our goal is to combine the desirable features of these two types of sensors to 
+create a new "sensor" that operates permanently (no batteries) and reliably (continuously available), which we call the \emph{\fullcis} (\cis).
 
 Sensors with such characteristics would allow us to add a cheap and maintenance-free sensing layer to many objects, making them smart and interactive. 
 For example, one can imagine developing smart wallpaper that users can interact with. 
@@ -58,7 +41,7 @@ Many sensing applications require the sensor to be available when there is a cha
 Energy-harvesting battery-less sensors can provide cheap and maintenance-free sensing, but the do not meet the availability requirements of many real-world applications. 
 
 \noindent\textbf{C1-Approach continuous availability on intermittent power}: 
-An energy-harvesting battery-less sensor is frequently off, spending most of its time charging. 
+An energy-harvesting battery-less sensor is frequently off, spending most of the time charging. 
 One way to increase the system availability is by using multiple nodes.
 However, coordinating the nodes' awake times using communication may introduce prohibitive overhead as a scattering algorithm must be regularly executed, and messages for synchronizing nodes' clocks and reserving time slots need to be repeatedly exchanged.
 Thus, the challenge is \emph{can we exploit some of the inherent characteristics of energy-harvesting battery-less sensors to distribute nodes' awake times without the need for communication?}
@@ -67,42 +50,43 @@ Thus, the challenge is \emph{can we exploit some of the inherent characteristics
 Even when the collective availability of intermittent sensors approaches 100\%, the emerging overall sensing behavior may still be intermittent. 
 Event-trigger sensors sleep in low-power mode waiting for an event to wake them up. 
 When ambient energy rises, the energy-harvesting rates of these sensors may equal (or approximate) their sleeping mode power consumption.
-Under such energy conditions, these sensors become available for and an extended period of time. 
+Under such energy conditions, these sensors become available for an extended period of time. 
 Therefore, when an external event arrives, nodes respond collectively, which exhausts their energy buffers, making them unavailable for the next set of events. 
-This is, particularly, a significant problem when events arrive in burst like a command of a few words (e.g., light on). 
+This is, particularly, a significant problem when events arrive in bursts, like a command of a few words (e.g., light on). 
 Thus, the challenge is, \emph{how to prevent energy-harvesting battery-less sensors from synchronizing their power cycles on some of the incoming events?}
 
 \noindent\textbf{C3-Efficient sensing on intermittent sensors:} 
 One of the main factors that determine the intermittency pattern of an energy-harvesting battery-less sensor is the richness of ambient energy. 
 For example, at mid-noon under direct sunlight, even a small solar panel can power a sensor node continuously. 
-In such conditions (favorable energy conditions), using plenty of intermittent sensors would only result in duplicated work that leads to duplicated messages, when the data is being communicated to a sink node: a continuously-powered node acts as a gateway for such sensors to communicate with other layers of the Internet of Things. These messages will collide as they will be generated at approximately the same time, and if some of them are received by the sink, then they waste energy as they carry the same information.  
+In such conditions (favorable energy conditions), using plenty of intermittent sensors would only result in duplicated work that leads to duplicated messages when the data is being communicated to a sink node: a continuously-powered node acts as a gateway for such sensors to communicate with other layers of the Internet of Things. These messages will collide as they will be generated at approximately the same time, and if some of them are received by the sink, then they waste energy as they carry the same information. Thus, the challenge is, \emph{how to reduce the number of duplicated event detections?} 
 %
 \subsection{Contributions}
 In this paper, we tackle the paradox of continuous sensing on intermittently-powered sensors. 
-We studied the inter-relationship between the power cycles of energy-harvesting battery-less devices, the emerging collective behavior, and the effect of changes in ambient energy levels on the sensors collective behavior. In particular, this paper makes the following key contributions:
+We studied the inter-relationship between the power cycles of energy-harvesting battery-less devices, the emerging collective behavior, and the effect of the change in ambient energy on this behavior. In particular, this paper makes the following key contributions:
 \begin{itemize}
 %
 \item We show how to approach continuous sensing using multiple intermittently-powered sensors. 
 For that, we \textbf{modeled} the collective effective availability---the system availability that leads to successful sensing---of a group of intermittent sensors and \textbf{validated} our models using simulation and on real hardware against different ambient energy sources. 
 %
-\item We introduce a new type of virtual sensor, showing its capabilities and limitations. This \textbf{\fullsys (\sys)} is the abstraction of a group of intermittently-powered sensors that achieves maximum statistical availability by exploiting (inherent) randomization to spread nodes' awake times uniformly.
+\item We introduce a new type of virtual sensor, showing its capabilities and limitations. This \textbf{\fullcis (\cis)} is the abstraction of a group of intermittently-powered sensors that achieves maximum statistical availability by exploiting (inherent) randomization to spread nodes' awake times uniformly.
 % 
-\item Contrary to common sense, we show how favorable energy conditions can deteriorate the performance of a \sys. We, therefore, equipped the \sys with \textbf{an new algorithm} that makes it ambient-energy aware. This algorithm enables the nodes to determine their own duty cycles (without requiring additional hardware), and the average number of alive nodes (without requiring communication). This information can effectively be used by the nodes to decide when to back off to avoid duplicated event detection and availability interruptions (implicit synchronization in favorable harvesting conditions).
+\item Contrary to common sense, we show how favorable energy conditions can deteriorate the performance of a \cis. We, therefore, equipped the \cis with \textbf{an new algorithm} that makes it ambient-energy aware. This algorithm enables the nodes to determine their own duty cycles (without requiring additional hardware), and the average number of alive nodes (without requiring communication). This information can effectively be used by the nodes to decide when to back off to avoid duplicated event detection and availability interruptions (implicit synchronization in favorable harvesting conditions).
 %
-\item We prototype, evaluate, and demonstrate the feasibility of the \fullsys concept in the form of voice-control commands recognizer, the \textbf{\fullCIM} (\textbf{\cim}). The \cim is a group of solar-powered intermittent sensor nodes equipped with a microphone.
+\item We prototype, evaluate, and demonstrate the feasibility of the \fullcis concept in the form of a voice-control commands recognizer, the \textbf{\fullCIM} (\textbf{\cim}). The \cim is a group of solar-powered intermittent nodes equipped with a microphone.
 \end{itemize}
 
 
-\subsection{Motivation}
+% \subsection{Motivation}
+\subsection{High level design decisions}
 Here we would like to motivate some of our design decisions.
 
 \paragraph{Why does this work focus on miniaturized battery-less sensors?}
-Small sensors are less intrusive devices than bigger ones. Therefore, they can be embedded in new locations that are not suited for the others. Powering small sensors with small batteries is problematic as small batteries severely limit sensor lifetime: even rechargeable batteries wear out after after a few hundreds of charging cycles~\cite{aditya2008comparison}.  Thus, this work researches battery-free energy-harvesting sensors as they have the potential to operate for decades-long without regular maintenance.
+Small sensors are less intrusive devices than bigger ones. Therefore, they can be embedded in new locations that are not suited for the others. Powering small sensors with small batteries is problematic as small batteries severely limit sensor lifetime: even rechargeable batteries wear out after a few hundreds of charging cycles~\cite{aditya2008comparison}.  Thus, this work researches battery-free energy-harvesting sensors as they have the potential to operate for decades-long without regular maintenance.
 
 \paragraph{Why did we choose to develop a word recognizer?}
-Voice is a natural way for human to interact with small devices. Moreover,
-Words allow us to easily experiment with individual events arrival and events that arrive in bursts. However, the goal of this paper is \emph{not} to present a new and novel word recognition technique. Instead, it adopts a classical words recognition algorithm, making it power failure immune, to safely running on intermittently-powered devices. 
-
+Voice is a natural way for the human to interact with small devices. Moreover, words allow us to easily experiment with individual event arrivals and events that arrive in bursts. 
+However, the goal of this paper is \emph{not} to present a new and novel word recognition technique. 
+Instead, it adopts a classical word recognition algorithm, making it power-failure immune. Yet our \cim prototype is the \emph{world's first} intermittent command recognizer, shedding light on the potential of intermittent systems. 
 
 
 

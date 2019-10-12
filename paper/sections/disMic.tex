@@ -1,11 +1,11 @@
 \begin{figure}
 	\centering
 	\includegraphics[width=\columnwidth]{figures/cis}
-	\caption{\fullCIM: an instant of a \fullsys. \cim features a power failure immune word recognition algorithm. First a word is recorded. Then, its spectral features are extracted. The resulting features vector is compared against previously-stored words' templates for recognition. The comparison is done using a liner distance matching algorithm}
+	\caption{\fullCIM: an instant of a \fullcis. \cim features a power failure immune word recognition algorithm. First a word is recorded. Then, its spectral features are extracted. The resulting features vector is compared against previously-stored words' templates for recognition. The comparison is done using a liner distance matching algorithm}
 	\label{fig:cis}
 \end{figure}
 
-We have developed a prototype of a \fullcim (\cim): an instant of a \fullsys. The \cim consists of eight battery-less intermittent nodes. Each node is capable of performing isolated words recognition. 
+We have developed a prototype of a \fullcim (\cim): an instant of a \fullcis. The \cim consists of eight battery-less intermittent nodes. Each node is capable of performing isolated words recognition. 
 
 The reason behind developing a \cim is threefold: (i) voice is a natural and convenient way for human to interact with miniaturized devices; (ii) demonstrating \textit{the world's first} battery-less intermittently-powered command recognizer, which shades light on the potential of battery-less intermittent systems; and (iii) facilitating testing with different sensing strategies and different type of external events arrival (i.e., regular  or burst). 
 
@@ -30,7 +30,7 @@ By exploiting the Wake-on-Sound feature and using the minimum effective recordin
 \subsubsection{Feature Extraction}
 Once a recording has finished, framing and data processing begin. \cim divides the digitized signal into non-overlapping frames of 256 samples ($\approx$ 33 milliseconds). This size is beneficial for doing a Fast Fourier Transform and short enough for the voice-features to be considered constant inside a frame.
 
-To extract the spectral features of a frame, \cim divides the frequency of interest into 12 bands (as in~\cite{hopper1992}). The first five bands have a bandwidth of 200\,Hz. The next three have a bandwidth of 300\,Hz which are followed by two bands of 500\,Hz. Finally, the last two bands have a 600\,Hz bandwidth. This division is motivated by how the energy is concentrated in human speech~\cite{hopper1992}. Then, \cim computes the 256-point Fast Fourier Transform for each frame. The resulting feature vector contains the amount of energy concentrated in each frequency band defined earlier. This feature vector forms the basis for the words identifying process once it is normalized.
+To extract the spectral features of a frame, \cim divides the frequency of interest into 12 bands (as in~\cite{hopper1992fft}). The first five bands have a bandwidth of 200\,Hz. The next three have a bandwidth of 300\,Hz which are followed by two bands of 500\,Hz. Finally, the last two bands have a 600\,Hz bandwidth. This division is motivated by how the energy is concentrated in human speech~\cite{hopper1992fft}. Then, \cim computes the 256-point Fast Fourier Transform for each frame. The resulting feature vector contains the amount of energy concentrated in each frequency band defined earlier. This feature vector forms the basis for the words identifying process once it is normalized.
 
 We normalize the feature vectors to reduce detection errors that result from differences in the amplitude of the speech input. To normalize a feature vector, \cim computes the binary logarithm of each entry of that vector. 
 Then it computes the mean of the resulting vector. Finally, it subtracts the computed mean from each entry of the resulting vector. This is summarized in the following equation: 

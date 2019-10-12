@@ -15,13 +15,13 @@ However, if an application's requirements put hard constraints on the size of th
 Battery-less energy-harvesting sensors have the potential to operate for very long time (decades long) while being tiny; but, they operate intermittently.  
 %
 They charge a small capacitor to guarantee uninterrupted operations for a certain minimum duration. 
-This guarantee facilitates the software architecture design. An intermittent program is usually decomposed  into a chain of small atomic regions that  are  glued together with checkpoints~\cite{mementos}. 
+This guarantee facilitates the software architecture design. An intermittent program is usually decomposed  into a chain of small atomic regions that  are  glued together with checkpoints~\cite{ransford2011mementos}. 
 %Once, the capacitor has been depleted, the sensor powers down, letting the energy-harvester accumulates energy again. 
 
 %
 \noindent\textbf{Do big capacitors enable continuous operation?}. Big capacitors allow longer operational periods, but they also need more time to charge. 
 As such, the on/off duty cycle of a big or small capacitor may still be the same. Additionally, very big capacitors might violate
-the size requirements of an application. For example, the WISPCam---an RF powered camera---~\cite{naderiparizi_rfid_2015} uses a supercapacitor that is about 50 times the size of the original WISP's capacitor---a computational RFID tag---~\cite{smith_ubicomp_2006}.
+the size requirements of an application. For example, the WISPCam---an RF powered camera---~\cite{naderiparizi2015wispcam} uses a supercapacitor that is about 50 times the size of the original WISP's capacitor---a computational RFID tag---~\cite{smith2006wirelessly}.
 
 \todo{charging big capacitors vs small ones}
 \todo{cold start of big capacitors vs small ones}

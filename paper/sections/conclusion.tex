@@ -1,0 +1,5 @@
+We presented the \textit{\fullcis} (\cis), an intermittently powered ``sensor'' that senses continuously! \cis is built around the observation that multiple intermittent nodes distribute themselves uniformly in time. This observation enables us to accurately model, and validate on real hardware, the \cis availability---the collective on-time of its intermittent nodes. 
+
+An important finding is that favorable energy conditions may cause sleeping intermittent nodes to synchronize their power cycles on the arrival of the first event. Consequently, they react to the same event, start recharging at the same time, and missing the next event. To counter this unwanted behavior we designed an algorithm to estimate the number of sleeping neighbors and respond proportionally to an event. We show that the \fullcis is able to distribute bursts of events on its nodes "evenly" and capture the entire burst with above 90\% detection accuracy.
+ 
+Additionally, we prototype a battery-less \fullcim and show that it can successfully capture events of multiple words. 
