@@ -27,11 +27,11 @@ Overcoming the intermittent availability challenge without changing the size of 
 	\label{fig:smart_fabric}
 \end{figure}
 %
-Battery-powered sensors are reliable, but they are short-lived; energy-harvesting sensors are long-lived, but they operate intermittently. Our goal is to combine the desirable features of these two types of sensors to 
-create a new "sensor" that operates permanently (no batteries) and reliably (continuously available), which we call the \emph{\fullcis} (\cis).
+Miniaturized sensors are less intrusive devices than bigger ones. Therefore, they can be embedded in locations that are not suited for the others (enabling new applications). Miniaturizing sensors, however, signifying their powering challenge.
+On one hand, batteries make these sensors \emph{continuously} available -for sensing opportunities- but for a short period of time (even rechargeable batteries wear out after a few hundreds of charging cycles~\cite{aditya2008comparison}). 
+On the other hand, removing batteries and relying on ambient energy make them available for \emph{extended period of time} but intermittently. Our vision is that by combining multiple battery-less energy-harvesting sensors we can create a new virtual sensor that operates permanently (no batteries) and reliably (continuously available): we call this sensor the \emph{\fullcis} (\cis).
 
-Sensors with such characteristics would allow us to add a cheap and maintenance-free sensing layer to many objects, making them smart and interactive. 
-For example, one can imagine developing smart wallpaper that users can interact with. 
+Sensors with such characteristics would allow us to add a cheap and maintenance-free sensing layer to many objects, making them smart and interactive. For example, one can imagine developing smart wallpaper that users can interact with. 
 Smart wallpaper with embedded microphones can enable direct in-building human-to-object communication (Figure~\ref{fig:smart_fabric}). Such a permanently operating sensor can be deployed, for example, in kids' playgrounds to monitor their occupancy. These battery-less sensors can enable
 interactive and safe-to-dispose sports rugs (that count how many times a person has jumped on them) or play rugs for kids.
 In short, we would like to develop small sensors with permanent and continuous sensing capabilities.  
@@ -72,21 +72,13 @@ For that, we \textbf{modeled} the collective effective availability---the system
 % 
 \item Contrary to common sense, we show how favorable energy conditions can deteriorate the performance of a \cis. We, therefore, equipped the \cis with \textbf{an new algorithm} that makes it ambient-energy aware. This algorithm enables the nodes to determine their own duty cycles (without requiring additional hardware), and the average number of alive nodes (without requiring communication). This information can effectively be used by the nodes to decide when to back off to avoid duplicated event detection and availability interruptions (implicit synchronization in favorable harvesting conditions).
 %
-\item We prototype, evaluate, and demonstrate the feasibility of the \fullcis concept in the form of a voice-control commands recognizer, the \textbf{\fullCIM} (\textbf{\cim}). The \cim is a group of solar-powered intermittent nodes equipped with a microphone.
+\item We prototype, evaluate, and demonstrate the feasibility of the \fullcis concept in the form of a voice-control commands recognizer, the \textbf{\fullCIM} (\textbf{\cim}). 
+We chose to develop a command recognizer as 
+voice is a natural way for the human to interact with small devices. Moreover, words allow us to easily experiment with individual event arrivals and events that arrive in bursts. 
+However, the goal of this paper is \emph{not} to present a novel word recognition technique. 
+Instead, we adapts a classical word recognition algorithm to make it power-failure immune. Yet, our \cim prototype is the first intermittent command recognizer, shedding light on the potential of intermittent systems. 
+
 \end{itemize}
-
-
-% \subsection{Motivation}
-\subsection{High level design decisions}
-Here we would like to motivate some of our design decisions.
-
-\paragraph{Why does this work focus on miniaturized battery-less sensors?}
-Small sensors are less intrusive devices than bigger ones. Therefore, they can be embedded in new locations that are not suited for the others. Powering small sensors with small batteries is problematic as small batteries severely limit sensor lifetime: even rechargeable batteries wear out after a few hundreds of charging cycles~\cite{aditya2008comparison}.  Thus, this work researches battery-free energy-harvesting sensors as they have the potential to operate for decades-long without regular maintenance.
-
-\paragraph{Why did we choose to develop a word recognizer?}
-Voice is a natural way for the human to interact with small devices. Moreover, words allow us to easily experiment with individual event arrivals and events that arrive in bursts. 
-However, the goal of this paper is \emph{not} to present a new and novel word recognition technique. 
-Instead, it adopts a classical word recognition algorithm, making it power-failure immune. Yet our \cim prototype is the \emph{world's first} intermittent command recognizer, shedding light on the potential of intermittent systems. 
 
 
 

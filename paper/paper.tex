@@ -21,7 +21,7 @@
 \begin{document}
 
 % \title{\hl{Smart Fabric:} Continuous Sensing on Intermittent Power} 
-\title{Continuous Sensing on Intermittently-operating Sensors}
+\title{Continuous Sensing on Intermittent Power}
 
 \input{preamble/authors}
 \renewcommand{\shortauthors}{A. Majid et al.}
@@ -56,12 +56,16 @@
 % \label{sec:background}
 % \input{sections/background}
 
+\section{Related Work} % and Background}
+\label{sec:relatedwork}
+\input{sections/relatedWork}
+
 \section{Coalesced Intermittent Sensor}
 \label{sec:coalInterSen}
 \input{sections/coalInterSen_v2}
 
-%\section{Distributed Intermittent System}
-\section{Implementation---Coalesced Intermittent Command Recognizer}
+%\section{Distributed Intermittent System} 
+\section{Prototype: Coalesced Intermittent Command Recognizer}
 \label{sec:disMic}
 \input{sections/disMic}
 
@@ -69,23 +73,16 @@
 \label{sec:evaluation}
 \input{sections/evaluation}
 
-\section{Related Work and Background}
-\label{sec:relatedwork}
-\input{sections/relatedWork}
 
-\section{Discussion and Future Work}
-\label{sec:discussion}
+% \section{Discussion and Future Work}
+% \label{sec:discussion}
 
 % \todo{MAC for backscattering and favorable energy conditions}
 
-\noindent\textbf{Intermittent timing algorithm} when the harvested power is very low the accuracy of inferring the charging time from the discharging degrades. However, for the \fullcis this is not a serious problem as the intermittent nodes need to randomize their response to external events in favorable energy conditions. 
 
 
-\noindent\textbf{\fullcis Speech recognition on intermittent devices} In this paper, we have shown the feasibility of speech recognition on intermittent power. We also demonstrated the possibility of recognizing burst of events (in our case four words). However, the type of speech we targeted is the simplest, isolated words. Next, we may attempt recognizing a more complicated type of speech and for a larger number of words than the number chosen for this study.
 
-Additionally, the command recognition rate could further be improved by using an estimation of the energy left in the energy buffer, to start recharging early. This will prevent a detection when there is not enough harvested energy to record for a long enough time, letting a node recharge earlier and coming back with sufficient energy.
-
-\section{Conclusion}
+\section{Conclusion and Future Work}
 \input{sections/conclusion}
 
 

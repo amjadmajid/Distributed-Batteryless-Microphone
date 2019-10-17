@@ -21,7 +21,7 @@ To determine the expected availability of a \cis, the strategy being employed to
 A \cis can build on top of the recent advancements in passive (light or RF) communication~\cite{LuzLink,liu2013ambient} and ultra-low-power timers~\cite{hester2017timely} to apply a time-division multiplexing strategy, minimizing on-times overlapping. For example, a node calculates its average on-time $\overline{t_\text{on}}$ and off-time $\overline{t_\text{off}}$ for a certain number of power cycles. Then, it encodes the information $({\overline{t_\text{off}}, \overline{t_\text{on}}})$ in a message and broadcasts it at the beginning of its power cycle. When a node receives this message it will have full knowledge about the transmitting node's power cycle. It can then alter its power cycle, relative to the transmitting nodes cycle, by increasing (or decreasing) its power consumption to shorten (or lengthen) its on-time and subsequently shift its power cycle to a different time slot. 
 
 With such explicit on-times control strategy, a \cis of $N$ nodes with on-time of $\overline{t_\text{on}}$ and off-time of $\overline{t_\text{off}}$ will have an availability 
-$= \min \left(N\times \frac{\overline{t_\text{on}}}{\overline{t_\text{p}}}\bigg\rvert 100\%\right)$. However, we expect such an approach to introduce significant overhead as a scattering algorithm (e.g., \cite{giusti2007decentralized}) must be frequently executed, messages need to be exchanged, and clocks should be synchronized. Therefore, we propose a different on-times spreading strategy.  
+$= \min \left(N\times \frac{\overline{t_\text{on}}}{\overline{t_\text{p}}}, 100\%\right)$. However, we expect such an approach to introduce significant overhead as a scattering algorithm (e.g., \cite{giusti2007decentralized}) must be frequently executed, messages need to be exchanged, and clocks should be synchronized. Therefore, we propose a different on-times spreading strategy.  
 %
 \begin{figure}[t]
 		\centering
@@ -33,7 +33,7 @@ $= \min \left(N\times \frac{\overline{t_\text{on}}}{\overline{t_\text{p}}}\bigg\
 \begin{figure}
 		\centering
 		\includegraphics[width=\columnwidth]{figures/cisModel}
-		\caption{\fullcis availability percentage for a different number of nodes and different duty cycles. The nodes are uniformly distributed and the \cis on-time evolves, when adding new nodes, according to the equation~\ref{eq:cisModel}.}
+		\caption{\fullcis availability for a different number of nodes and different duty cycles. The nodes are uniformly distributed and the \cis on-time evolves, when adding new nodes, according to equation~\ref{eq:cisModel}.}
 		\label{fig:cisModel}
 \end{figure} 
 %
@@ -68,14 +68,14 @@ The power cycles of energy-harvesting battery-less devices are inherently random
 		\begin{subfigure}{.49\columnwidth}
 			\centering
 			\includegraphics[width=\textwidth]{figures/light_power_cycles_len}
-			\caption{Light}
+			\caption{Light ($680\si{\mu F}$) }
 		\end{subfigure}\hfill
 		\begin{subfigure}{.49\columnwidth}
 			\centering
 			\includegraphics[width=\textwidth]{figures/rf_power_cycles_len}
-			\caption{RF}
+			\caption{RF ($47\si{\mu F}$)}
 		\end{subfigure}\hfill
-		\caption{Nodes' power cycles length for different energy sources, and different energy buffer sizes.}
+		\caption{Nodes' power cycles length for different ambient energy sources, and different energy buffer sizes.}
 		\label{fig:power_cycles}
 \end{figure} 
 %
@@ -123,13 +123,14 @@ An intermittent sensor has a limited energy budget per power cycle. When it is t
 This wake-on-event style of operation is important as the minimal energy consumption during sleep significantly prolongs the period during which an event can be handled (for example, our prototype consumes 7 times less energy during sleep compared to being active).
 To model the effective \cis availability when it is tasked with event-based sensing the change in energy consumption between the sleep and active mode must be taken into account. Since the event itself times when the node changes its energy consumption, we can model the effective availability as,
 \begin{equation}
-		A_\text{v}(N) = A_\text{v}(N-1) + \left(1-A_\text{v}(N-1)\right) \times \frac{t_\text{s} - (t_\text{e} \times\frac{e_\text{a}}{e_\text{s}}) }{t_\text{sp}},\footnote{Notice that, there is a subtle point about equation~\ref{eq:cisEventSenseModel} as when an event arrives the node wakes up, consuming more energy. Therefore, its uptime shirnks. We, for similicity, modeled this effect by extending the events time with same factor. This is sufficient to say if the event will be fully captured or not (effective availability).}
+		A_\text{v}(N) = A_\text{v}(N-1) + \left(1-A_\text{v}(N-1)\right) \times \frac{t_\text{s} - (t_\text{e} \times\frac{p_\text{a}}{p_\text{s}}) }{t_\text{sp}},
 		\label{eq:cisEventSenseModel}
 \end{equation}
 
 where $t_\text{s}$ is the expected sleep time of the \cis's nodes, 
  $t_\text{sp} \coloneqq t_\text{s} + t_\text{off}$, 
- and $e_\text{a}$ and $e_\text{s}$ are the energy consumption at active and sleeping modes, respectively.
+ and $p_\text{a}$ and $p_\text{s}$ are the power consumption at active and sleeping mode, respectively.
+ Notice that, there is a subtle point about equation~\ref{eq:cisEventSenseModel} as when an event arrives the node wakes up, consuming more energy. Therefore, its uptime shrinks. We, for simplicity, modeled this effect by extending the event time with the same factor. This is sufficient to say if that the event will be fully captured or not (effective availability).
 %
 \subsubsection{Simulation}
 To do a first sanity check on our models, we simulated $10^5$ power cycles of a \cis of 10 nodes (Figure~\ref{fig:cis_simulation}). The duty cycles of the nodes range from $10\%$ to $50\%$, while the event length is fixed at $3\%$ of the power cycle length, $t_\text{p}$. The on-times and events arrivals were uniformly distributed over the power cycles. 
@@ -144,18 +145,36 @@ Ambient energy controls the availability of a \cis's nodes.  Consequently, it al
 A \cis can experience a wide range of ambient power intensities. For example, a solar-powered \cis may harvest no energy at night, modest energy from artificial light, and abundant energy from direct sunlight.  Generally, we can identify four different \cis powering states: 
 \begin{itemize}
 		\item \textit{Targeted power state}---These are the powering conditions that a \cis is designed for. In these  conditions, the \cis should work intermittently and have sufficiently randomized power cycles to uniformly distribute its intermittent nodes on-times and meet the desired availability (Figure~\ref{fig:cisModel}). In general, the targeted powering conditions should be near worst energy harvesting conditions to ensure that the system is properly functioning for the majority of the time.
-		\item \textit{Under-targeted power state}---Ultimately, the ambient energy is an uncontrollable power source, and it is not hard to imagine scenarios where a \cis will be under-powered or even comes to complete and long power down (for example, a solar \cis will come to a perpetual power down in the darkness). In general, for under-targeted energy conditions, the \cis behavior can be considered as undefined.
+		\item \textit{Under-targeted power state}---Ultimately, the ambient energy is an uncontrollable power source, and it is not hard to imagine scenarios where a \cis will be under-powered or even comes to complete and long power down (for example, a solar \cis will come to a perpetual power down in darkness). In general, for under-targeted energy conditions, the \cis behavior can be considered as undefined.
 %
 \begin{figure}
 		\centering
-		\includegraphics[width=\columnwidth]{figures/hibernating_power_state}
-		\caption{\fullcis is in a hibernating power state when the energy harvesting rate approximates the energy consumption rate at the sleeping (or low-power) mode. In this state, the intermittent nodes lose the randomization in their power cycles. Thus, all the nodes capture the same event and power down shortly after missing the subsequent ones. Consequently, the \cis senses intermittently and does not take advantage of its redundant intermittent nodes to approach continuous sensing.}
+		\includegraphics[width=\columnwidth]{figures/hibernatingState}
+		\caption{
+		Capturing events may lead to power cycles synchronization of nodes that were in low-power mode. In particular, if some of the nodes power down while capturing the event, then this implies that these nodes slept (prior to the event) longer than the nodes that capture the event. This means that the nodes that have died spent their energy slower (they stayed longer in sleep mode); therefore,  their overall uptime is longer than the uptime of the node the captured the event. In other words, the nodes that the woke up earlier have stated longer on, and therefore, the next power cycles are more synchronize, see the $\Delta t$ before and after the event.
+		% \fullcis is in a hibernating power state when the energy harvesting rate approximates the energy consumption rate at the sleeping (or low-power) mode. In this state, the intermittent nodes lose the randomization in their power cycles. Thus, all the nodes capture the same event and power down shortly after missing the subsequent ones. Consequently, the \cis senses intermittently and does not take advantage of its redundant intermittent nodes to approach continuous sensing.
+		}
 		\label{fig:noRand}
 \end{figure} 
 %
-		\item \label{it:hibernating} \textit{Hibernating power state}---In event-based sensing scenarios, the intermittent nodes of a \cis sleep in low-power mode waiting for an external event to wake them up. If the energy conditions are relatively higher than the targeted conditions, the nodes may not die and sustain their sleeping power consumption. This will cause them to synchronize their wake-ups on the first incoming event and their power down as the event capturing process depletes their energy buffers quickly. Consequently, the \cis may miss the next incoming events (specially if the events happens to arrive in bursts) causing it to sense intermittently instead of continuously (Figure~\ref{fig:noRand}). 
+		\item \label{it:hibernating} \textit{Hibernating power state}---In event-driven sensing, nodes sleep in low-power mode waiting for an event to wake them up. This mode extends \cis's nodes' on-times and makes them overlap significantly. Moreover, the on-times overlap even more, when ambient energy level rises (favorable energy conditions). If an event arrives in such conditions, it will wake up many nodes, causing them to consume their buffered energy much faster. Some of these nodes will power down before capturing the entire event, while others survive. If we assume that nodes have the same energy buffers, then the nodes that died before finishing the event should have been sleeping for a \emph{longer} time than the nodes the capture the entire event (because they slept for a long time, they could not finish capturing the event). However, nodes that captured the entire event have a \emph{shorter} overall uptime than the nodes the have died while capturing the event because they stayed \emph{longer} in the active mode (because they stayed longer in active mode, they consume their energy budget faster). This will lead the nodes' power cycles to tend to synchronized after the event. Let us analyze the example presented in Figure~\ref{fig:noRand} to see exactly why nodes' power cycles tend to synchronized after an event if some or all of the nodes die while capturing an event. The figure shows the power traces of two nodes. It indicates that the nodes consume 7 times more power at active mode than that of the sleep mode (our prototype has a similar power consumption ratio, Table~\ref{tab:power_usage}). Further, shows that a node sustains the low-power mode for 90 units of time, $t_\text{s} = 90$; therefore, the maximum buffered energy can be calculated as 
 		%
-		\item \label{it:continuous} \textit{Continuous power state}---Under direct mid-noon sun a tiny solar panel may provide sufficient power to run a sensor node continuously. In such conditions, a \cis's node will sense continuously. Therefore, the job of a single node will be repeated $N$ times, and instead of sending a single message to a battery-powered or tethered sink---to push the data to the Internet---$N$ identical messages will be sent.
+		$$E_\text{buf}=t_\text{s} \times p_\text{s}$$
+		%
+		, where $p_\text{s}$ is a node power consumption at sleep mode. If we focus on the power cycle with the first event, then we see that node $R$ powers up at $t_\text{0}$, and it remains in low-power mode for 50 units of time, whereas node $G$ spends only 20 units of time before the event arrives. Now, we can calculate when these two nodes will power down and compare the difference, $\Delta t$, before and after the event. A node will turn off when the buffered energy is depleted. This can be expressed as follows, 
+		%
+		$$
+		E_\text{buf} = t_\text{se} \times p_\text{s} + t_\text{on} \times \delta p_\text{s},
+		$$
+		%
+		where $ t_\text{se}$ is the sleep time of the power cycle that an event arrives in, $t_\text{on}$ is a node's on-time and $\delta = \frac{ p_\text{a}}{ p_\text{s}}$ where, $p_\text{a}$ is the power consumption at the active mode. $p_\text{s}$ can be eliminated and $ t_\text{se}$ and $ \delta$ are given; thus to find when the nodes will power down when need to find $t_\text{on}$ for both nodes. By substituting the given values we find $t_\text{on}$ to be 10 and 5.7 units of time for the $G$ and $R$ node, respectively. Therefore, $\Delta t$ becomes 4.3 while it was 30 before the event. 
+
+		When the events arrive in burst this becomes a significant problem, as a \cis will capture multiple copies of the first event, while missing the subsequent ones (Figure~\ref{fig:noRand}). 
+
+		%TODO Connected with above text%
+		% Consequently, the \cis may miss the next incoming events (specially if the events happens to arrive in bursts) causing it to sense intermittently instead of continuously (Figure~\ref{fig:hibernatingState}). 
+		%
+		\item \label{it:continuous} \textit{Continuous power state}---Under direct mid-noon sun a tiny solar panel may provide sufficient power to run a sensor node continuously. In such conditions, a \cis's node will be available and able to sense continuously. Therefore, the job of a single node will be repeated $N$ times, and instead of sending a single message to a sink---to push the data to the Internet---$N$ identical messages will be sent.
 		These messages will collide as they are sent at about the same time, causing the information to be lost; if they arrive, however, they -except the first one- will waste energy of the sink as they carry the same information.  
 		 % at about the same time causing them to collide or waste energy as they replicated the same information that has been delivered by the first message. 
 				
@@ -202,7 +221,7 @@ Furthermore, responding with a constant probability during the above-targeted en
 	\end{algorithmic}
 \end{algorithm}
 %
-Timing is a key building block of sensing systems. It is, however, missing on intermittent nodes unless an additional dedicated (RC-based) timer is added to them~\cite{hester2017timely}. Here we would like to propose an alternative that does not require additional hardware. This alternative does not only enable time estimation but also ambient energy richness, which is very important for estimating the number of a node's active neighbors. But, \textit{how a node can time its own on/off cycle?}
+Timing is a key building block of sensing systems. It is, however, missing on intermittent nodes unless an additional dedicated (RC-based) timer is included~\cite{hester2017timely}. Here we propose an alternative that does not require additional hardware. This alternative does not only enable time estimation but also ambient energy richness, which is very important for estimating the number of a node's active neighbors. But, \textit{how a node can time its own on/off cycle?}
 
 Intermittent nodes fail abruptly; therefore, a persistent timer is needed to measure node's on-time. A simple way to emulate persistent timer is by using a persistent counter, or sampling the volatile built-in timers of the microcontroller and save the obtained values in the non-volatile memory. To estimate the off-time, $t_\text{off}$ in Figure~\ref{fig:softwareClock}, a node needs to determine the incoming power (harvesting rate). The average harvesting rate can be induced from the on-time as follows.
 %
@@ -210,6 +229,9 @@ The node measures its on-time while harvesting, see $t_\text{on}$ in Figure~\ref
 %
 If $t_\text{on}$ and $t_\text{a}$ are measured on the same load---thus, they have the same power consumption---then the amount of the energy harvested while the device is on can be calculated as in Line~\ref{lin:ehar}, Algorithm~\ref{algo:offTime}. And, the average input power can be found as in Line~\ref{lin:pin} that, in turn, enables the node to estimate its own $t_\text{off}$ (Line~\ref{lin:offtime}).
 Since calculating the off-time requires constant load, the sensor cannot run arbitrary code during time measurement. Therefore, the sensor needs to sacrifice a certain percentage of its power cycles for measuring time (Line~\ref{lin:i}-\ref{lin:ton}). Once the on-time and off-time are found the node's power cycle for load $a$ is determined.
+
+%ToDo check if removing it is better
+Notice that, when the harvested power is very low the accuracy of inferring the charging time from the discharging degrades. However, for the \fullcis this is not a serious problem as the intermittent nodes need to randomize their response to events only in favorable energy conditions. 
 
 \subsubsection{Alive nodes estimation}
 \begin{figure}[t]
@@ -224,7 +246,7 @@ Since calculating the off-time requires constant load, the sensor cannot run arb
 			\includegraphics[width=\textwidth]{figures/rf_cis_dutyCycle}
 			\caption{RF}
 		\end{subfigure}\hfill
-		\caption{The average duty cycles of 8 solar-powered and 6 RF-powered intermittent nodes for different ambient energy sources and energy intensities. In general, the average duty cycle of a node is a good indicator of the average duty cycle of \cis's nodes.}
+		\caption{The average duty cycles of 8 solar-powered and 6 RF-powered intermittent nodes for different ambient energy sources and energy intensities. In general, the average duty cycle of a node is a good indicator of the average duty cycle of the other \cis's nodes.}
 		\label{fig:cis_nodes_dutyCycle}
 \end{figure} 
 
@@ -235,9 +257,9 @@ Since calculating the off-time requires constant load, the sensor cannot run arb
 				\hline
 				\textbf{light (lux)} &\textbf{on/off cycle (\%)}  & \textbf{$N_\text{active}$} & \textbf{std}   \\
 				\hline
-				300	                 & 8  & 1.01 & 0.85   \\
-				500                  & 17 & 1.63 & 0.98   \\
-				800                  & 31 & 2.88 & 1.50   \\
+				\ \ 300	                 & \ \ 8  & 1.01 & 0.85   \\
+				\ \ 500                  & 17 & 1.63 & 0.98   \\
+				\ \ 800                  & 31 & 2.88 & 1.50   \\
 				1200                 & 62 & 5.05 & 1.08   \\
 				\hline
 		\end{tabular}
@@ -247,33 +269,49 @@ Since calculating the off-time requires constant load, the sensor cannot run arb
 
 To estimate the number of active nodes, a \cis's node needs to determine the following information:
 \begin{enumerate*}[label=(\roman*)]
- \item the total number of nodes in its \cis, which is a constant value that can be loaded to the device memory; 
+ \item the total number of nodes in its \cis, which is a typically constant value that can be loaded to the device memory; 
   \item the on-times distribution, which is uniform in our case; and
- \item its own $\overline{t_\text{on}}$ and $\overline{t_\text{off}}$. 
+ \item its own average $\overline{t_\text{on}}$ and $\overline{t_\text{off}}$. 
 \end{enumerate*}
 
-Since, we assume that a \cis's nodes have the same energy buffer and are in the vicinity of each other---thus, they are exposed to the same energy conditions---then their duty cycles should approach the same value. 
-Figure~\ref{fig:cis_nodes_dutyCycle} shows the average power cycles of the nodes of a solar- and RF-powered \cis{}s. In general, we can conclude that a node's average duty cycle is a good estimator of other \cis's nodes' duty cycles.
+Since, we assume that a \cis's nodes have the same energy buffers and are in the vicinity of each other (thus, they are exposed to the same energy conditions) then their duty cycles should approach the same value. 
+Figure~\ref{fig:cis_nodes_dutyCycle} shows the average duty cycles of the nodes of a solar- and RF-powered \cis{}s. In general, we can conclude that a node's average duty cycle is a good estimator of other \cis's nodes' duty cycles.
 % We can conclude from these measurements that a node power cycle approximates other \cis's nodes power cycles.
 % This observation can be generalized by considering that the nodes of a \cis are assumed to have the same energy buffer size and they are in a close proximate, and therefore, they are expose to roughly the same energy conditions 
 % (this should not be confused with argument about the emerging uniform distribution of nodes' on-times as this distribution appears due to \emph{small} differences between the power cycles).  
-Now, a node can estimate the maximum time span ($t_\text{max}$) of its \cis, which is the total duration of the nodes' on-times when they are aligned next to each other, as follows
+Now, a node can estimate the maximum time span, $t_\text{max}$, of its \cis, which is the total duration of the nodes' on-times when they are aligned next to each other, as follows
 \begin{equation}
 t_\text{max} = N\times \overline{t_\text{on}}.
 		\label{eq:max_time}
 \end{equation}
-Then, from Equation~\ref{eq:cisModel}, the node calculates the \cis availability, $A_\text{v}(N)$. As we argued in Section~\ref{subSec:availability}, nodes on-times are uniformly distributed; therefore, the overlapping on-time is also uniformly distributed. As such, a node can calculate the average number of active intermittent nodes $N_\text{active}$ using the following formula,
+Then, from equation~\ref{eq:cisModel}, the node calculates the \cis availability, $A_\text{v}(N)$. As we argued in Section~\ref{subSec:availability}, nodes on-times are uniformly distributed; therefore, the overlapping on-time is also uniformly distributed. As such, a node can calculate the average number of active intermittent nodes, $N_\text{active}$, using the following formula,
 \begin{equation}
-	N_\text{active} = \frac{t_\text{max}}{\overline{t_\text{p}}\times A_\text{v}(N)},
+	N_\text{active} = \frac{t_\text{max}}{\overline{t_\text{p}}\times A_\text{v}(N)}.
 	\label{eq:active}
 \end{equation}
-and choose the proper randomization factor. If a second event, however, happens shortly after the first one, a node needs to update $N$ as follows, 
-$$
-N = N - (N_\text{active}-1)
-$$
-the $-1$ is because the node itself decided not to react on the first event. 
 
-Table~\ref{tab:clusters} shows the average number of active nodes of an 8-nodes \cis for different light intensities. These measurements provide a sanity check on equation~\ref{eq:active}. For example, at $\SI{1200}{lux}$ an individual node of our \cis has a duty cycle of $\approx$\,62\%. If we multiply it by the number of nodes (Equation~\ref{eq:max_time}) we get about 500\%. Figure~\ref{fig:cisModel} indicates that a \cis with eight nodes of duty cycles above 50\% has near 100\% availability. From equation~\ref{eq:active}, we find that the expected number of clustered nodes is 5 which is what Table~\ref{tab:clusters} also shows. 
+\subsubsection{Response randomization factor}
+
+Once a node has estimated the number of active neighbors, $N_\text{active}$, it can use the following formula to determine the response probability,  
+
+\begin{equation}
+	P_\text{resp} = 
+	\begin{cases}
+		\frac{N_\text{resp}}{N_\text{active}} & \ \  \text{if} \frac{N_\text{resp}}{N_\text{active}} < 1\\
+		1 									  & \ \ \text{therwise},
+	\end{cases}
+	\label{eq:randFactor}
+\end{equation}
+
+where $N_\text{resp}$ is a system parameter that reflects the desired redundancy factor required by an application. 
+
+% and choose the proper randomization factor. If a second event, however, happens shortly after the first one, a node needs to update $N$ as follows, 
+% $$
+% N = N - (N_\text{active}-1)
+% $$
+% the $-1$ is because the node itself decided not to react on the first event. 
+
+Table~\ref{tab:clusters} shows the average number of active nodes of an 8-nodes \cis for different light intensities. These measurements provide a sanity check on equation~\ref{eq:active}. For example, at $\SI{1200}{lux}$ an individual node of our \cis has a duty cycle of $\approx$\,62\%, i.e., it is on average 0.62\,$t_\text{p}$ operating. If we multiply that by the number of nodes (equation~\ref{eq:max_time}) we get about 5\,$t_\text{p}$. Figure~\ref{fig:cisModel} indicates that a \cis with eight nodes of duty cycles above 50\% has near 100\% availability. From equation~\ref{eq:active}, we find that the expected number of clustered nodes is 5 confirmed by the measurements presented in Table~\ref{tab:clusters}. 
 
 
 

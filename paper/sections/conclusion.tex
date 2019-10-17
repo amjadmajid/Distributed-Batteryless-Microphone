@@ -1,5 +1,31 @@
-We presented the \textit{\fullcis} (\cis), an intermittently powered ``sensor'' that senses continuously! \cis is built around the observation that multiple intermittent nodes distribute themselves uniformly in time. This observation enables us to accurately model, and validate on real hardware, the \cis availability---the collective on-time of its intermittent nodes. 
-
-An important finding is that favorable energy conditions may cause sleeping intermittent nodes to synchronize their power cycles on the arrival of the first event. Consequently, they react to the same event, start recharging at the same time, and missing the next event. To counter this unwanted behavior we designed an algorithm to estimate the number of sleeping neighbors and respond proportionally to an event. We show that the \fullcis is able to distribute bursts of events on its nodes "evenly" and capture the entire burst with above 90\% detection accuracy.
+Energy-harvesting battery-less sensors can operate very long because their power source is unlimited. 
+However, ambient power is weak and volatile; therefore, these sensors operate intermittently.
+The intermittent availability compromises their value as they have a high probability of missing events. 
+This paper addresses the \emph{availability} problem of intermittent sensors. 
+%
+It presents the \textit{\fullcis} (\cis), which is the abstraction of a group of intermittently-powered sensors.
+A \cis is able to approach continuous sensing by taking advantage of the embedded randomization in the powering subsystem of intermittent sensors.
+The resulting differences in the sensor nodes' power cycles make the nodes' on-times uniformly distrusted. 
+Therefore, the number of a \cis nodes can be seen as a design parameter to achieve a targeted collective availability. 
+% Therefore, adding more nodes to a \cis increases its expected availability. 
+We have modeled the availability of a \cis and its effective availability: the availability that leads to successful event capturing. 
+Further, we showed the accuracy of these models by validating them against data collected on real hardware and with different ambient energy sources (i.e., sunlight, artificial light, and RF). 
+%
+Furthermore, we showed how the variation in nodes' power consumption and harvesting rate and the arrival of external events can compromise the \cis's availability (nodes employing sleeping mode to increase the chance of successfully capturing an event, synchronize their power cycles on the first incoming event, in a burst, and miss the subsequent ones. The probability of this unwanted synchronization increases when ambient energy rises beyond the design point.  
+% It taking advantage of the embedded randomization in the powering subsystem of energy-harvesting battery-less sensors to distribute
+% the on-times of a group of intermittent sensors uniformly in time 
+% We presented the \textit{\fullcis} (\cis), an intermittently powered ``sensor'' that senses continuously! \cis is built around the observation that multiple intermittent nodes distribute themselves uniformly in time. This observation enables us to accurately model, and validate on real hardware, the \cis availability---the collective on-time of its intermittent nodes. 
+% An important finding is that favorable energy conditions may cause sleeping intermittent nodes to synchronize their power cycles on the arrival of the first event. Consequently, they react to the same event, start recharging at the same time, and missing the next event. 
+% 
+To counter this unwanted behavior, we designed an algorithm to estimate the number of active neighbors and respond proportionally to an event. 
+We developed a prototype of the \cis, an 8-nodes \fullCIM (\cim). 
+Using this prototype, we showed that the \fullcis is able to distribute bursts of events on its nodes "evenly" and capture the entire burst with above 85\% detection accuracy.
  
-Additionally, we prototype a battery-less \fullcim and show that it can successfully capture events of multiple words. 
+
+Intermittent sensors will partially capture events. Classical algorithms for recognizing and classifying these events might face difficulties  dealing with partially captured data. Thus, follow-up work can investigate \emph{how much machine learning algorithms can improve the sensing quality of intermittent sensing?} 
+% Additionally, the command recognition rate could further be improved by using an estimation of the energy left in the energy buffer, to start recharging early. This will prevent a detection when there is not enough harvested energy to record for a long enough time, letting a node recharge earlier and coming back with sufficient energy.
+
+
+% \noindent\textbf{Speech Recognition on Intermittent Devices} In this paper, we have shown the feasibility of speech recognition on intermittent power. We also demonstrated the possibility of recognizing burst of events (in our case four words). However, the type of speech we targeted is the simplest, isolated words. Next, we may attempt recognizing a more complicated type of speech and for a larger number of words than the number chosen for this study.
+
+
