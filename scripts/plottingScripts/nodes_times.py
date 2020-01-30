@@ -100,7 +100,7 @@ def main():
         plt.ylabel("On time (sec)", fontsize=fontSize)
     else:
         plt.ylabel("Off time (sec)", fontsize=fontSize)
-    plt.xlabel("Nodes ID", fontsize=fontSize)
+    plt.xlabel("Node ID", fontsize=fontSize)
     plt.yticks(fontsize=fontSize-2)
     plt.xticks(fontsize=fontSize-2)
     plt.tight_layout()

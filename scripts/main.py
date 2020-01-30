@@ -36,7 +36,7 @@ def sysAvailable(totTime, timeInterval,nodesIndices, dataHandler):
                       A list of system availabity along the specified intervals
     """
     availability=[ [] for i in nodesIndices] 
-    for interval in range(0,totTime, timeInterval):
+    for interval in np.arange(0,totTime, timeInterval):
         for idx, node in enumerate(nodesIndices):
             # System availability 
             try:
@@ -146,7 +146,7 @@ def main():
     fs = FileSelector('../data/')
     path = fs.getPath()
     print(path)
-    labelPattern = "(_?[s|S]unny_?|_?[D|d]ay_?|_?[N|n]ight_?|_?cloudy.*?_|[C|c]loudy|[0-9]*-?[0-9]+(lux|cm))"
+    labelPattern = "(_?[s|S]unny_?|_?[D|d]ay_?|_?[N|n]ight_?|_?cloudy.*?_|[C|c]loudy|[0-9]*-?[0-9]+(lux|cm)|[0-9]*-uf_[0-9]*-lux)"
     label = labelFinder(path, labelPattern)
     print(label)
     capPattern = "220|470|680|1000|RF"
@@ -164,7 +164,7 @@ def main():
 
     totTime=int(dataHandler.getTotalExperimentTime())+1 # seconds
     timeInterval = totTime # seconds
-    timelineInterval = 10
+    timelineInterval = 5
     
     availability = sysAvailable(totTime, timeInterval,range(numOfNodes), dataHandler)
     nodesOnTimes = intermittent_nodes_ontimes(totTime, timeInterval,range(numOfNodes), dataHandler)
@@ -175,19 +175,19 @@ def main():
 
     jsonObj = json.dumps([label,availability])
     #TODO prevent duplicated entries
-    with open("processed_data/new/availability"+cap+".json", "a") as f:
-        print(jsonObj, file=f)
+    # with open("processed_data/new/availability_"+label+".json", "a") as f:
+    #     print(jsonObj, file=f)
 
-    jsonObj = json.dumps([label,nodesOnTimes])
-    with open("processed_data/new/intermittent_nodes_ontimes"+cap+".json", "a") as f:
-        print(jsonObj, file=f)
+    # jsonObj = json.dumps([label,nodesOnTimes])
+    # with open("processed_data/new/intermittent_nodes_ontimes_"+cap+".json", "a") as f:
+    #     print(jsonObj, file=f)
 
-    jsonObj = json.dumps([label,nodesOffTimes])
-    with open("processed_data/new/intermittent_nodes_offtimes"+cap+".json", "a") as f:
-        print(jsonObj, file=f)
+    # jsonObj = json.dumps([label,nodesOffTimes])
+    # with open("processed_data/new/intermittent_nodes_offtimes_"+cap+".json", "a") as f:
+    #     print(jsonObj, file=f)
 
     jsonObj = json.dumps([label,availabilityTimeline])
-    with open("processed_data/new/availabilityTimeline"+cap+".json", "a") as f:
+    with open("processed_data/new/availabilityTimeline"+cap+"_sleep_interval"+str(timelineInterval)+".json", "a") as f:
         print(jsonObj, file=f)
 
     plt.figure()

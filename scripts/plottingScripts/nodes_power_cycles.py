@@ -60,7 +60,7 @@ def __power_cycle_len(ontime, offtime):
 
 
 def main():
-    fontSize=16
+    fontSize=18
     if rf_flag:
         ontime_path = '../processed_data/intermittent_nodes_ontimesRF.json'
         offtime_path = '../processed_data/intermittent_nodes_offtimesRF.json'
@@ -107,8 +107,8 @@ def main():
     
     plt.gca().grid(True, axis='y') 
     plt.ylim(bottom=0)
-    plt.ylabel("Power Cycle Length (sec)", fontsize=fontSize+2)
-    plt.xlabel("Nodes ID", fontsize=fontSize+2)
+    plt.ylabel("Power cycle (sec)", fontsize=fontSize+4)
+    plt.xlabel("Node ID", fontsize=fontSize+4)
     plt.yticks(fontsize=fontSize+2)
     plt.xticks(fontsize=fontSize+2)
     plt.tight_layout()

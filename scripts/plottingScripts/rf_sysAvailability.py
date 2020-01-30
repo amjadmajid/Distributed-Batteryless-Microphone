@@ -35,8 +35,9 @@ ax = plt.axes()
 ax.grid(linestyle=":")
 
 ## Plotting parameters 
-plotPatterns = ['-*', '-^', '-+','-o', '-d','-8', '-p', '->']
-fontSize = 16 
+colors = [ "#2b8cbe", "#2b8cbe","#2b8cbe","#2b8cbe","#2b8cbe", "#d73027" ]
+plotPatterns = ['-d', '-^', '-+','-o', '-*','-8', '-p', '->']
+fontSize = 18 
 #colors=['r','b','k']
 dataIndices = np.arange(len(data[0][1]))+1 
 
@@ -44,22 +45,22 @@ dataIndices = np.arange(len(data[0][1]))+1
 for idx, d in enumerate(data):
     #print(d[0])
     print("Data length", len(d[1]) )
-    ax.plot(dataIndices, np.array(d[1])*10,plotPatterns[idx], label=d[0] ) #, color=colors[idx]) 
+    ax.plot(dataIndices, np.array(d[1])*10,plotPatterns[idx], label=d[0], lw=2, markersize = 8, color=colors[idx]) #, color=colors[idx]) 
 
 # Plotting the simulated system availability 
-ax.plot(range(1,n+1), tot(n,ndc)* 10, '--', label="{:0.0f}%".format(100*ndc), lw=2)
+ax.plot(range(1,n+1), tot(n,ndc)* 10, '--', label="{:0.0f}%".format(100*ndc), lw=3, color=colors[-1])
 
 ## axes formatting 
-ylabels = ["{:4d}%".format(x*10) for x in dataIndices-1]
-ax.set_yticks(dataIndices-1)
+ylabels = ["{:4d}%".format(x*10) for x in range(1,11,2)]
+ax.set_yticks(range(1,11,2))
 ax.set_yticklabels(ylabels, fontsize=fontSize)
 ax.set_xticklabels(dataIndices, fontsize=fontSize)
 ax.set_xticks(dataIndices)
 ax.set_ylabel("Availability", fontsize=fontSize)
 ax.set_xlabel("Number of nodes", fontsize=fontSize)
 ## Plotting output
-ax.legend(frameon=False, fontsize=fontSize)
+ax.legend(frameon=False, fontsize=fontSize-2)
 plt.tight_layout()
-plt.savefig('../../paper/figures/rf_sysAvailability.eps')
+plt.savefig('../../paper/figures/new_rf_sysAvailability.eps')
 plt.show()
 

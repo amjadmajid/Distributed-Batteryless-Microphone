@@ -3,9 +3,9 @@ import numpy as np
 import sys, os, json
 plt.style.use('seaborn-ticks')
 
-fontSize=16
+fontSize=18
 
-labels = ["300lux", "500lux", "800lux", "1400lux"]
+labels = ["300 lux", "500 lux", "800 lux", "1400 lux"]
 # color_list = ["#66a61e" , '#e7298a', '#7570b3', '#d95f02', '#1b9e77']
 f = plt.figure(figsize=(8,4))
 
@@ -36,7 +36,7 @@ print(uniqueDet)
 
 for i in range(4):
     orange_bar = plt.bar(np.arange(4)*bw+i, totalDet[i], width=bw-0.01, color='#9ecae1',  hatch="o")
-    green_bar = plt.bar(np.arange(4)*bw+i, uniqueDet[i], width=bw-0.01, color='#08519c', hatch="+")
+    green_bar = plt.bar(np.arange(4)*bw+i, uniqueDet[i], width=bw-0.01, color='#08519c')
 
 for i in range(3):
     plt.axvline(x=0.84+i, color='lightgrey')

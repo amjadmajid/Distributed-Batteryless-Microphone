@@ -82,7 +82,7 @@ class LogicAnalyzerData:
 
     def intervalDataInterpolation(self,interval):
         timespan=interval
-        if interval < 1:
+        if interval <= 0:
             raise ValueError("interval must be greater than 0")
         timestamps=[]
         states=[]

@@ -129,12 +129,13 @@ To model the effective \cis availability when it is tasked with event-based sens
 
 where $t_\text{s}$ is the expected sleep time of the \cis's nodes, 
  $t_\text{sp} \coloneqq t_\text{s} + t_\text{off}$, 
- and $p_\text{a}$ and $p_\text{s}$ are the power consumption at active and sleeping mode, respectively.
+ and $p_\text{a}$ and $p_\text{s}$ are the power consumption in active and sleeping mode, respectively.
  Notice that, there is a subtle point about equation~\ref{eq:cisEventSenseModel} as when an event arrives the node wakes up, consuming more energy. Therefore, its uptime shrinks. We, for simplicity, modeled this effect by extending the event time with the same factor. This is sufficient to say if that the event will be fully captured or not (effective availability).
 %
 \subsubsection{Simulation}
-To do a first sanity check on our models, we simulated $10^5$ power cycles of a \cis of 10 nodes (Figure~\ref{fig:cis_simulation}). The duty cycles of the nodes range from $10\%$ to $50\%$, while the event length is fixed at $3\%$ of the power cycle length, $t_\text{p}$. The on-times and events arrivals were uniformly distributed over the power cycles. 
-The results clearly confirm our models and support our argument about the distinction between \cis's availability and effective availability. The importance of this distinction is a function of the value $\frac{t_\text{e}}{t_\text{on}}$; observe the difference between availability and effective availability when nodes' duty cycle is $10\%$ (large effect) and $50\%$ (negligible effect).
+As a first sanity check on our models, we simulated $10^5$ power cycles of a \cis of 10 nodes (Figure~\ref{fig:cis_simulation}). The duty cycles of the nodes range from $10\%$ to $50\%$, while the event length is fixed at $3\%$ of the power cycle length, $t_\text{p}$. The on-times and event arrivals were uniformly distributed over the power cycles. 
+The results clearly confirm our models and support our argument about the distinction between \cis's availability and effective availability (notice that the percentage of captured events matches the effective availability). 
+The importance of this distinction---availability versus effective availability---is a function of the value $\frac{t_\text{e}}{t_\text{on}}$; observe the difference between availability and effective availability when nodes' duty cycle is $10\%$ (large effect) and $50\%$ (negligible effect).
 %
 %
 \subsection{Environment}
@@ -157,19 +158,34 @@ A \cis can experience a wide range of ambient power intensities. For example, a 
 		\label{fig:noRand}
 \end{figure} 
 %
-		\item \label{it:hibernating} \textit{Hibernating power state}---In event-driven sensing, nodes sleep in low-power mode waiting for an event to wake them up. This mode extends \cis's nodes' on-times and makes them overlap significantly. Moreover, the on-times overlap even more, when ambient energy level rises (favorable energy conditions). If an event arrives in such conditions, it will wake up many nodes, causing them to consume their buffered energy much faster. Some of these nodes will power down before capturing the entire event, while others survive. If we assume that nodes have the same energy buffers, then the nodes that died before finishing the event should have been sleeping for a \emph{longer} time than the nodes the capture the entire event (because they slept for a long time, they could not finish capturing the event). However, nodes that captured the entire event have a \emph{shorter} overall uptime than the nodes the have died while capturing the event because they stayed \emph{longer} in the active mode (because they stayed longer in active mode, they consume their energy budget faster). This will lead the nodes' power cycles to tend to synchronized after the event. Let us analyze the example presented in Figure~\ref{fig:noRand} to see exactly why nodes' power cycles tend to synchronized after an event if some or all of the nodes die while capturing an event. The figure shows the power traces of two nodes. It indicates that the nodes consume 7 times more power at active mode than that of the sleep mode (our prototype has a similar power consumption ratio, Table~\ref{tab:power_usage}). Further, shows that a node sustains the low-power mode for 90 units of time, $t_\text{s} = 90$; therefore, the maximum buffered energy can be calculated as 
+		\item \label{it:hibernating} \textit{Hibernating power state}---In event-driven sensing, nodes sleep in low-power mode waiting for an event to wake them up. This mode extends \cis's nodes' on-times and makes them overlap significantly. Moreover, the on-times overlap even more, when ambient energy level rises (favorable energy conditions). If an event arrives in such conditions, it will wake up many nodes, causing them to consume their buffered energy much faster. Some of these nodes will power down before capturing the entire event, while others survive. This difference in how much energy is spent in active and sleep mode causes these nodes to tend to synchronize their power cycles after the event. To understand why
+		% , you should realize that the nodes that capture the entire event have the shortest uptime as they stayed in active mode for the entire event duration; therefore, they consume their the fastest. 
+		% The nodes that died while capturing the event must have been sleeping for a longer time than the node that capture the event. 
+		%  for a longer uptime as they stayed only for a part of the event duration in the active mode, which implies that they stayed a number of time longer in sleep mode
+		% The uptime of the surviving nodes, for the this power cycle, is the shortest as they stayed in active mode for the entire event. 
+		% However, the nodes that died while capturing the event must have been sleeping for a \emph{longer} time than the node the captured the event. 
+		% Therefore, the died-while-capturing nodes had gone into sleep mode \emph{before} the surviving nodes and their uptime is longer than the nodes that successfully captured the event. Therefore, the power cycles after the event tend to cluster together.
+		% Since the energy buffers of the nodes are the same, the nodes' up-times that the event arrives in will be significantly different; nodes that die while capturing the event spend their energy budget slower as they spend less time in active mode than the nodes that capture the entire event, which, in turn, implies that the nodes that die while capturing the event must have been sleeping for a longer time than the nodes that capture the event. 
 		%
-		$$E_\text{buf}=t_\text{s} \times p_\text{s}$$
+		% If we assume that nodes have the same energy buffers, then the nodes that died before finishing the event should have been sleeping for a \emph{longer} time than the nodes the capture the entire event (because they slept for a long time, they could not finish capturing the event). However, nodes that captured the entire event have a \emph{shorter} overall uptime than the nodes the have died while capturing the event because they stayed \emph{longer} in the active mode (because they stayed longer in active mode, they consume their energy budget faster). This will lead the nodes' power cycles to tend to synchronized after the event. 
 		%
-		, where $p_\text{s}$ is a node power consumption at sleep mode. If we focus on the power cycle with the first event, then we see that node $R$ powers up at $t_\text{0}$, and it remains in low-power mode for 50 units of time, whereas node $G$ spends only 20 units of time before the event arrives. Now, we can calculate when these two nodes will power down and compare the difference, $\Delta t$, before and after the event. A node will turn off when the buffered energy is depleted. This can be expressed as follows, 
+		let us analyze the example presented in Figure~\ref{fig:noRand}. The figure shows the power traces of two nodes. the nodes consume 7 times more power in active than in sleep mode (our prototype has a similar power consumption ratio, Table~\ref{tab:power_usage}). Further, it shows that a node sustains the low-power mode for 90 units of time, $t_\text{s} = 90$; therefore, the maximum buffered energy can be calculated as 
+		%
+		$$E_\text{buf}=t_\text{s} \times p_\text{s},$$
+		%
+		where $p_\text{s}$ is a node's power consumption in sleep mode. If we focus on the power cycle with the first event, then we see that node $R$ powers up at $t_\text{0}$, and it remains in low-power mode for 50 units of time, whereas node $G$ spends only 20 units of time before the event arrives. Now, we can calculate when these two nodes will power down and compare the difference, $\Delta t$, before and after the event. A node will turn off when the buffered energy is depleted. This can be expressed as follows, 
 		%
 		$$
-		E_\text{buf} = t_\text{se} \times p_\text{s} + t_\text{on} \times \delta p_\text{s},
+		E_\text{buf} = t_\text{se} \times p_\text{s} + t_\text{on} \times p_\text{a},
 		$$
 		%
-		where $ t_\text{se}$ is the sleep time of the power cycle that an event arrives in, $t_\text{on}$ is a node's on-time and $\delta = \frac{ p_\text{a}}{ p_\text{s}}$ where, $p_\text{a}$ is the power consumption at the active mode. $p_\text{s}$ can be eliminated and $ t_\text{se}$ and $ \delta$ are given; thus to find when the nodes will power down when need to find $t_\text{on}$ for both nodes. By substituting the given values we find $t_\text{on}$ to be 10 and 5.7 units of time for the $G$ and $R$ node, respectively. Therefore, $\Delta t$ becomes 4.3 while it was 30 before the event. 
+		where $ t_\text{se}$ is the sleep time of the power cycle that an event arrives in, $t_\text{on}$ is a node's on-time and $p_\text{a}$ is the power consumption in active mode, which can be expressed as $p_\text{a}=\frac{\delta}{p_\text{s}}$. $ t_\text{se}$ and $ \delta$ are given and $p_\text{s}$ can be eliminated; thus to find when the nodes will power down we need to find $t_\text{on}$ for both nodes. By substituting the given values we find $t_\text{on}$ to be 10 and 5.7 units of time for the $G$ and $R$ node, respectively. Therefore, $\Delta t$ becomes 4.3 while it was 30 before the event (notice, $\frac{30}{7} \approx 4.3$). 
+		%
+		In general, nodes that die while capturing the event must have started their power cycles \emph{before} the nodes that capture the event.
+		Further, the uptime of the died-while-capturing nodes is \emph{longer} than the nodes that capture the event because they spend less time in active mode. Therefore, the difference,  $\Delta t$, between the power cycles of a died-while-capturing node and a node the successfully captures the event becomes smaller. This difference shrinks by the factor $\delta$ or $\frac{p_\text{a}}{p_\text{s}}$
 
-		When the events arrive in burst this becomes a significant problem, as a \cis will capture multiple copies of the first event, while missing the subsequent ones (Figure~\ref{fig:noRand}). 
+
+		When the events arrive in burst this becomes a significant problem, as a \cis will capture multiple copies of the first event, while missing the subsequent ones. 
 
 		%TODO Connected with above text%
 		% Consequently, the \cis may miss the next incoming events (specially if the events happens to arrive in bursts) causing it to sense intermittently instead of continuously (Figure~\ref{fig:hibernatingState}). 
@@ -298,7 +314,7 @@ Once a node has estimated the number of active neighbors, $N_\text{active}$, it 
 	P_\text{resp} = 
 	\begin{cases}
 		\frac{N_\text{resp}}{N_\text{active}} & \ \  \text{if} \frac{N_\text{resp}}{N_\text{active}} < 1\\
-		1 									  & \ \ \text{therwise},
+		1 									  & \ \ \text{otherwise},
 	\end{cases}
 	\label{eq:randFactor}
 \end{equation}

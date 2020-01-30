@@ -81,6 +81,8 @@ directory = "../../data/RF/"
 csv_files = ['30cm.csv', '40cm.csv', '50cm.csv', '60cm.csv', '70cm.csv', '80cm.csv'] #, '1705-1737lux.csv', '1947-2012lux.csv']
 # csv_files = ['40cm.csv'] 
 
+fontsize = 18
+
 measurements = []
 for file in csv_files:
     # print file,
@@ -97,8 +99,8 @@ boxplot_color_fontsize(box, '#0868ac', 1.5)
 plt.gca().grid(True) 
 plt.xticks(range(1, len(distances)+1),distances, fontsize=fontSize+2)
 plt.yticks(fontsize=fontSize+2)
-plt.ylabel("Avg. nodes duty cycle (%)", fontsize=fontSize+2)
-plt.xlabel("Distance from the RF source", fontsize=fontSize+2)
+plt.ylabel("Nodes duty cycle (%)", fontsize=fontSize+4)
+plt.xlabel("Distance from RF source", fontsize=fontSize+4)
 plt.tight_layout()
 plt.savefig('../../paper/figures/rf_cis_dutyCycle.eps')
 plt.show()

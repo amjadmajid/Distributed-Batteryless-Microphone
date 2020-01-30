@@ -3,7 +3,7 @@ import numpy as np
 import sys, os, json
 plt.style.use('seaborn-ticks')
 
-fontSize=16
+fontSize=18
 
 labels = ["500lux", "800lux", "1400lux", "1700lux"]
 # color_list = ["#66a61e" , '#e7298a', '#7570b3', '#d95f02', '#1b9e77']

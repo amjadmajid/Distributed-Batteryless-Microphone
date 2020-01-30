@@ -10,7 +10,7 @@ def main():
 	n = 10 
 	duty_cycles = range(1,6)     #  duty_cycles * ton OR duty_cycles * (ton-te)
 
-	observed_time = int(1e5)
+	observed_time = int(1e4)
 	num_events = observed_time
 	captured=[]
 	model=[]
@@ -50,7 +50,7 @@ def main():
 	plt.yticks(fontsize=14)
 	plt.xticks([0,1,2,3,4], [10,20,30,40, 50],fontsize=14)
 	plt.ylabel("(%)", fontsize=16)
-	plt.xlabel("Nodes' Duty Cycles (%)", fontsize=16)
+	plt.xlabel("Nodes' duty cycles (%)", fontsize=16)
 	plt.legend(fontsize=16)
 	plt.tight_layout()
 	plt.savefig('../paper/figures/effective_availability.eps')

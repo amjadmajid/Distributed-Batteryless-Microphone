@@ -3,7 +3,7 @@ import numpy as np
 import sys, os, json
 
 plt.style.use('seaborn-ticks')
-fontSize=16
+fontSize=18
 
 DESYNC =True
 
@@ -50,7 +50,7 @@ for i in range(3):
     plt.axvline(x=0.8+i, color='r', linestyle="dashed")
 
 plt.xlabel("Light intensity (lux)", fontsize = fontSize)
-plt.ylabel("Detection events", fontsize = fontSize)
+plt.ylabel("Event Detection", fontsize = fontSize)
 plt.xticks(np.arange(4)+0.275,(500,800,1400,1700,2300),fontsize=fontSize-2)
 plt.yticks(range(0,10,2),range(0,10,2),fontsize=fontSize-2)
 plt.xlim([-0.11,3.71])

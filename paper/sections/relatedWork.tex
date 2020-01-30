@@ -20,7 +20,7 @@ Intermittent execution models enable applications to progress despite frequent p
 
 % checkpointing 
 Mementos~\cite{ransford2011mementos} proposed a volatile memory \emph{checkpoint-based} approach to enable long-running applications on intermittently powered devices. DINO~\cite{dino} enables safe non-volatile memory access despite power failures. Chain~\cite{colin2016chain} minimizes the amount of data needed to be protected by introducing the concepts of \emph{atomic tasks and data-channels}. Hibernus~\cite{balsamo2014hibernus,balsamo2016hibernus++} measures the voltage level in the energy buffer to reduce the number of checkpoints per power cycle. Ratchet~\cite{van2016intermittent} uses compiler analysis to eliminate the need for programmer intervention or hardware support. HarvOS~\cite{bhatti2017harvos} uses both compiler and hardware support to optimize checkpoint placement and energy consumption. Mayfly~\cite{hester2017timely} enables time-aware intermittent computing. InK~\cite{yildirim2018ink} introduces event-driven intermittent execution.  
-\emph{Our system adopts a power failure protection approach similar to that of DINO~\cite{dino}.}
+\emph{For our prototype implementation we adopt a power failure protection approach similar to that of DINO~\cite{dino}, see Section~\ref{sec:software}.}
 
 
 \subsection{Speech recognition}
