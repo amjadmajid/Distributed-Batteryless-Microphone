@@ -1,0 +1,63 @@
+Recent advances in ultra-low-power microcontrollers along with the development of energy harvesters have enabled the creation of stand-alone battery-free sensors. These sensors operate intermittently because the power that they harvest is
+weak and volatile.
+
+\subsection{Energy-harvesting systems}
+Energy harvesters have the potential to power devices indefinitely as they collect energy from perpetual energy sources. Sunlight, vibration, and radio frequency (RF) waves are examples of such energy sources. The power harvested from these sources vary wildly, for example, RF harvestable power ranges from
+\si{\nano\watt}-scale when harvested from ambient signals to \si{\uW}-scale when collected from a dedicated RF signal emitter, and solar power varies from tens of \si{\uW} to tens of \si{\mW} when it is harvested by a solar panel of a few \si{\cm^2} illumination surface~\cite{lucia2017intermittent,rao2017ambient}.
+
+Many battery-less EH platforms have been proposed. Some of them
+rely on dedicated external energy sources such as WISP -and its variants-, a
+general wireless sensing and identification
+platform~\cite{smith2006wirelessly,zhao2015nfc,zhang2011moo}; WISPcam,  an
+RF-powered camera~\cite{naderiparizi2015wispcam} and, the battery-free
+cellphone~\cite{talla2017battery}. Others, harvest from ambient sources such as
+the ambient backscatter tag~\cite{liu2013ambient}, and the solar-powered
+tag~\cite{majid2019multi}. Platforms that facilitate the development of
+battery-less EH systems have also been proposed. For instance,
+Flicker~\cite{hester2017flicker}, a prototyping platform for battery-less devices; EDB~\cite{colin2016energy} an energy-interference-free debugger for intermittent devices; Capybara~\cite{colin2018reconfigurable}, a re-configurable energy storage architecture for EH devices; and Stork~\cite{aantjes2017fast} is protocol for over-the-air programming for batteyless EH devices.
+
+However, \emph{there is no EH platform that considers the abstraction of many intermittent sensors (or nodes) and exploits the statistical energy harvesting differences between them to provide reliable sensing}.
+
+
+\subsection{Intermittent execution}
+Intermittent execution models enable applications to progress despite frequent
+power failures~\cite{van2016intermittent,colin2016chain,lucia2015simpler,bhatti2017harvos,gobieski2019intelligence,patoukas2018feasibility}. To this end, they decompose an application into several small pieces and save the state of the computation on the transitions between these code segments. Therefore, intermittent applications do not return to the beginning of the program (i.e., \texttt{main()}) after each power failure.
+%(in contrast to  applications that assume continuous power).
+Instead, they resume execution from the last successfully saved progress state.   
+
+% checkpointing 
+Mementos~\cite{ransford2011mementos} proposed a volatile memory \emph{checkpoint-based} approach to enable long-running applications on intermittently powered devices. DINO~\cite{dino} enables safe non-volatile memory access despite power failures. Chain~\cite{colin2016chain} minimizes the amount of data needed to be protected by introducing the concepts of \emph{atomic tasks and data-channels}. Hibernus~\cite{balsamo2014hibernus,balsamo2016hibernus++} measures the voltage level in the energy buffer to reduce the number of checkpoints per power cycle. Ratchet~\cite{van2016intermittent} uses compiler analysis to eliminate the need for programmer intervention or hardware support. HarvOS~\cite{bhatti2017harvos} uses both compiler and hardware support to optimize checkpoint placement and energy consumption. Mayfly~\cite{hester2017timely} enables time-aware intermittent computing. InK~\cite{yildirim2018ink} introduces event-driven intermittent execution.  
+\emph{For our prototype implementation we adopt a power failure protection approach similar to that of DINO~\cite{dino}, see Section~\ref{sec:software}.}
+
+\subsection{Explicit duty-cycle desynchronization}% in Sensor Networks}
+Explicit duty-cycle desynchronization has been proposed in the wireless sensor networks literature~\cite{degesys2007desync,giusti2007decentralized,zheng2013survey}. 
+These (biologically-inspired) algorithms, however, cannot be applied to desynchronize intermittently-powered nodes as they assume that nodes (i) are able to listen to other nodes, and (ii) can maintain a notion of global time (slots). Listening is expensive, and keeping track of time is difficult at best when nodes can power down at random moments. We therefore adopt a best-effort approach.
+
+\subsection{Speech recognition}
+
+The speech recognition problem has been tackled from many angles and has experienced many breakthroughs. For example, the dynamic time warping (DTW) algorithm enables matching voice signals with different speeds (or time) \cite{vintsyuk1968speech}. 
+Approaches based on Hidden Markov Models showed much better performance than DTW-based ones~\cite{jelinek1997statistical}. Hence, they became the standard techniques for general-purpose speech recognition until artificial intelligent algorithms~\cite{hinton2012deep} outperform them. 
+
+From a recognition complexity standpoint, we can classify the speech into \textit{spontaneous speech, continuous speech, connected word,} and \textit{isolated word}~\cite{gaikwad2010review}.
+The \textit{continuous} and \textit{spontaneous speech} are the closest to natural speech, but they are the most difficult to recognize because they need special methods to detect words boundaries~\cite{gaikwad2010review}. This is less the case for the \textit{connected word} type, where a minimum pause between the words is required. The type with the least complexity is the \textit{isolated word}, as it requires a period of silence on both sides of a spoken word. 
+
+Speech recognition on resources---memory, computation power, and energy---limited platforms is challenging, to say the least. Therefore, \emph{our command recognizer targets isolated-word type of speech}. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

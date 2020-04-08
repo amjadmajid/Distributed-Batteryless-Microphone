@@ -3,9 +3,9 @@ import numpy as np
 import sys, os, json
 
 plt.style.use('seaborn-ticks')
-fontSize=18
+fontSize=20
 
-DESYNC =True
+DESYNC =False
 
 if DESYNC:
     files = [
@@ -50,9 +50,9 @@ for i in range(3):
     plt.axvline(x=0.8+i, color='r', linestyle="dashed")
 
 plt.xlabel("Light intensity (lux)", fontsize = fontSize)
-plt.ylabel("Event Detection", fontsize = fontSize)
-plt.xticks(np.arange(4)+0.275,(500,800,1400,1700,2300),fontsize=fontSize-2)
-plt.yticks(range(0,10,2),range(0,10,2),fontsize=fontSize-2)
+plt.ylabel("Event detection", fontsize = fontSize)
+plt.xticks(np.arange(4)+0.275,(500,800,1400,1700,2300),fontsize=fontSize)
+plt.yticks(range(0,10,2),range(0,10,2),fontsize=fontSize)
 plt.xlim([-0.11,3.71])
 plt.ylim([-0.8,8.2])
 
@@ -64,7 +64,7 @@ for group_idx in range(4):
 
 plt.tight_layout()
 if DESYNC:
-    f.savefig("../../paper/figures/events_burst_rand.pdf", bbox_inches='tight')
+    f.savefig("../../paper_IPSN_2020/figures/events_burst_rand.eps", bbox_inches='tight')
 else:
-    f.savefig("../../paper/figures/events_burst_problem.pdf", bbox_inches='tight')
+    f.savefig("../../paper_IPSN_2020/figures/events_burst_problem.eps", bbox_inches='tight')
 plt.show()

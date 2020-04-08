@@ -1,0 +1,305 @@
+\begin{figure*}[h]
+        \begin{subfigure}{.66\columnwidth}
+            \includegraphics[width=\textwidth]{figures/sysAvailability}
+                \caption{The \cis is powered by uncontrollable light sources---artificial light (night) and sunlight (day).}
+            \label{fig:solarPwrCIS}
+        \end{subfigure}\hfill
+        \begin{subfigure}{.66\columnwidth}
+            \includegraphics[width=\textwidth]{figures/sysAvailability_artificial-light}
+                \caption{The \cis is powered by a controllable array of LEDs. \vspace{1em}}
+            \label{fig:artPwrCIS}
+        \end{subfigure}\hfill
+        \begin{subfigure}{.66\columnwidth}
+            \includegraphics[width=\textwidth]{figures/rf_sysAvailability}
+                \caption{The \cis is powered by an RF reader~\cite{r420_website} located 30-70\,cm away from the RF tags (WISPs~\cite{smith2006wirelessly}).}
+            \label{fig:rfPwrCIS}
+        \end{subfigure}
+        \caption{The \fullcis's availability for differed energy sources and number of nodes. 
+        The modeled availability (dashed red lines with nodes' duty cycles of 15\%) approximates the measured availability with high accuracy.}
+        \label{fig:pwrCIS}
+\end{figure*} 
+To evaluate the performance (availability) of the \fullcis, we conducted several experiments in different energy conditions and with different event arrivals patterns. 
+%
+\subsection{Availability}
+%%%%%%%%%% ToDo %%%%%%%%%%
+% Experiment setup
+Irrespective of the energy source (RF or light) we showed in Figure~\ref{fig:power_cycles} that the power cycles of a \cis's nodes are different, which leads to a uniform distribution of their on-times, as we argued in Section~\ref{subSec:availability}. We captured the expected joined availability of these nodes in Model~\ref{eq:cisModel}.  Here, we validate model by comparing the modeled availability of a \cis against data captured with different hardware (solar- and RF-powered nodes) in different scenarios.
+% the measured ones under different powering conditions and with different hardware. 
+ 
+% KOEN: here for better layout
+\begin{table}[t]
+\centering
+\caption{Testing set}
+\label{tab:words}
+\begin{tabular}{lllll}
+\hline
+on    & off  & stop & clear & load   \\
+go & pause & resume & edit  & cancel  \\  
+\hline  
+\end{tabular}
+\end{table}
+% %
+% \begin{figure}
+% \centering
+% \includegraphics[width=\linewidth]{figures/DTWvsLDM}
+% \caption{Recognition accuracy for linear matching and DTW when using 9 frames as the recording length.}
+% \label{fig:DTWvsLDM}
+% \end{figure}
+% %
+% \begin{table}[t]
+% 	\centering
+% 	\caption{Profiling of features matching algorithms: Dynamic Time Warping (DTW) and Linear Distance Matching (LDM).}
+% 	\label{tab:profiling}
+% 	\begin{tabular}{lll} \hline
+% 	\textbf{Section} & \textbf{LDM (ms)} & \textbf{DTW (ms)} \\\hline
+% 	\textit{Recording} & 285  & 285 \\
+% 	\textit{Feature extraction} & 501 & 501 \\
+% 	\textit{Feature matching} &  99 & 1251 \\\hline
+% 	\textit{Total} & 885 & 2037 \\\hline
+% 	\end{tabular}
+% \end{table}
+%
+\begin{table}[t]
+	\centering
+	\caption{Power usage}
+	\label{tab:power_usage}
+	%Compiled without optimization flags:
+	\begin{tabular}{lrr}\hline
+	\textbf{State} & \textbf{Current ($\si{\micro A}$)} & \textbf{time ($\si{\milli\second}$)} \\\hline
+	\textit{Sleeping} & 64 $\pm$20 & --- \\
+	\textit{Recording} & 423 $\pm$20 & 285   \\
+	\textit{Processing} &  282 $\pm$20 & 600\\\hline
+	\end{tabular}
+\end{table}
+
+Figure~\ref{fig:pwrCIS} shows the availability of three \cis{}s when they are powered by sunlight, artificial light, and RF and for a different number of intermittent nodes.
+%%%%%%%%%% ToDo %%%%%%%%%%
+% clarify that the RF and solar power nodes use different hardware.
+The results clearly confirm our expectation: when the power cycles are slightly different, the on-times are uniformly distributed. The results also validate our model; the dashed lines represent the modeled availability when the nodes duty cycle is 15\%.
+
+\subsubsection{Availability on a Fine Scale}
+%
+\begin{figure}[t]
+    \centering
+     \includegraphics[width=\columnwidth]{figures/sysAvailabilityTimeline_470_sleep_5seconds_2}
+    \caption{\cis availability smoothed with a 5-second time window.}
+    \label{fig:fineScaleAvailability}
+\end{figure}
+% In Section~\ref{subSec:availability}, we discussed that the \cis availability is not a constant value. 
+Since the nodes' on-times are in a constant shift relative to each other (Section~\ref{subSec:availability}), the collective availability of the \cis fluctuates when it is observed in a short time window. 
+Figure~\ref{fig:fineScaleAvailability} captures \cis availability on a time window of 5 seconds for thee different ambient energy conditions. In these experiments, the average power cycles of the \cis nodes are (3,18), (3.9,12.3), and (4.3,11.5) seconds when ambient light intensity are 500, 800, and 900\,$\si{lux}$, respectively. 
+If we focus on the line graphs associated with 500 and 800\,$\si{lux}$ and compare the system availability within the interval $[20,50]$ seconds and the rest, we can observe that the \cis gradually alternates between low and high collective availability; nodes' on-times gradually transition from maximum to minimum separation and vice versa (Section~\ref{subSec:availability}). Notice that, when ambient light intensity was 800\,$\si{lux}$ the \cis collective availability transited from low to high to low, while this pattern happened to be reversed when light intensity was  500\,$\si{lux}$. For the 900\,$\si{lux}$ the 8-node \cis achieved near-continuous $100\%$ availability. 
+%
+% \begin{table}
+%     \centering
+%     \caption{The \cis availability on fine scale: the effect of the energy buffer size and the time interval within a \cis is observed on the system availability}
+%     \label{tab:availFineScale}
+%     \begin{tabular}{r|l|l|l|r}
+%     \hline
+%     Intervals (sec) & -    & RF ($47\si{\mu F}$)      & -    & light ($470\si{\mu F}$)  \\ 
+%     \hline
+%     -             & mean  & std     & mean     & std   \\ \hline
+%     0.5             & 61    & 8.8     & 27.3     & 42.9   \\
+%     1               & 61    & 5.9     & 27.3     & 41.5   \\
+%     2               & 61    & 4.4     & 27.3     & 37.5   \\
+%     \hline
+%     \end{tabular}
+% \end{table}
+
+% Table~\ref{tab:availFineScale} captures the \cis availability on fine scale. An obvious but important observation is that the \cis availability fluctuates, see the std columns.    for two different energy buffer sizes. 
+
+
+% \begin{table}
+%     \centering
+%     \caption{The \cis availability on fine scale: the effect of the energy buffer size and the time interval within a \cis is observed on the system availability}
+%     \label{tab:availFineScale}
+%     \begin{tabular}{r|l|l|l|r}
+%     \hline
+%     Energy Intensity & -    & RF ($47\si{\mu F}$)      & -    & light ($470\si{\mu F}$)  \\ 
+%     \hline
+%     -             & mean  & std     & mean     & std   \\ \hline
+%     high          & 61    & 8.8     & 91.3     & 24.9   \\
+%     medium        & 43    & 7.4     & 67.6     & 44.3   \\
+%     how           & 21    & 3.4     & 27.3     & 37.5   \\
+%     \hline
+%     \end{tabular}
+% \end{table}
+
+
+
+
+\subsection{Sensing}
+\subsubsection{Experiment setup}
+\label{sec:experiment_setup}
+% \paragraph{availability on a fine scale}
+ % \todo{Because of the differences in intermittent nodes power cycles, their duty cycles are constantly shifting relative to each other ( Figure~\ref{fig:cisOntime}).  However, this study does zoom in on the \cis availability on short time scale and the effect of length of the differences between the nodes power cycles on the system short term availability. } 
+%
+After validating our observation on different energy sources, we designed a testbed with controllable light intensity for clarity and reproducibility. To this end, we blocked uncontrollable light sources with a box of $60 \times 40 \times 40$\,cm. On the box ceiling, we attached a light strip of 2.5\,m with 150 LEDs that can produce 15 different light intensities. On the bottom a \fullCIM of 8 intermittent nodes is placed (see Section~\ref{sec:hardware} for hardware description).
+
+The events in our experiments are spoken words (Table~\ref{tab:words}). 
+Short events (see events classification in Section~\ref{sec:event_classification}) are represented with individual words, while burst events are represented with phrases of a few words.
+We recorded different patterns of inter-event and inter-bust arriving time. We used a Bluetooth speaker~\cite{jbl} to replay a certain recording. 
+% The data were collected using a logic analyzer~\cite{saleae} and processed on a laptop running Ubuntu 16.04 LTS. 
+%
+\subsubsection{Events detection rate}
+
+Here we experiment with the behavior of a \cis when events arrive individually or in bursts \emph{without} enabling  randomized response in favorable energy conditions. 
+
+\paragraph{Individual events.}
+
+Figure~\ref{fig:events_detection_rate} shows the percentages of capturing duplicate and unique events when light intensity varies from $\SI{300}{lux}$ to $\SI{1400}{lux}$ and the inter-event arrival time ranges from $\SI{1}{second}$ to $\SI{6}{seconds}$. For each experimental trial 20 words were played, resulting in a total of 240 playbacks. 
+
+Figure~\ref{fig:events_detection_rate} shows a positive correlation between light intensity and the number of detected events. In particular, the number of duplicate detections rises dramatically when light intensity increases, \emph{demonstrating the overpowering problem} (Section~\ref{sec:power_state}). Moreover, increasing the inter-event arrival time also surges the number of duplicated events. The reason for this is that when the time between events increases, the intermittent nodes get the chance to sleep longer in low-power mode, consuming less energy. Thus, nodes' on-times expand, reducing their inherent randomization, which leads them to be in \textit{hibernating power state} (Section~\ref{it:hibernating}).  
+
+% Indirectly, these results show how a \cis can achieve a much higher duty cycle than its individual intermittent nodes: Figure~\ref{fig:cis_nodes_dutyCycle} shows that with a light intensity of $\SI{800}{lux}$ an intermittent node is active with a duty cycle of 30\% while Figure~\ref{fig:events_detection_rate} shows that a \cis of 8 nodes captures 100\% of the unique events when the time between them is \SI{6}{s}. 
+
+\begin{figure}[t!]
+		\centering
+	    \includegraphics[width=\columnwidth]{figures/regular_events_capture_rate_2.eps}
+		\caption{Duplicate and unique events captured by a \fullcim of eight solar-powered nodes. In general, the number of captured events increases in two case: when light intensity rises and when inter-event arrival time increases. 
+         % In general, we see that when the light intensity increases, the number of detected and captured events rise too. Moreover, there is a positive correlation between the length of the inter-event arrival time and the detection and capture rates. 
+         Red numbers indicate events arrival interval in seconds.
+         }
+    	\label{fig:events_detection_rate}
+\end{figure} 
+
+\begin{figure}[t]
+    \includegraphics[width=\columnwidth]{figures/events_burst_problem_2}
+	\caption{When capturing a burst of 4 events without randomizing the response, the majority of the nodes react to the first event in the burst and power down shortly after, missing the rest of the burst.}
+    \label{fig:events_burst_problem}
+%\end{figure}
+%\begin{figure}[t]
+\vspace*{3ex}
+	\centering
+     \includegraphics[width=\columnwidth]{figures/events_burst_rand_2}
+    \caption{Response randomization enables a \cis to capture the entire burst of events with high capturing rates. It also reduces the number of duplicated events. Red numbers indicate events index in a burst.}
+    \label{fig:events_burst_rand}
+\end{figure}
+
+%\textit{Bursty events.}
+\paragraph{Bursty events.}
+Figure~\ref{fig:events_burst_problem} shows the capturing behavior of a \cis when the events arrive in bursts. A burst of four events with one second between the individual events was fired every 20 seconds. Each burst was repeated 10 times and under four different light intensities. The nodes sleep in a low-power mode when they finish processing an event, waiting for the next one. 
+
+In general, we observe that in favorable energy conditions (above $\SI{500}{lux}$) intermittent nodes react to the first event of a burst and power down shortly after, missing the rest of the burst. These results confirm our argument about the side effect of the \textit{hibernating power state} of a \cis (Section~\ref{sec:power_state}). These results also demonstrate that the hibernating power problem happens on a wide range of power intensities, showing its significance. Next, we will show how randomizing the response can mitigate the problems generated when ambient energy exceeds the design point. 
+
+\subsubsection{Events detection rate with randomization}
+
+Here, we examine the effect of enabling artificial randomization on the \cis's response. 
+
+\paragraph{Individual events.} 
+Table~\ref{tab:regular_rand} compares the number of detected events when the
+\cim's response is randomized and when not.
+When randomization is enabled, nodes respond to events with a probability of 65\% for the scenario of $\left(\SI{800}{lux}, \SI{6}{seconds}\right)$ and $\left(\SI{1400}{lux}, \SI{4}{seconds}\right)$, and for the highest energy level and the longest inter-event arrival time the responding probability was set to 30\%.
+
+Table~\ref{tab:regular_rand} shows that randomizing the response reduces duplicated events by an average of $\approx$50\%, while only marginally lowers the number of the uniquely detected events (7\% on average). 
+
+
+\paragraph{Bursty events.}
+
+To enable a \cis to capture events arrive in bursts, the response probability for each events in a burst should be different. The \cis should respond with a minimum probability to the first event in a burst and gradually increase the response probability for the subsequent events in the burst (we assume that between the bursts the \cis resumes to its expected collective availability). This gradual increment to the responding probability is motivated by the observation that when a node captures an event it becomes unavailable for the subsequent ones in the burst.
+In this experiment, the nodes reacted with a probability of 40\%, 50\%, 70\% and, 100\% on the first, second, third and fourth event, respectively. Since the event distribution is known these probabilities were fixed during the development stage.
+
+Figure~\ref{fig:events_burst_rand} shows how randomizing the \cis response spreads the nodes' awake times--as compared to Figure~\ref{fig:events_burst_problem}--and enables the \cis to capture the entire burst with a high probability, i.e., above 85\%. 
+However, capturing the signal of a word does not ensure correct word
+recognition as the recognition algorithm is not robust to ambient noise.
+As a consequence, our word recognizer achieved an acceptable recognition
+accuracy of 76.6\% on average.
+% Additionally, we also observe a positive impact of randomizing the response when the system is under-powered ($\SI{500}{lux}$).
+
+%40 50 70 100
+
+
+% \subsection{Coalesced intermittent command recognizer word detection accuracy}
+% For evaluating the \fullcim accuracy, we used the word set in Table~\ref{tab:words}.
+% Each word was pronounced by a single speaker 20 times and recorded on a PC. One of these recordings was stored as a template on the \cim, while the remaining 19 were played back through a Bluetooth speaker~\cite{microphone} for testing.
+
+% The ratio between detected events and successfully recognized events per node is shown in Figure~\ref{fig:word_freq} and it averages out at  76.7\%. The difference between detection and capture is primarily caused by nodes that have insufficient buffered energy to finish recording.  
+
+% %
+% \begin{figure}
+% \centering
+% \includegraphics[width=\linewidth]{figures/detection_vs_recognition}
+% \caption{
+% % The percentage of successfully recognized words as compared to the detected ones.
+% The average number of successfully recognized words per node and average number of detected words per node, as percentages of the total number of played words. Words are relatively long events and therefore some of their recordings do not complete due to insufficient harvested energy.}
+% \label{fig:word_freq}
+% \end{figure}
+
+\paragraph{Different energy harvesting rates}
+A valid concern is that neighboring nodes may harvest energy at different
+rates (e.g., being in direct sunlight vs.\ in the shade) leading to a different
+view on the effective power cycle, in turn, yielding different response
+probabilities. Figure~\ref{fig:differentEnergyIntensity} shows (in green)
+that the length of a power cycle can differ by as much as a factor of two
+between low and high intensity lighting. Note that this data is from nodes that
+employ the wake-on-event strategy and --in good lighting conditions at the
+right-- spend most of their on time in low-power mode (in blue), allowing
+them to charge while sleeping. That also explains their very short off times
+(in orange).
+
+To see what the effect of the different energy harvesting rates
+(and corresponding response probabilities) is we ran a simulation
+experiment with 10 nodes where we varied the number of nodes in the
+shade (400 lux) and sunlight (1200 lux) running at 16\% and 50\% duty
+cycle, respectively. The response probabilities were set to achieve
+a 2.5 factor of redundancy following Equation~\ref{eq:randFactor}.
+Figure~\ref{fig:sim:differentEnergyIntensity} shows that the \cis
+availability (i.e., the number of uniquely captured events in green) is
+not dramatically affected by the distribution of nodes over sun/shade.
+This is in part due to the redundancy (cf.\ the number of captured events
+in orange), but mainly caused by the adequate response (sleep on it)
+of the ``sunny'' nodes.
+
+%It can happen that some of the nodes of a \cis are in the shadow
+%while the rest is under direct sunlight (e.g., when curtains are being
+%opened).  As a consequence, nodes' power cycles will be significantly
+%different (Figure~\ref{fig:differentEnergyIntensity} shows the on-times,
+%off-times, and power cycles when the ambient energy ranges from 400 to
+%1400\,lux). Therefore, nodes will not be able to accurately estimate
+%the collective availability of the system.
+%%
+%The inaccurate estimation is most significant when half of the nodes are in shadow. 
+%However, even during such a worst-case scenario, a \cis availability is not dramatically effected (Figure~\ref{fig:sim:differentEnergyIntensity}). 
+%This is because half of the nodes will overestimate the availability of the system while the other half will underestimate the \cis's availability.
+%For example, in these simulation results the node with 50\% duty cycle responded to $\approx$\,50\% of the events while nodes with 16\% duty cycle responded with a probability of 100\%. 
+%During this simulation, the power cycles, on-time, and off-time of the nodes are 10, 5, and 5 units of time when they are under sunlight and 24, 4, and 20 when they are in shadow. 
+%The length of the simulated experiment is 1000 units of time and We used a redundant factor of 2.5 (see (\ref{eq:randFactor})).
+
+
+\begin{table}
+	\centering
+    \caption{The number of \textit{unique/total} detected events.
+    Randomizing the response reduces the number of duplicated events by 50\% while losing only 7\% of the unique events.}
+    \label{tab:regular_rand}
+    $
+    \begin{array}{llll}\hline
+     \textbf{(lux,second)} & \textbf{(800,6)} & \textbf{(1400,4)} & \textbf{(1400,6)}\\\hline
+    \textit{randomization}^{*}    & 205/432 &  236/675 & 223/493 \\
+    \textit{no randomization} & 240/831 &  240/938 & 240/1802 \\\hline
+    \vspace{-2ex} \\
+    \end{array}
+    $
+    \parbox{0.8\linewidth}{
+    $^{*}$ A node's response probability is 65\% in the first two scenarios,
+    \textbf{(800,6)} and \textbf{(1400,4)}, and 30\% in the third.}
+\end{table}
+
+\begin{figure}
+    \begin{subfigure}{0.48\columnwidth}
+        \includegraphics[width=\textwidth]{figures/BatterylessNodesDutyCycles_Sleep_mode}
+        \caption{In wake-on-event style of operation, nodes go into low-power
+	mode after charging. The low power-consumption rate of this mode makes
+	the on-time of a node an important factor for its duty cycle and
+	power-cycle length.}
+        \label{fig:differentEnergyIntensity}
+    \end{subfigure}\hfill
+    %
+    \begin{subfigure}{0.48\columnwidth}
+        \includegraphics[width=\textwidth]{figures/different_energy_intensity}
+        \caption{Simulated results showing how the number of captured events is affected when shadow is covering a \cis. Detected events are \#times events trigger nodes. Captured events are \#times nodes processed events.}
+        \label{fig:sim:differentEnergyIntensity}
+    \end{subfigure}
+    \vspace{-0.3cm}
+    \caption{The effect of non-uniform energy distribution.}
+    \label{fig:pwrCycleVSEnergyIntensity}
+\end{figure}

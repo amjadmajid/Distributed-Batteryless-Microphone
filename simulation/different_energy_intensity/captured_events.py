@@ -2,43 +2,54 @@ import numpy as np
 from node import Node
 
 
-# observation_time
-# pwr_cycle
-# num_pwr_cycles = observation_time/pwr_cycle
-
 def main():
+
+	num_nodes = 10
+	num_events = 100
+	nodes_in_shadow_percentage = 0.1  # percetage of nodes in the shadow
+	response_redundancy =  2.5
+
+	observation_time = 1000
+	on_time_sunlight = 5
+	off_time_sunlight= 5
+	pwr_cycle_sunlight = on_time_sunlight + off_time_sunlight
+	num_pwr_cycles_sunlight =  int(observation_time/pwr_cycle_sunlight) * num_nodes
+
+	on_time_shadow = 4
+	off_time_shadow= 20
+	pwr_cycle_shadow = on_time_shadow + off_time_shadow
+	num_pwr_cycles_shadow =  int(observation_time/pwr_cycle_shadow) * num_nodes
+
+	fh = open("different_energy_intensity.csv", 'w' )
+	print("detectedEvents , captturedEvents, uniqueEvents",file=fh)
+	fh = open("different_energy_intensity.csv", 'a' )
 
 	for percentage_idx in range(11):
 		tot_events=[]
 		cap_events=[]
 		uniq_events=[]
 		re=[]
+		# nodes_in_the_shadow = 
+		nodes_in_shadow = int(nodes_in_shadow_percentage * percentage_idx * num_nodes)
+		# print("nodes_in_shadow", nodes_in_shadow)
 		for i in range(100):
 			nodes=[]
-			num_nodes = 10
-			cis_pwr_cycles  = 20
-			num_events = cis_pwr_cycles
-			nodes_in_shadow = 0.1 * percentage_idx  # the percetage of nodes in shadow
 			
-			t_on_sunlight 	= 0.2 * num_nodes  # t_s (or t_on) when nodes in sleep mode under sunlight
-			t_off_sunlight 	= 0.8 * num_nodes  # t_off when nodes under sunlight
-			t_on_shadow 	= 0.05 * num_nodes # t_s (or t_on) when nodes in sleep mode in shadow
-			t_off_shadow 	= 0.95 * num_nodes # t_off when nodes in shadow
-			
-			max_wake_up_time = num_nodes * cis_pwr_cycles
-			response_redundancy =  1
+			num_pwr_cycles_sunlight = int((observation_time/pwr_cycle_sunlight) * (num_nodes - nodes_in_shadow))
+			num_pwr_cycles_shadow   = int((observation_time/pwr_cycle_shadow) * nodes_in_shadow)
 
-			for i in np.arange(max_wake_up_time):
-				if np.random.uniform() < nodes_in_shadow:
-					nodes.append(Node(max_wake_up_time, t_on_shadow, t_off_shadow))
-				else:
-					nodes.append(Node(max_wake_up_time, t_on_sunlight, t_off_sunlight))
+			# print("num_pwr_cycles_sunlight: ", num_pwr_cycles_sunlight)
+			# print("num_pwr_cycles_shadow: ", num_pwr_cycles_shadow)
 
-			events = list(np.random.uniform(0,max_wake_up_time,num_events))
+			for i in range(num_pwr_cycles_sunlight):
+				nodes.append(Node(observation_time, on_time_sunlight, off_time_sunlight))
+
+			for i in range(num_pwr_cycles_shadow):
+				nodes.append(Node(observation_time, on_time_shadow, off_time_shadow))
+
+			events = list(np.random.uniform(0,observation_time,num_events))
 
 
-			# print("Total number events: ", len(events))
-			# print("Total number of nodes: ", len(nodes))
 			e = captured_events(num_nodes,nodes, events,response_redundancy)
 			tot_events.append(e[0])
 			cap_events.append(e[1])
@@ -47,10 +58,9 @@ def main():
 				re.append(e[3])
 
 			# print(percentage_idx * nodes_in_shadow )
-		print("nodes in shadow: ", nodes_in_shadow)
-		print(np.mean(tot_events),np.mean(cap_events),np.mean(uniq_events) )
-		print(re)
-		print()
+		# print("nodes in shadow: ", nodes_in_shadow)
+		print(np.mean(tot_events),',',np.mean(cap_events),',',np.mean(uniq_events), file=fh)
+		# print(re)
 
 def cis_availability(n,ndc):
 	"""The modeled CIS availability"""

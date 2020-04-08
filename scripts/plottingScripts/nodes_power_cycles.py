@@ -14,7 +14,7 @@ plt.style.use('seaborn-ticks')
 #     # #           ####  #    #    ####### #  ####  #    #   #   
 # ----------------------------------------------------------------
 # Run for RF data
-rf_flag = True
+rf_flag =True 
 
 # To disable debugging set it to False
 # To print all debugging info set the second entry to 0
@@ -60,7 +60,7 @@ def __power_cycle_len(ontime, offtime):
 
 
 def main():
-    fontSize=18
+    fontSize=20
     if rf_flag:
         ontime_path = '../processed_data/intermittent_nodes_ontimesRF.json'
         offtime_path = '../processed_data/intermittent_nodes_offtimesRF.json'
@@ -105,17 +105,17 @@ def main():
     boxplot_color_fontsize(boxs,color_list[1], 1.5)
 
     
-    plt.gca().grid(True, axis='y') 
+    plt.gca().grid() 
     plt.ylim(bottom=0)
-    plt.ylabel("Power cycle (sec)", fontsize=fontSize+4)
-    plt.xlabel("Node ID", fontsize=fontSize+4)
-    plt.yticks(fontsize=fontSize+2)
-    plt.xticks(fontsize=fontSize+2)
+    plt.ylabel("Power cycle (sec)", fontsize=fontSize)
+    plt.xlabel("Node ID", fontsize=fontSize)
+    plt.yticks(fontsize=fontSize)
+    plt.xticks(fontsize=fontSize)
     plt.tight_layout()
     if rf_flag:
-        plt.savefig('../../paper/figures/rf_power_cycles_len.eps')
+        plt.savefig('../../paper_IPSN_2020/figures/rf_power_cycles_len.eps')
     else:
-        plt.savefig('../../paper/figures/light_power_cycles_len.eps')
+        plt.savefig('../../paper_IPSN_2020/figures/light_power_cycles_len.eps')
     plt.show()
     
 if __name__=="__main__":

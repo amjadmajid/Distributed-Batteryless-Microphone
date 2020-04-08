@@ -1,0 +1,20 @@
+The main obstacles to achieve truly ubiquitous sensing are (i) the limitations of battery technology - batteries are short-lived, hazardous, bulky, and costly - and (ii) the unpredictability of ambient power. The latter causes sensors to operate intermittently, violating the availability requirements of many real-world applications. 
+
+In this paper, we present the \textit{\fullcis} (\cis), an
+intermittently-powered ``sensor'' that senses continuously! Although
+a single node will frequently be off charging, a group of nodes can
+--in principle-- sense 24/7 provided that their awake times are spread
+apart. As communication is too expensive, we rely on inherent component
+variations that induce small differences in power cycles. This basic
+assumption has been verified through measurements of different nodes
+and power sources. However, desynchronizing nodes is not enough.
+
+An important finding is that a \cis designed for certain (minimal)
+energy conditions will become synchronized when the available energy
+exceeds the design point. Nodes employing a sleep mode (to extend
+their availability) do wake up collectively at some event, process it,
+and return to charging as the remaining energy is typically too low to
+handle another event. This results in multiple responses (bad)
+and missing subsequent events (worse) due to the synchronized charging.
+To counter this undesired behavior we designed an algorithm to estimate the number of active neighbors and respond proportionally to an event. 
+We show that when intermittent nodes randomize their responses to events, in favorable energy conditions, the \cis reduces the duplicated captured events by 50\% and increases the percentage of capturing entire bursts above 85\%. 

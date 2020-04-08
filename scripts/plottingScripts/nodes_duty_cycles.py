@@ -158,13 +158,13 @@ def main():
     plt.gca().grid(True, axis='y') 
     plt.ylabel("Nodes duty cycle (%)", fontsize=fontSize)
     plt.xlabel("Nodes ID", fontsize=fontSize)
-    plt.yticks(fontsize=fontSize-2)
-    plt.xticks(fontsize=fontSize-2)
+    plt.yticks(fontsize=fontSize)
+    plt.xticks(fontsize=fontSize)
     plt.tight_layout()
     if rf_flag:
-        plt.savefig('../../paper/figures/rf_nodes_duty_cycles.eps')
+        plt.savefig('../../paper_IPSN_2020/figures/rf_nodes_duty_cycles')
     else:
-        plt.savefig('../../paper/figures/light_nodes_duty_cycles.eps')
+        plt.savefig('../../paper_IPSN_2020/figures/light_nodes_duty_cycles')
 
     plt.show()
     

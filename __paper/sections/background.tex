@@ -1,0 +1,39 @@
+Here, a minimal amount of background information is presented to clarify some of our design decisions. 
+
+\subsection{Energy-harvesting Devices}
+
+%1. why \textit{small form factors EH sensor nodes}\\
+\noindent\textbf{ Why miniaturized sensors.} A small sensor is a less intrusive device and compared to a bigger one; therefore, many applications prefer sensors of small form factors.
+% (imagine the difference in the implications of embedding a sensor of the size of 2 AAA batteries and a sensor of a few cubic millimeters in volume in a shoe for step counting, for example).  
+Long sensors' lifetimes lead to less maintenance costs, and therefore, many applications demand sensors with long lifetimes. However, long lifetime and small form factor are conflict goals.
+% 2. classify EH with continuous power and tiny EH with intermittent power \\
+For example, rechargeable batteries paired with energy harvesters can continuously power sensor nodes for a relatively long time. But, 
+they obviously increase nodes' sizes and costs. Additionally, rechargeable batteries wear out after a few hundreds of charging cycles, which means
+they also limit sensors' lifetimes~\cite{aditya2008comparison}.  
+%
+However, if an application's requirements put hard constraints on the size of the sensors, then removing the batteries is one of the first options to be considered. 
+Battery-less energy-harvesting sensors have the potential to operate for very long time (decades long) while being tiny; but, they operate intermittently.  
+%
+They charge a small capacitor to guarantee uninterrupted operations for a certain minimum duration. 
+This guarantee facilitates the software architecture design. An intermittent program is usually decomposed  into a chain of small atomic regions that  are  glued together with checkpoints~\cite{ransford2011mementos}. 
+%Once, the capacitor has been depleted, the sensor powers down, letting the energy-harvester accumulates energy again. 
+
+%
+\noindent\textbf{Do big capacitors enable continuous operation?}. Big capacitors allow longer operational periods, but they also need more time to charge. 
+As such, the on/off duty cycle of a big or small capacitor may still be the same. Additionally, very big capacitors might violate
+the size requirements of an application. For example, the WISPCam---an RF powered camera---~\cite{naderiparizi2015wispcam} uses a supercapacitor that is about 50 times the size of the original WISP's capacitor---a computational RFID tag---~\cite{smith2006wirelessly}.
+
+\todo{charging big capacitors vs small ones}
+\todo{cold start of big capacitors vs small ones}
+%Moreover, charging a bigger capacitor requires higher input voltage, because the input voltage must be higher than the voltage that has been accumulated in the capacitor to continue the charging. 
+%This phenomena makes charging big capacitors using tiny energy harvester less efficient~\cite{buettner2011dewdrop}. 
+
+%boosting ambient energy using an energy-conditioning circuit is possible on the expense of device complexity, form factor, energy consumption, and cost. 
+
+\subsection {Speech types}
+%
+\noindent\textbf{Why isolated word speech type}. Speech recognition algorithms can be classified based on the type of speech that they can recognize into \textit{spontaneous speech, continuous speech, connected word,} and \textit{isolated word}~\cite{gaikwad2010review}.
+Systems with \textit{continuous} or \textit{spontaneous speech} recognition are the closest to natural speech but are the most difficult to create because they need special methods to detect words boundaries~\cite{gaikwad2010review}. This is less the case for the \textit{connected word} type, where a minimum pause between the words is required. The type with the least complexity is the \textit{isolated word} type. It requires a period of silence on both sides of a spoken word and accepts only single words. 
+ 
+Voice is a natural way for the human to interact with small devices. However,
+implementing speech recognition on resources---memory, computation power, and energy---limited platforms is challenging, to say the least. Therefore, we attempt to recognize, with our command recognizer prototype, the simplest type of speech, isolated words. 

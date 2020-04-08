@@ -71,7 +71,7 @@ def main():
     clean_data = cleaned_data(unlabelled_ontime_data)
     # print (clean_data, file=open("debug.txt", 'w'))
     # exit()
-    fig = plt.figure(figsize=(8,4))
+    fig = plt.figure(figsize=(8,3.6))
 
     # for idx, cis in enumerate(clean_data):
     colors = ["#d73027", "#fee090", "#4575b4"]
@@ -91,7 +91,7 @@ def main():
     plt.xticks(fontsize=fontSize-2)
     plt.legend(fontsize=fontSize, loc="lower right")
     plt.tight_layout()
-    plt.savefig('../../paper/figures/sysAvailabilityTimeline_470_sleep_5seconds.eps')
+    plt.savefig('../../paper/figures/sysAvailabilityTimeline_470_sleep_5seconds_2.eps')
     plt.show()
     
 if __name__=="__main__":

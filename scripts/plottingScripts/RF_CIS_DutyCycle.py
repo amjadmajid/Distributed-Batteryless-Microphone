@@ -81,8 +81,6 @@ directory = "../../data/RF/"
 csv_files = ['30cm.csv', '40cm.csv', '50cm.csv', '60cm.csv', '70cm.csv', '80cm.csv'] #, '1705-1737lux.csv', '1947-2012lux.csv']
 # csv_files = ['40cm.csv'] 
 
-fontsize = 18
-
 measurements = []
 for file in csv_files:
     # print file,
@@ -90,7 +88,7 @@ for file in csv_files:
 
 plot_data = [m.getDutyCycles() for m in measurements]
 distances = [30, 40, 50, 60, 70, 80] #, 1705, 1947]
-fontSize=16
+fontSize=20
 plt.figure(figsize=(8,4))
 box = plt.boxplot(plot_data, showfliers=False)
 boxplot_color_fontsize(box, '#0868ac', 1.5)
@@ -98,9 +96,9 @@ boxplot_color_fontsize(box, '#0868ac', 1.5)
 # ylabels = ["{:4d}%".format(x*10) for x in ]
 plt.gca().grid(True) 
 plt.xticks(range(1, len(distances)+1),distances, fontsize=fontSize+2)
-plt.yticks(fontsize=fontSize+2)
-plt.ylabel("Nodes duty cycle (%)", fontsize=fontSize+4)
-plt.xlabel("Distance from RF source", fontsize=fontSize+4)
+plt.yticks(fontsize=fontSize)
+plt.ylabel("Nodes duty cycle (%)", fontsize=fontSize)
+plt.xlabel("Distance from RF source", fontsize=fontSize)
 plt.tight_layout()
-plt.savefig('../../paper/figures/rf_cis_dutyCycle.eps')
+plt.savefig('../../paper_IPSN_2020/figures/rf_cis_dutyCycle.eps')
 plt.show()

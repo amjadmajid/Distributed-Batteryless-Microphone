@@ -15,13 +15,14 @@ plt.plot(data['Energy Intensity (lux)'], data['Off-time'], '-v')
 plt.plot(data['Energy Intensity (lux)'], data['Power Cycle Length'], '-o')
 
 
-fontSize = 18 
+fontSize = 20 
 plt.ylabel("Time (seconds)", fontsize=fontSize)
 plt.xlabel("Energy Intensity (lux)", fontsize=fontSize)
 # plt.xticks(np.arange(5)+1,(300,500,800,1000,1400),fontsize=fontSize-2)
 plt.yticks(fontsize=fontSize-2)
 plt.xticks(fontsize=fontSize-2)
-plt.tight_layout()
+plt.legend()
+plt.tight_layout(fontsize=fontSize-2)
 plt.savefig('../../paper/figures/BatterylessNodesDutyCycles_Active_mode.eps')
 
 
@@ -30,20 +31,20 @@ data = pd.read_csv("../processed_data/BatterylessNodesDutyCycles_Sleep_mode.csv"
 # print( data.to_string())
 
 fig = plt.figure(figsize=(8,4))
-plt.plot(data['Energy Intensity (lux)'], data['On-time'], '-^')
-plt.plot(data['Energy Intensity (lux)'], data['Off-time'], '-v')
-plt.plot(data['Energy Intensity (lux)'], data['Power Cycle Length'], '-o')
+plt.plot(data['Energy Intensity (lux)'], data['On-time'], '-^', label="on time")
+plt.plot(data['Energy Intensity (lux)'], data['Off-time'], '-v', label="off time")
+plt.plot(data['Energy Intensity (lux)'], data['Power Cycle Length'], '-o', label="power cycle")
 
 
-fontSize = 18 
+fontSize = 20 
 plt.ylabel("Time (seconds)", fontsize=fontSize)
 plt.xlabel("Energy Intensity (lux)", fontsize=fontSize)
 # plt.xticks(np.arange(5)+1,(300,500,800,1000,1400),fontsize=fontSize-2)
 plt.yticks(fontsize=fontSize-2)
 plt.xticks(fontsize=fontSize-2)
+plt.legend(fontsize=fontSize-2)
 plt.tight_layout()
 plt.savefig('../../paper/figures/BatterylessNodesDutyCycles_Sleep_mode.eps')
-
 
 plt.show()
     

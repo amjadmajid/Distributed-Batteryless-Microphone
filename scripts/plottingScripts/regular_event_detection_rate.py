@@ -7,7 +7,7 @@ fontSize=18
 
 labels = ["300 lux", "500 lux", "800 lux", "1400 lux"]
 # color_list = ["#66a61e" , '#e7298a', '#7570b3', '#d95f02', '#1b9e77']
-f = plt.figure(figsize=(8,4))
+f = plt.figure(figsize=(8,3.6))
 
 plt.tick_params(axis='x', pad=10, bottom=False)
 intervals = [1,2,4,6]
@@ -56,5 +56,5 @@ plt.tight_layout()
 orange_bar.set_label('detected events')
 green_bar.set_label('unique events')
 plt.legend(fontsize=fontSize)
-plt.savefig('../../paper/figures/regular_events_capture_rate.eps')
+plt.savefig('../../paper/figures/regular_events_capture_rate_2.eps')
 plt.show()

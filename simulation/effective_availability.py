@@ -10,7 +10,7 @@ def main():
 	n = 10 
 	duty_cycles = range(1,6)     #  duty_cycles * ton OR duty_cycles * (ton-te)
 
-	observed_time = int(1e4)
+	observed_time = int(1e5)
 	num_events = observed_time
 	captured=[]
 	model=[]
@@ -39,7 +39,7 @@ def main():
 	captured = np.array(captured)/num_events * 100
 
 	# Plotting 
-	f = plt.figure(figsize=(8,4))
+	f = plt.figure(figsize=(8,3.6))
 
 	plt.plot(model, 				 '-o', label="(modeled) availability", lw=2)
 	plt.plot(availability ,			 '-v', label="(simulated) availability") 
@@ -53,7 +53,7 @@ def main():
 	plt.xlabel("Nodes' duty cycles (%)", fontsize=16)
 	plt.legend(fontsize=16)
 	plt.tight_layout()
-	plt.savefig('../paper/figures/effective_availability.eps')
+	plt.savefig('../paper/figures/effective_availability_2.eps')
 	plt.show()
 
 

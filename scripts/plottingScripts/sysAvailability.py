@@ -31,7 +31,7 @@ with open(path) as f:
 n=len(data[0][1])
 # Plotting
 ## Figure, Axes setup
-fig = plt.figure(figsize=(8,4))
+fig = plt.figure(figsize=(8,3.6))
 ax = plt.axes()
 ax.grid(linestyle=":")
 
@@ -69,6 +69,6 @@ ax.set_xlabel("Number of nodes", fontsize=fontSize)
 ax.legend(frameon=False, fontsize=fontSize-2, loc="lower right")
 plt.tight_layout()
 # plt.savefig('../../paper/figures/new_sysAvailability.eps')
-plt.savefig('../../paper/figures/new_sysAvailability_artificial-light.eps')
+plt.savefig('../../paper/figures/new_sysAvailability_artificial-light_2.eps')
 
 plt.show()

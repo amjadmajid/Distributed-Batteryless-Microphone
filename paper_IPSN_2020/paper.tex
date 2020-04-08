@@ -1,0 +1,106 @@
+% \documentclass[letterpaper, twocolumn]{article}
+\documentclass[sigconf]{acmart}
+
+\copyrightyear{2020}
+\acmYear{2020}
+\setcopyright{none}
+\acmConference[IPSN'20]{Information Processing in Sensor Networks}{April 2020}{Sydney, Australia}
+\acmBooktitle{IPSN '20, April 21--24, 2020, Sydney, Australia.}
+\acmPrice{15.00}
+\acmDOI{}
+\acmISBN{}
+
+\settopmatter{printacmref=false}
+
+\input{preamble/packages.tex}
+
+%% New command for TODOs
+\algnewcommand{\LeftComment}[1]{\Statex \(\triangleright\) #1}
+\newcommand{\todo}[1]{}
+\renewcommand{\todo}[1]{{\color{red} [{#1}]}}
+\newcommand{\checkit}[1]{\textcolor{red}{Check---} \hl{#1}} 
+\DeclareRobustCommand*\circled[1]{\tikz[baseline=(char.base)]{
+            \node[shape=circle,draw,inner sep=1pt] (char) {#1};}}
+\newcommand{\cis}{CIS\xspace}
+\newcommand{\fullcis}{Coalesced Intermittent Sensor\xspace}
+%\newcommand{\fullsys}{\sys: Battery-less Distributed Microphone}
+%\newcommand{\fullsys}{Distributed Batteryless Intermittent Sensors}
+%\newcommand{\fullsys}{Distributed Intermittent Systems: Theory and Practice}
+\newcommand{\cim}{CICR\xspace}
+\newcommand{\fullcim}{coalesced intermittent command recognizer\xspace}
+\newcommand{\fullCIM}{Coalesced Intermittent Command Recognizer\xspace}
+\begin{document}
+
+% \title{\hl{Smart Fabric:} Continuous Sensing on Intermittent Power} 
+\title{Continuous Sensing on Intermittent Power}
+
+\input{preamble/authors}
+\renewcommand{\shortauthors}{A. Majid et al.}
+
+%\keywords{}
+
+\begin{abstract}
+\input{sections/abstract}
+\end{abstract}
+
+\begin{CCSXML}
+<ccs2012>
+<concept>
+<concept_id>10003120.10003138.10011767</concept_id>
+<concept_desc>Human-centered computing~Empirical studies in ubiquitous and mobile computing</concept_desc>
+<concept_significance>300</concept_significance>
+</concept>
+</ccs2012>
+\end{CCSXML}
+
+\ccsdesc[300]{Human-centered computing~Empirical studies in ubiquitous and mobile computing}
+\keywords{Embedded systems, Energy harvesting, Ubiquitous computing, Intermittent Systems}
+
+\maketitle
+
+
+\section{Introduction}
+\label{sec:introduction}
+\input{sections/introduction}
+
+% \section{Context Assumptions}
+% \label{sec:background}
+% \input{sections/background}
+
+\section{Related Work} % and Background}
+\label{sec:relatedwork}
+\input{sections/relatedWork}
+
+\section{Coalesced Intermittent Sensor}
+\label{sec:coalInterSen}
+\input{sections/coalInterSen_v2}
+
+%\section{Distributed Intermittent System} 
+\section{Prototype: Coalesced Intermittent Command Recognizer}
+\label{sec:disMic}
+\input{sections/disMic}
+
+\section{Evaluation}
+\label{sec:evaluation}
+\input{sections/evaluation}
+
+
+% \section{Discussion }
+% \label{sec:discussion}
+% \input{sections/discussion}
+% \todo{MAC for backscattering and favorable energy conditions}
+
+
+
+
+\section{Conclusion and Future Work}
+\input{sections/conclusion}
+
+\section{Acknowledgements}
+\input{sections/acknowledgement}
+
+
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+\end{document}

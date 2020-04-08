@@ -88,7 +88,7 @@ for file in csv_files:
 
 plot_data = [m.getDutyCycles() for m in measurements]
 light_intensities = [ 200, 400, 600, 800, 1000, 1200] #, 1705, 1947]
-fontSize=18
+fontSize=20
 plt.figure(figsize=(8,4))
 box = plt.boxplot(plot_data, showfliers=False)
 boxplot_color_fontsize(box, '#0868ac', 1.5)
@@ -96,11 +96,11 @@ boxplot_color_fontsize(box, '#0868ac', 1.5)
 # ylabels = ["{:4d}%".format(x*10) for x in ]
 plt.gca().grid(True) 
 plt.xticks(range(1,len(light_intensities)+1),light_intensities, fontsize=fontSize+2)
-plt.yticks(fontsize=fontSize+2)
-plt.ylabel("Nodes duty cycle (%)", fontsize=fontSize+4)
-plt.xlabel("Light intensity (lux)", fontsize=fontSize+4)
+plt.yticks(fontsize=fontSize)
+plt.ylabel("Nodes duty cycle (%)", fontsize=fontSize)
+plt.xlabel("Light intensity (lux)", fontsize=fontSize)
 # plt.ylim(0,1.05)
 # plt.xlim(0, light_intensities[-1]+50)
 plt.tight_layout()
-plt.savefig('../../paper/figures/cis_dutyCycle.eps')
+plt.savefig('../../paper_IPSN_2020/figures/cis_dutyCycle.eps')
 plt.show()
